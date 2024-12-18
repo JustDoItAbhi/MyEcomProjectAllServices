@@ -1,5 +1,4 @@
 NEED TO CHANGE ACCESS FOR USER PERMISSIONS TO AUTHENTICATED USER
-1 ADD ADRESS TO USER TO CAN SEND ORDER TO HOME ADDRESS  == DONE
  MAKE AUTHENTICATION ONLY IF NESECCERY FOR EXAMPLE
  1 IN PRODUCT SERVICE = PRODUCT AND CATEGORY SHOULD BE AVAILABLE FOR ALL , BUT CREATNG PRODUCT SHOULD BE BY ADMIN
   2INT USER SERVICE = USERS CAN BE VISIBLE TO ALL BUT SIGN UP SHOULD BE VISIBLE ALL
@@ -8,6 +7,7 @@ NEED TO CHANGE ACCESS FOR USER PERMISSIONS TO AUTHENTICATED USER
   5 IN ORDER SERVCIE = USER MUST SIGN IN TO PLACE AN ORDER WITH ADDRESS AND OTHER DETAILS PERMITTED ALL
   6 USER CANNOT HAVE PERMISSIONS TO CHANGE PRICE AND OR EDITING ANY FORM
   7 PAYMENT ONLY AUTHENTICATED USER CAN ENTER IN THIS SERVCE
-8.IF CUSTOMER WILL FORGET PASSWORD THEN ADD RESET PASSWORD OPTION == 1 if someone forgot password then customer must send email in path variable to to get confirmation
+  8 ADD ADRESS TO USER TO CAN SEND ORDER TO HOME ADDRESS  == DONE
+9.IF CUSTOMER WILL FORGET PASSWORD THEN ADD RESET PASSWORD OPTION == 1 if someone forgot password then customer must send email in path variable to to get confirmation
 then admin will match the request if customer email matches with database then admin should issue then link to update password , how it should work ?
-we will use customers old password bcrypt link to match with old password bcrypt password if matches then we can issue the new update new password option to user ;
+we will use customers old password bcrypt link to match with old password bcrypt password if matches then we can issue the new update new password option to user ;==DONE
