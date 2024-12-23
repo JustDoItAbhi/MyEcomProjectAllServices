@@ -20,13 +20,11 @@ public class CustomUsersDetals implements UserDetails {
     private  boolean accountNonLocked;
     private  boolean credentialsNonExpired;
     private boolean enabled;
+    private String userEmail;
     private List<GrantedAuthority>authorities;
-    private String userName;
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -51,19 +49,21 @@ public class CustomUsersDetals implements UserDetails {
         this.authorities = authorities;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     public CustomUsersDetals(Users user) {
-//        this.username = user.getUserName();
+//        this.username = user.getUsername();
         this.password = user.getUserPassword();
         this.username = user.getUserEmail();
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-        this.userName =user.getUserName();
+//        this.username =user.getUserName();
         authorities=new ArrayList<>();
 
         // Check if roles are null or empty
@@ -84,19 +84,19 @@ public class CustomUsersDetals implements UserDetails {
         return this.authorities;
     }
 
+    public String getUserEmail() {
+        return username;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     @Override
     public String getPassword() {
         return password;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
 
     @Override
     public boolean isAccountNonExpired() {

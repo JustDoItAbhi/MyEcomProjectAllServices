@@ -17,6 +17,13 @@ public class UserMapper {
         responseDto.setUserPhone(users.getUserPhone());
         responseDto.setUserPassword(users.getUserPassword());
         responseDto.setUserEmail(users.getUserEmail());
+        responseDto.setUserCity(users.getUserCity());
+        responseDto.setUserCountry(users.getUserCountry());
+        responseDto.setUserState(users.getUserState());
+        responseDto.setUserPostelCode(users.getUserPostelCode());
+        responseDto.setUserHouseNumber(users.getUserHouseNumber());
+        responseDto.setUserStreet(users.getUserStreet());
+        responseDto.setUserLandMark(users.getUserLandMark());
         List<String> rolesList = users.getRolesList().stream()
                 .map(Roles::getRoleType) // Extracting role type
                 .collect(Collectors.toList());

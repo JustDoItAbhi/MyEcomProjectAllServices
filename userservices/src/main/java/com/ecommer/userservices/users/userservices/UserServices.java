@@ -1,10 +1,8 @@
 package com.ecommer.userservices.users.userservices;
 
-import com.ecommer.userservices.users.userdtos.LogOut;
-import com.ecommer.userservices.users.userdtos.Login;
-import com.ecommer.userservices.users.userdtos.SignUp;
-import com.ecommer.userservices.users.userdtos.UserResponseDto;
+import com.ecommer.userservices.users.userdtos.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -15,4 +13,6 @@ public interface UserServices {
     List<UserResponseDto>getAllUsers();
     boolean deleteUser(long id);
     UserResponseDto getById(String email);
+    UserResponseDto updateUser(String email, UpdateUserRequestDto dto);
+    ResponseEntity<UserResponseDto> resetPassword(String email,String password);
 }

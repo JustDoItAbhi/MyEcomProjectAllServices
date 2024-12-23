@@ -1,6 +1,8 @@
 package cartservice.service;
 
 import cartservice.client.ProductServiceClient;
+import cartservice.client.UserclientRestTemplate;
+import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
 import cartservice.dtos.ProductResponseDto;
@@ -8,11 +10,17 @@ import cartservice.entity.CartItems;
 import cartservice.entity.Carts;
 import cartservice.entity.UserDetails;
 import cartservice.mapper.CartMapper;
+import cartservice.mapper.Mapper;
+import cartservice.mapper.UserMapper;
 import cartservice.repository.CartItemsRepository;
 import cartservice.repository.CartRepository;
 import cartservice.repository.UserDetailsReposirtoy;
+import cartservice.userdtos.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -21,60 +29,54 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CartService implements IcartServices{
+public class CartServiceImpl implements IcartServices{
 
-private CartRepository cartRepository;
-    private ProductServiceClient productServiceClient;
-    private UserDetailsReposirtoy userDetailsReposirtoy;
-    private CartItemsRepository cartItemsRepository;
-    @Autowired
+private final CartRepository cartRepository;
+    private final ProductServiceClient productServiceClient;
+    private final UserDetailsReposirtoy userDetailsReposirtoy;
+    private final CartItemsRepository cartItemsRepository;
     @Qualifier("productServiceRestClient")
-    private RestClient restClient;
+    private final RestClient restClient;
 
-    public CartService(CartRepository cartRepository, ProductServiceClient productServiceClient,
-                       UserDetailsReposirtoy userDetailsReposirtoy, CartItemsRepository cartItemsRepository) {
+    public CartServiceImpl(CartRepository cartRepository, ProductServiceClient productServiceClient, UserDetailsReposirtoy userDetailsReposirtoy,
+                           CartItemsRepository cartItemsRepository, RestClient restClient) {
         this.cartRepository = cartRepository;
         this.productServiceClient = productServiceClient;
         this.userDetailsReposirtoy = userDetailsReposirtoy;
         this.cartItemsRepository = cartItemsRepository;
+        this.restClient = restClient;
     }
+
     @Override
         public CartResposneDtos addItemToCart(CartRequestDto dto) {
-            // Validate if the user exists
-            Optional<UserDetails> existingUser = userDetailsReposirtoy.findByUserEmail(dto.getUserId());
-            if (existingUser.isEmpty()) {
-                throw new RuntimeException("Please sign in again: " + dto.getUserId());
+        Carts carts = new Carts();
+        carts.setUserId(dto.getUserId());
+        List<CartItems> cartItemsList = new ArrayList<>();
+        for (CartItems cartItems : dto.getItem()) {
+            ProductResponseDto responseDto = restClient.get()
+                    .uri("/" + cartItems.getProductId())
+                    .retrieve()
+                    .body(ProductResponseDto.class);
+
+            if (responseDto == null) {
+                throw new RuntimeException("Product not found: " + cartItems.getProductId());
             }
 
-            Carts carts = new Carts();
-            carts.setUserId(dto.getUserId());
-            List<CartItems>cartItemsList=new ArrayList<>();
-            for (CartItems cartItems : dto.getItem()) {
-                ProductResponseDto responseDto = restClient.get()
-                        .uri("/" + cartItems.getProductId())
-                        .retrieve()
-                        .body(ProductResponseDto.class);
-                // Blocking call to retrieve the response
-
-                if (responseDto == null) {
-                    throw new RuntimeException("Product not found: " + cartItems.getProductId());
-                }
-
-                cartItems.setProductId(responseDto.getId());
-                cartItems.setProductName(responseDto.getName());
-                cartItems.setQuantity(cartItems.getQuantity());
-                cartItems.setPrice(responseDto.getPrice());
-                cartItemsList.add(cartItems);
-            }
-            double amount=0.0;
-            for(int i=0;i<cartItemsList.size();i++){
-                amount+=cartItemsList.get(i).getPrice()*cartItemsList.get(i).getQuantity();
-            }
-            carts.setTotal(amount);
-            carts.setItems(cartItemsList);
-            Carts savedCart = cartRepository.save(carts);
-            return CartMapper.fromCart(savedCart);
+            cartItems.setProductId(responseDto.getId());
+            cartItems.setProductName(responseDto.getName());
+            cartItems.setQuantity(cartItems.getQuantity());
+            cartItems.setPrice(responseDto.getPrice());
+            cartItemsList.add(cartItems);
         }
+        double amount = 0.0;
+        for (int i = 0; i < cartItemsList.size(); i++) {
+            amount += cartItemsList.get(i).getPrice() * cartItemsList.get(i).getQuantity();
+        }
+        carts.setTotal(amount);
+        carts.setItems(cartItemsList);
+        Carts savedCart = cartRepository.save(carts);
+        return CartMapper.fromCart(savedCart);
+    }
     @Override
     public CartResposneDtos removeItemFromCart(String userId, long productId) {
         Carts cart = cartRepository.findByUserId(userId).orElseThrow(
@@ -142,4 +144,43 @@ private CartRepository cartRepository;
 
         return responseDto;
     }
+
+    @Override
+    public List<CartItemResponseDto> getAllCartItems() {
+        List<CartItems>items=cartItemsRepository.findAll();
+            List<CartItemResponseDto>dtos=new ArrayList<>();
+            for(CartItems cartItems:items){
+                dtos.add(Mapper.fromcartItems(cartItems));
+            }
+        return dtos;
+    }
+
+    @Override
+    public CartItemResponseDto getCartItemById(String userId) {
+        return null;
+    }
+
+    @Override
+        public  String getUserRoles() {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication.getPrincipal() instanceof Jwt) {
+                Jwt jwt = (Jwt) authentication.getPrincipal();
+                return jwt.getClaimAsStringList("roles").toString(); // Extract "roles" claim
+            }
+            return "No roles available";
+        }
+
+    @Override
+    public UserDetails getUser(String userEmail) {
+        // Validate if the user exists
+        Optional<UserDetails> existingUser = userDetailsReposirtoy.findByUserEmail(userEmail);
+        if(existingUser.isEmpty()){
+            throw new RuntimeException("PLEASE SIGN IN AGAIN OR CALL USER SEPERATLY FROM USER SERVICE "+userEmail);
+        }
+
+        return existingUser.get();
+
+    }
 }
+

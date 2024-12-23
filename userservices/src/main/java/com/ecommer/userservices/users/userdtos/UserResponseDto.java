@@ -14,6 +14,13 @@ public class UserResponseDto {
     private String userEmail;
     private String userPassword;
     private List<String> rolesList;
+    private String userCity;
+    private String userState;
+    private String userCountry;
+    private int userPostelCode;
+    private String userHouseNumber;
+    private String userStreet;
+    private String userLandMark;
 
     public long getUserId() {
         return userId;
@@ -62,7 +69,61 @@ public class UserResponseDto {
     public void setRolesList(List<String> rolesList) {
         this.rolesList = rolesList;
     }
-//    private String userCity;
-//    private String userState;
-//    private String userCountry;
+
+    public String getUserCity() {
+
+        return userCity;
+    }
+
+    public void setUserCity(String userCity) {
+        this.userCity = userCity;
+    }
+
+    public String getUserState() {
+        return userState;
+    }
+
+    public void setUserState(String userState) {
+        this.userState = userState;
+    }
+
+    public String getUserCountry() {
+        return userCountry;
+    }
+
+    public void setUserCountry(String userCountry) {
+        this.userCountry = userCountry;
+    }
+
+    public int getUserPostelCode() {
+        return userPostelCode;
+    }
+
+    public void setUserPostelCode(int userPostelCode) {
+        this.userPostelCode = userPostelCode;
+    }
+
+    public String getUserHouseNumber() {
+        return userHouseNumber;
+    }
+
+    public void setUserHouseNumber(String userHouseNumber) {
+        this.userHouseNumber = userHouseNumber;
+    }
+
+    public String getUserStreet() {
+        return userStreet;
+    }
+
+    public void setUserStreet(String userStreet) {
+        this.userStreet = userStreet;
+    }
+
+    public String getUserLandMark() {
+        return userLandMark;
+    }
+
+    public void setUserLandMark(String userLandMark) {
+        this.userLandMark = userLandMark;
+    }
 }

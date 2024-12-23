@@ -16,4 +16,13 @@ public class UserDetails extends BaseModels {
     private String userPhone;
     private String userEmail;
     private String userPassword;
+    private List<String> rolesList;
+    private String userCity;
+    private String userState;
+    private String userCountry;
+    private int userPostelCode;
+    private String userHouseNumber;
+    private String userStreet;
+    private String userLandMark;
+
 }

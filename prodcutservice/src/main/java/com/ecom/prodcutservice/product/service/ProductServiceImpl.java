@@ -9,6 +9,9 @@ import com.ecom.prodcutservice.product.exceptions.ProductNotFoundException;
 import com.ecom.prodcutservice.product.productmapper.ProductMapper;
 import com.ecom.prodcutservice.product.repository.CategoryRespository;
 import com.ecom.prodcutservice.product.repository.ProductRespository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -105,4 +108,14 @@ public class ProductServiceImpl implements ProductService {
         }
                 return false;
             }
+    @Override
+    public  String getUserRoles() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getPrincipal() instanceof Jwt) {
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            return jwt.getClaimAsStringList("roles").toString(); // Extract "roles" claim
+        }
+        return "No roles available";
+    }
         }

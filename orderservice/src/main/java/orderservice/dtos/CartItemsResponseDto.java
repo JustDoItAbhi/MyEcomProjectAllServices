@@ -1,10 +1,11 @@
 package orderservice.dtos;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class CartItemResponseDto {
-    private long cartId;
+@Getter
+@Setter
+public class CartItemsResponseDto {
     private long productId;
     private String productName;
     private int quantity;

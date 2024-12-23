@@ -7,13 +7,12 @@ import com.ecommer.userservices.kafka.SendEmailDto;
 import com.ecommer.userservices.repository.RoleRepository;
 import com.ecommer.userservices.repository.TokenRepository;
 import com.ecommer.userservices.repository.UserRepository;
-import com.ecommer.userservices.users.userdtos.LogOut;
-import com.ecommer.userservices.users.userdtos.Login;
-import com.ecommer.userservices.users.userdtos.SignUp;
-import com.ecommer.userservices.users.userdtos.UserResponseDto;
+import com.ecommer.userservices.users.userdtos.*;
 import com.ecommer.userservices.users.usermapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,6 +48,13 @@ public class UserServicesImpl implements UserServices {
         users.setUserEmail(signUp.getUserEmail());
         users.setUserPassword(passwordEncoder.encode(signUp.getUserPassword()));
         users.setUserPhone(signUp.getUserPhone());
+        users.setUserPostelCode(signUp.getPostelCode());
+        users.setUserCity(signUp.getCity());
+        users.setUserState(signUp.getState());
+        users.setUserCountry(signUp.getCountry());
+        users.setUserHouseNumber(signUp.getUserHouseNumber());
+        users.setUserLandMark(signUp.getUserLandMark());
+        users.setUserStreet(signUp.getUserStreet());
         userRepository.save(users);
 
       Optional<Roles> savedRole=roleRepository.findByRoleType(signUp.getRoles());
@@ -66,7 +72,17 @@ public class UserServicesImpl implements UserServices {
         emailDto.setTo(users.getUserEmail());
         emailDto.setFrom("Pattorney0@gmail.com");
         emailDto.setSubject("WELCOME TO KAFKA");
-        emailDto.setBody("thanks for joining ");
+        emailDto.setBody("thanks for joining " +" / "+
+                users.getUserName()+" / "+
+                users.getUserPhone()+" / "+
+                users.getUserEmail()+" / "+
+                users.getUserHouseNumber()+" / "+
+                users.getUserStreet()+" / "+
+                users.getUserLandMark()+" / "+
+                users.getUserCity()+" / "+
+                users.getUserState()+" / "+
+                users.getUserCountry()+" / "+
+                users.getUserPostelCode());
         kafkaProducerClinet.sendMessage("sendemail",
                 objectMapper.writeValueAsString(emailDto));
 
@@ -128,5 +144,48 @@ public class UserServicesImpl implements UserServices {
         }
 
         return UserMapper.fromEntity(existingUser.get());
+    }
+
+    @Override
+    public UserResponseDto updateUser(String email, UpdateUserRequestDto dto) {
+        Optional<Users>existingUser=userRepository.findByUserEmail(dto.getUserEmail());
+        if(existingUser.isEmpty()){
+            throw new RuntimeException("DEAR CUSTOMER PLEASE SIGN UP FIRST "+dto.getUserName());
+        }
+        Users users=existingUser.get();
+        users.setUserName(dto.getUserName());
+//        users.setUserEmail(dto.getUserEmail());
+        users.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
+        users.setUserPhone(dto.getUserPhone());
+        users.setUserPostelCode(dto.getPostelCode());
+        users.setUserHouseNumber(dto.getUserHouseNumber());
+       Optional<Roles>rolesOptional=roleRepository.findByRoleType(dto.getRoles());
+        Roles roles=rolesOptional.get();
+        List<Roles>rolesList=new ArrayList<>();
+//        roles.setUsers(users);
+        rolesList.add(roles);
+        roleRepository.save(roles);
+        users.setUserLandMark(dto.getUserLandMark());
+        users.setUserStreet(dto.getUserStreet());
+        users.setUserCity(dto.getCity());
+        users.setUserState(dto.getState());
+        users.setUserCountry(dto.getCountry());
+        userRepository.save(users);
+        return UserMapper.fromEntity(users);
+    }
+
+    @Override
+    public ResponseEntity<UserResponseDto> resetPassword(String email,String password) {
+        Optional<Users>existingUser=userRepository.findByUserEmail(email);
+        if(existingUser.isEmpty()){
+            throw new RuntimeException("PLEASE CHECK EMAIL OR SIGN UP "+email);
+        }
+        Users users=existingUser.get();
+        if(passwordEncoder.matches(password, users.getUserPassword())){
+           return new ResponseEntity<>( UserMapper.fromEntity(users),HttpStatus.ACCEPTED);
+        }
+        String newPassword=passwordEncoder.encode(password);
+        users.setUserPassword(newPassword);
+        return new ResponseEntity<>(UserMapper.fromEntity(users),HttpStatus.CREATED);
     }
 }

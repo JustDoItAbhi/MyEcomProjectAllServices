@@ -41,4 +41,8 @@ public ResponseEntity<ProductResponseDto>createProduct(@RequestBody ProductReque
     public ResponseEntity<ProductResponseDto> getById(@PathVariable ("id")long id){
         return ResponseEntity.ok(productService.getProductById(id));
 }
+    @GetMapping("/GETUSERROLE")
+    public ResponseEntity<String> getUSERrOLE() {
+        return ResponseEntity.ok(productService.getUserRoles());
+    }
 }

@@ -1,4 +1,4 @@
-package com.ecommer.userservices.security.auth2server.customiseloginforemail;
+package com.ecommer.userservices.kafka.customiseloginforemail;
 
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;

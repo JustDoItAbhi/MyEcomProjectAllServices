@@ -5,6 +5,9 @@ import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
 import cartservice.dtos.ProductResponseDto;
 import cartservice.entity.UserDetails;
+import cartservice.userdtos.UserResponseDto;
+
+import java.util.List;
 
 public interface IcartServices {
 //    UserDetails createUser(String userID);
@@ -14,6 +17,10 @@ public interface IcartServices {
     boolean deleteUser(long id);
     CartResposneDtos getById(long id);
     ProductResponseDto getByIds(long id);
+    List<CartItemResponseDto>getAllCartItems();
+    CartItemResponseDto getCartItemById(String userId);
+    String getUserRoles();
+    UserDetails getUser(String userEmail);
 
 }
 

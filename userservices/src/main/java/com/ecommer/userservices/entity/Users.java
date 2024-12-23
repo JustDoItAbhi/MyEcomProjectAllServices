@@ -17,14 +17,20 @@ private String userName;
 private String userPhone;
 private String userEmail;
 private String userPassword;
-@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "users")
+private String userHouseNumber;
+private String userStreet;
+private String userLandMark;
+private String userCity;
+private String userState;
+private String userCountry;
+private int userPostelCode;
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "users")
 @JsonBackReference
 private List<Roles> rolesList;
 @ManyToOne
 private  Token token;
-//private String userCity;
-//private String userState;
-//private String userCountry;
+
+
 
     public String getUserName() {
         return userName;
@@ -72,5 +78,37 @@ private  Token token;
 
     public void setToken(Token token) {
         this.token = token;
+    }
+
+    public String getUserCity() {
+        return userCity;
+    }
+
+    public void setUserCity(String userCity) {
+        this.userCity = userCity;
+    }
+
+    public String getUserState() {
+        return userState;
+    }
+
+    public void setUserState(String userState) {
+        this.userState = userState;
+    }
+
+    public String getUserCountry() {
+        return userCountry;
+    }
+
+    public void setUserCountry(String userCountry) {
+        this.userCountry = userCountry;
+    }
+
+    public int getUserPostelCode() {
+        return userPostelCode;
+    }
+
+    public void setUserPostelCode(int userPostelCode) {
+        this.userPostelCode = userPostelCode;
     }
 }

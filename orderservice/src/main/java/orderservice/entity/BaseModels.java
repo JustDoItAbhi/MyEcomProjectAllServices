@@ -5,12 +5,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class BaseModels {
     @Id
@@ -18,6 +21,6 @@ public abstract class BaseModels {
 private long id;
     @CurrentTimestamp
 private LocalDateTime createdAt;
-@UpdateTimestamp
-    private LocalDateTime updatedAt;
+//@UpdateTimestamp
+//    private LocalDateTime updatedAt;
 }

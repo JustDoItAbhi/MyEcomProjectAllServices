@@ -13,4 +13,5 @@ public interface ProductService {
     List<ProductResponseDto>getAllProducts();
     boolean deleteProduct(long id);
     boolean deleteList();
+    String getUserRoles();
 }

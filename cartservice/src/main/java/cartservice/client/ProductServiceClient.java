@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -50,4 +51,5 @@ public class ProductServiceClient {
         registry.addMapping("/**").allowedOrigins("*");
         System.out.println("ENTERED BY CART SERVICE");
     }
+
 }
