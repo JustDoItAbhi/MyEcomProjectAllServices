@@ -1,6 +1,7 @@
 package cartservice.controller;
 
 import cartservice.dtos.*;
+import cartservice.entity.Products;
 import cartservice.entity.UserDetails;
 import cartservice.service.IcartServices;
 import cartservice.service.UserServices;
@@ -13,47 +14,64 @@ import java.util.List;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
+
+    private final IcartServices icartServices;
+    private final UserServices userServices;
+
     @Autowired
-    private IcartServices icartServices;
-    @Autowired
-    private UserServices userServices;
+    public CartController(IcartServices icartServices, UserServices userServices) {
+        this.icartServices = icartServices;
+        this.userServices = userServices;
+    }
 
     @GetMapping("/login/{userID}")
-    public ResponseEntity<UserDetails> getByiD(@PathVariable("userID")String userID) {
+    public ResponseEntity<UserDetails> getByiD(@PathVariable("userID") String userID) {// user login
         return ResponseEntity.ok(icartServices.getUser(userID));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CartResposneDtos> getItams(@RequestBody CartRequestDto dtos) {
+    public ResponseEntity<CartResposneDtos> getItams(@RequestBody CartRequestDto dtos) { //select product for cart
         return ResponseEntity.ok(icartServices.addItemToCart(dtos));
     }
 
     @DeleteMapping("/userdelete/{id}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") long id) {// delete details user by id
         return ResponseEntity.ok(icartServices.deleteUser(id));
     }
 
     @GetMapping("/getByid/{id}")
-    public ResponseEntity<ProductResponseDto> getById(@PathVariable("id") long id) {
+    public ResponseEntity<ProductResponseDto> getById(@PathVariable("id") long id) {//fetch product by id for practice
         return ResponseEntity.ok(icartServices.getByIds(id));
     }
 
     @DeleteMapping("/deleteCart/userId/{userId}/productId/{productId}")
-    public ResponseEntity<CartResposneDtos> removeCart(@PathVariable("userId") String userId, @PathVariable("productId")long productId) {
-        return ResponseEntity.ok(icartServices.removeItemFromCart(userId,productId));
+    public ResponseEntity<CartResposneDtos> removeCart(@PathVariable("userId") String userId, @PathVariable("productId") long productId) {// delete product from cart
+        return ResponseEntity.ok(icartServices.removeItemFromCart(userId, productId));
     }
 
     @GetMapping("/getCartById/{userId}")// MOVED TO ORDER SERIVES
-    public ResponseEntity<CartResposneDtos> ConfirmedCart(@PathVariable("userId") String userId) {
+    public ResponseEntity<CartResposneDtos> ConfirmedCart(@PathVariable("userId") String userId) {// get cart by id
         return ResponseEntity.ok(icartServices.confirmCart(userId));
     }
+
     @GetMapping("/")
     public ResponseEntity<List<CartItemResponseDto>> getAllItems() {
         return ResponseEntity.ok(icartServices.getAllCartItems());
     }
+
     @GetMapping("/GETUSERROLE")
     public ResponseEntity<String> getUSERrOLE() {
         return ResponseEntity.ok(icartServices.getUserRoles());
     }
 
+    @GetMapping("/GETALL/")//getall prodcut
+    public ResponseEntity<List<ProductResponseDto>> getProductOnlyByI() {
+        return ResponseEntity.ok(icartServices.getAllProducts());
+    }
+
+    @DeleteMapping("/deleteCartById/{id}")
+    public ResponseEntity<Boolean> deleteCartById(@PathVariable("id") long id) {// delete details user by id
+        return ResponseEntity.ok(icartServices.deleteCart(id));
+
+    }
 }

@@ -2,6 +2,8 @@ package com.ecommer.userservices.users.userservices;
 
 import com.ecommer.userservices.entity.Roles;
 import com.ecommer.userservices.entity.Users;
+import com.ecommer.userservices.exceptions.EmailNotFoundException;
+import com.ecommer.userservices.exceptions.UserNotFoundException;
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;
 import com.ecommer.userservices.repository.RoleRepository;
@@ -150,7 +152,7 @@ public class UserServicesImpl implements UserServices {
     public UserResponseDto updateUser(String email, UpdateUserRequestDto dto) {
         Optional<Users>existingUser=userRepository.findByUserEmail(dto.getUserEmail());
         if(existingUser.isEmpty()){
-            throw new RuntimeException("DEAR CUSTOMER PLEASE SIGN UP FIRST "+dto.getUserName());
+            throw new UserNotFoundException("DEAR CUSTOMER PLEASE SIGN UP FIRST "+dto.getUserName());
         }
         Users users=existingUser.get();
         users.setUserName(dto.getUserName());
@@ -178,7 +180,7 @@ public class UserServicesImpl implements UserServices {
     public ResponseEntity<UserResponseDto> resetPassword(String email,String password) {
         Optional<Users>existingUser=userRepository.findByUserEmail(email);
         if(existingUser.isEmpty()){
-            throw new RuntimeException("PLEASE CHECK EMAIL OR SIGN UP "+email);
+            throw new EmailNotFoundException("PLEASE ENTER CORRECT EMAIL OR SIGN UP "+email);
         }
         Users users=existingUser.get();
         if(passwordEncoder.matches(password, users.getUserPassword())){

@@ -21,7 +21,6 @@ public class UserclientRestTemplate {
     @Autowired
     private UserDetailsReposirtoy reposirtoy;
     @Autowired
-//    @Qualifier("userServiceTemplte")
     private RestTemplateBuilder restTemplateBuilder;
 
 
@@ -44,21 +43,6 @@ public class UserclientRestTemplate {
         return response.getBody();
     }
 
-//    public UserDetails fetchUser(String userEmail, String jwtToken){
-//        UserResponseDto responseDto=new UserResponseDto();
-//        responseDto=restClient.get()
-//                .uri("/getUserByid/"+userEmail)
-//                .headers(headers -> headers.setBearerAuth(jwtToken)) // Set Bearer Token // storing token in header
-//                .retrieve()
-//                .body(UserResponseDto.class);
-//        UserDetails userDetails=new UserDetails();
-//        userDetails.setUserId(responseDto.getUserId());
-//        userDetails.setUserPhone(responseDto.getUserPhone());
-//        userDetails.setUserEmail(responseDto.getUserEmail());
-//        userDetails.setUserName(responseDto.getUserName());
-////        reposirtoy.save(userDetails);
-//        return UserMapper.fromEntity(responseDto);
-//    }
     private String getJwtToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof JwtAuthenticationToken) {

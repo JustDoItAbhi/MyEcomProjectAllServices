@@ -7,6 +7,7 @@ import com.ecommer.userservices.roles.roledtos.RoleResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -28,6 +29,11 @@ public class RoleServiceImpl implements RoleService{
 
     @Override
     public List<RoleResponseDto> getAllRoles() {
-        return List.of();
+        List<Roles>rolesList=roleRepository.findAll();
+        List<RoleResponseDto>dtos=new ArrayList<>();
+        for(Roles roles:rolesList){
+            dtos.add(RoleResponseDto.fromEntity(roles));
+        }
+        return dtos;
     }
 }

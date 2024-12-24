@@ -5,7 +5,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -74,9 +73,9 @@ import java.util.stream.Collectors;
         http
                 .csrf().disable()  // Disable CSRF for API
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST,"/user/update/","/role/create").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/user/","/user/delete/","/debug","/getUserByid/").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
@@ -116,11 +115,7 @@ import java.util.stream.Collectors;
         firewall.setAllowSemicolon(true); // Allow semicolons in URLs
         return firewall;
     }
-    @Bean
-    public RestClient restClient(){
-        return RestClient.builder()
-                .baseUrl("http://localhost:8085/cartUser/getUserByid/").build();
-    }
+
 
 
         private static KeyPair generateRsaKey() {

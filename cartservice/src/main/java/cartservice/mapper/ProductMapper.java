@@ -16,6 +16,7 @@ public class ProductMapper {
 
     public static Products fromProductResponseDto(ProductResponseDto dto){
         Products products=new Products();
+
         products.setId(dto.getId());
         products.setName(dto.getName());
         products.setPrice(dto.getPrice());
@@ -23,7 +24,7 @@ public class ProductMapper {
         products.setDescription(dto.getDescription());
         products.setStock(dto.getStock());
         products.setBrand(dto.getBrand());
-        productRepository.save(products);
+//        productRepository.save(products);
         return products;
     }
 }

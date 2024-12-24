@@ -1,6 +1,7 @@
 package paymentservice.configrations;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +16,10 @@ import paymentservice.dtos.OrderResponseDto;
 public class SystemConfig {
 
     @Bean
+    @LoadBalanced
     public RestClient restClient(){
         return RestClient.builder()
-                .baseUrl("http://localhost:8086/order")
+                .baseUrl("http://ORDERSERVICE/order")
                 .build();
     }
     @Bean
