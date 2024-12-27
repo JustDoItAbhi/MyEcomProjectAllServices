@@ -26,14 +26,14 @@ public class Incomingcalls  {
         this.discoveryClient = discoveryClient;
     }
 
-    public CartResposneDtos fetchProduct(String userId) {
+    public CartResposneDtos fetchProduct(long cartId) {
         RestTemplate restTemplate=restTemplateBuilder.build();
         ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
-        String serviceAUri = serviceInstance.getUri().toString() + "/cart/getCartById/"+userId;
+        String serviceAUri = serviceInstance.getUri().toString() + "/cart/getCartById/"+cartId;
 //String url="http://CARTSERVICE/cart/getCartById/"+userId;
         ResponseEntity<CartResposneDtos>response=restTemplate.getForEntity(serviceAUri, CartResposneDtos.class);
         if(response.getBody()==null){
-            throw new RuntimeException("CANNOT FETCH CART "+ userId);
+            throw new RuntimeException("CANNOT FETCH CART "+ cartId);
         }
         return response.getBody();
     }

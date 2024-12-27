@@ -1,9 +1,7 @@
-package cartservice.entity;
+package orderservice.users;
 
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.cache.annotation.EnableCaching;
+import orderservice.entity.BaseModels;
 
 import java.util.List;
 

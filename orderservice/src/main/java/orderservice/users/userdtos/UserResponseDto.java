@@ -1,4 +1,4 @@
-package cartservice.userdtos;
+package orderservice.users.userdtos;
 
 import lombok.Getter;
 import lombok.Setter;

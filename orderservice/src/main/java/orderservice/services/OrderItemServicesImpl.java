@@ -5,8 +5,12 @@ import orderservice.dtos.CartResposneDtos;
 import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.OrderStatus;
 import orderservice.entity.Orders;
+import orderservice.exceptions.OrderCannotPLacedexception;
+import orderservice.exceptions.SignUpException;
 import orderservice.mappers.OrderMapper;
 import orderservice.repositorties.OrderRepository;
+import orderservice.templates.UserclientRestTemplate;
+import orderservice.users.userdtos.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.security.core.Authentication;
@@ -24,20 +28,27 @@ public class OrderItemServicesImpl implements OrderItemServices {
     private final RestTemplateBuilder restTemplateBuilder;
     private final HashMap<Long,Object>ordersMap;
     private final Incomingcalls incomingcalls;
+    private final UserclientRestTemplate template;
 
     public OrderItemServicesImpl(OrderRepository orderRepository,
-                                 RestTemplateBuilder restTemplateBuilder, HashMap<Long, Object> ordersMap, Incomingcalls incomingcalls) {
+                                 RestTemplateBuilder restTemplateBuilder, HashMap<Long, Object> ordersMap,
+                                 Incomingcalls incomingcalls, UserclientRestTemplate template) {
         this.orderRepository = orderRepository;
         this.restTemplateBuilder = restTemplateBuilder;
         this.ordersMap = ordersMap;
         this.incomingcalls = incomingcalls;
+        this.template = template;
     }
 
     @Override
-    public OrderResponseDto getCartItems(String userId) {
-        CartResposneDtos resposneDtos=incomingcalls.fetchProduct(userId);
+    public OrderResponseDto getCartItems(String userEmail, long cartId) {
+        UserResponseDto dto=template.getUserById(userEmail);
+        if(dto==null){
+            throw new SignUpException("USER NOT FOUND PLEASE SIGN UP  "+userEmail);
+        }
+        CartResposneDtos resposneDtos=incomingcalls.fetchProduct(cartId);
         if(resposneDtos==null){
-            throw new RuntimeException("NO CART FOUND PLEASE CHECK CONNECTION "+userId);
+                throw new OrderCannotPLacedexception(" CANNOT FIND CART "+cartId);
         }
         Orders orders= new Orders();
         orders.setUserId(resposneDtos.getUserId());
@@ -60,7 +71,7 @@ public class OrderItemServicesImpl implements OrderItemServices {
     }
 
     @Override
-    public Orders getById(long id) {
+    public Orders getOrderById(long id) {
         Orders existingOrder=orderRepository.findById(id).orElseThrow(
                 ()-> new RuntimeException("ID NOT FOUND "+ id));
         if(ordersMap.containsKey(id)){

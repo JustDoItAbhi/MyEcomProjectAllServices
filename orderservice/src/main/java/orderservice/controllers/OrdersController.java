@@ -3,30 +3,45 @@ package orderservice.controllers;
 import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.Orders;
 import orderservice.services.OrderItemServices;
+import orderservice.services.UserServices;
+import orderservice.users.UserDetails;
+import orderservice.users.userdtos.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
 public class OrdersController {
-@Autowired
+    @Autowired
     public OrderItemServices orderItemServices;
+    @Autowired
+    private UserServices userServices;
 
-@GetMapping("/getCartById/{userId}")
-public ResponseEntity<OrderResponseDto> getCART(@PathVariable("userId") String userId){
-    return ResponseEntity.ok(orderItemServices.getCartItems(userId));
-}
-@DeleteMapping("/{id}")
-public ResponseEntity<Boolean> deleteOrder(@PathVariable ("id")long id){
-    return ResponseEntity.ok(orderItemServices.deleteOrder(id));
-}
-@GetMapping("/{id}")
-public ResponseEntity<Orders> getOrderById(@PathVariable("id") long id){
-    return ResponseEntity.ok(orderItemServices.getById(id));
-}
+    @GetMapping("/getCartById/{email}/{cartId}")
+    public ResponseEntity<OrderResponseDto> getCART(@PathVariable("email") String email, @PathVariable("cartId") long cartId) {
+        return ResponseEntity.ok(orderItemServices.getCartItems(email, cartId));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteOrder(@PathVariable("id") long id) {
+        return ResponseEntity.ok(orderItemServices.deleteOrder(id));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Orders> getOrderById(@PathVariable("id") long id) {
+        return ResponseEntity.ok(orderItemServices.getOrderById(id));
+    }
+
     @GetMapping("/GETUSERROLE")
     public ResponseEntity<String> getUSERrOLE() {
         return ResponseEntity.ok(orderItemServices.getUserRoles());
+    }
+
+    @GetMapping("/GETUSER/{email}")
+    public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
+        return ResponseEntity.ok(userServices.getUserById(email));
+
     }
 }

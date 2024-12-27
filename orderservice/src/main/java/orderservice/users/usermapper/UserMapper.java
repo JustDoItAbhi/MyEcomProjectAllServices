@@ -1,8 +1,8 @@
-package cartservice.mapper;
+package orderservice.users.usermapper;
 
-import cartservice.entity.Roles;
-import cartservice.entity.UserDetails;
-import cartservice.userdtos.UserResponseDto;
+
+import orderservice.users.UserDetails;
+import orderservice.users.userdtos.UserResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package cartservice.entity;
+package orderservice.users;
 
 public enum RoleType {
     ADMIN,

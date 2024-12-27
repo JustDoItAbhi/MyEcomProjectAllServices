@@ -4,7 +4,7 @@ import com.ecom.productservice.category.categoryservice.CategoryServiceImpl;
 import com.ecom.productservice.entity.BaseModels;
 import com.ecom.productservice.entity.Categoryes;
 import com.ecom.productservice.entity.Products;
-import com.ecom.productservice.product.repository.CategoryRespository;
+import com.ecom.productservice.repository.CategoryRespository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,52 +1,36 @@
 package cartservice.service;
 
 import cartservice.client.ProductServiceClient;
-import cartservice.client.UserclientRestTemplate;
 import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
 import cartservice.dtos.ProductResponseDto;
 import cartservice.entity.CartItems;
 import cartservice.entity.Carts;
-import cartservice.entity.Products;
-import cartservice.entity.UserDetails;
 import cartservice.mapper.CartMapper;
 import cartservice.mapper.Mapper;
-import cartservice.mapper.ProductMapper;
-import cartservice.mapper.UserMapper;
 import cartservice.repository.CartItemsRepository;
 import cartservice.repository.CartRepository;
 import cartservice.repository.ProductRepository;
-import cartservice.repository.UserDetailsReposirtoy;
-import cartservice.userdtos.UserResponseDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
+import expcetions.CartNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements IcartServices {
 
     private final CartRepository cartRepository;
     private final ProductServiceClient productServiceClient;
-    private final UserDetailsReposirtoy userDetailsReposirtoy;
     private final ProductRepository productRepository;
     private final CartItemsRepository cartItemsRepository;
 
-
     public CartServiceImpl(CartRepository cartRepository, ProductServiceClient productServiceClient,
-                           UserDetailsReposirtoy userDetailsReposirtoy, ProductRepository productRepository,
-                           CartItemsRepository cartItemsRepository) {
+                           ProductRepository productRepository, CartItemsRepository cartItemsRepository) {
         this.cartRepository = cartRepository;
         this.productServiceClient = productServiceClient;
-        this.userDetailsReposirtoy = userDetailsReposirtoy;
         this.productRepository = productRepository;
         this.cartItemsRepository = cartItemsRepository;
     }
@@ -54,22 +38,20 @@ public class CartServiceImpl implements IcartServices {
     @Override
     public CartResposneDtos addItemToCart(CartRequestDto dto) {
         Carts carts = new Carts();
-        carts.setUserId(dto.getUserId());
+        carts.setCartCreatedTime(LocalDateTime.now());
         List<CartItems> cartItemsList = new ArrayList<>();
         for (CartItems cartItems : dto.getItem()) {
             ProductResponseDto responseDto =productServiceClient.fetchProductById(cartItems.getProductId());
-
             if (responseDto == null) {
                 throw new RuntimeException("Product not found: " + cartItems.getProductId());
             }
-
             cartItems.setProductId(responseDto.getId());
             cartItems.setProductName(responseDto.getName());
             cartItems.setQuantity(cartItems.getQuantity());
             cartItems.setPrice(responseDto.getPrice());
             cartItemsList.add(cartItems);
         }
-        double amount = 0.0;
+        long amount = 0;
         for (int i = 0; i < cartItemsList.size(); i++) {
             amount += cartItemsList.get(i).getPrice() * cartItemsList.get(i).getQuantity();
         }
@@ -80,8 +62,8 @@ public class CartServiceImpl implements IcartServices {
     }
 
     @Override
-    public CartResposneDtos removeItemFromCart(String userId, long productId) {
-        Carts cart = cartRepository.findByUserId(userId).orElseThrow(
+    public CartResposneDtos removeItemFromCart(long userId, long productId) {
+        Carts cart = cartRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("Cart not found for user: " + userId));
         List<CartItems> updateCartItems = new ArrayList<>();
         for (CartItems items : cart.getItems()) {
@@ -89,7 +71,7 @@ public class CartServiceImpl implements IcartServices {
                 updateCartItems.add(items);
             }
         }
-        double totalcost = 0.0;
+        long totalcost = 0;
         int n = updateCartItems.size();
         for (int i = 0; i < n; i++) {
             totalcost += updateCartItems.get(i).getQuantity() * updateCartItems.get(i).getPrice();
@@ -106,8 +88,8 @@ public class CartServiceImpl implements IcartServices {
     }
 
     @Override
-    public CartResposneDtos confirmCart(String userId) {
-        Carts cart = cartRepository.findByUserId(userId)
+    public CartResposneDtos confirmCart(long userId) {
+        Carts cart = cartRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
 
         // Perform confirmation logic, e.g., saving the cart as an order
@@ -121,31 +103,22 @@ public class CartServiceImpl implements IcartServices {
 
     }
 
+
+
     @Override
-    public boolean deleteUser(long id) {
-        userDetailsReposirtoy.deleteById(id);
-        return true;
+    public CartResposneDtos getById(long id) throws CartNotFoundException {
+        Carts carts=cartRepository.findById(id).orElseThrow(
+                ()->new  CartNotFoundException("NO SUCH CART AVAILABLE PLEASE TRY AGAIN "+id));
+
+        return CartMapper.fromCart(carts);
     }
 
     @Override
-    public CartResposneDtos getById(long id) {
-//        Carts carts=new Carts();
-//        for(CartItems cartsitems:carts.getItems()){
-//            CartItems item = productServiceClient.fetchProductbYiD(id)));
-//            carts.addItem(item);
-//        }
-//        Carts savedCart = cartRepository.save(carts);
-        return null;
-    }
-
-    @Override
-    public ProductResponseDto getByIds(long id) {
+    public ProductResponseDto getByIds(long id) {//extra method for practice
         ProductResponseDto responseDto =productServiceClient.fetchProductById(id);
-
         if (responseDto == null) {
             throw new RuntimeException("Product not found: " +id);
         }
-
         return responseDto;
     }
 
@@ -162,28 +135,6 @@ public class CartServiceImpl implements IcartServices {
     @Override
     public CartItemResponseDto getCartItemById(String userId) {
         return null;
-    }
-
-    @Override
-    public String getUserRoles() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication.getPrincipal() instanceof Jwt) {
-            Jwt jwt = (Jwt) authentication.getPrincipal();
-            return jwt.getClaimAsStringList("roles").toString(); // Extract "roles" claim
-        }
-        return "No roles available";
-    }
-
-    @Override
-    public UserDetails getUser(String userEmail) {
-        // Validate if the user exists
-        Optional<UserDetails> existingUser = userDetailsReposirtoy.findByUserEmail(userEmail);
-        if (existingUser.isEmpty()) {
-            throw new RuntimeException("PLEASE SIGN IN AGAIN OR CALL USER SEPERATLY FROM USER SERVICE " + userEmail);
-        }
-
-        return existingUser.get();
     }
 
     @Override

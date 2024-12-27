@@ -15,6 +15,10 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @GetMapping("/")
+    public ResponseEntity<List<ProductResponseDto>> getAllProduct(){
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
     @PostMapping("/create")
 public ResponseEntity<ProductResponseDto>createProduct(@RequestBody ProductRequestDto requestDto)
         throws CategoryNotFoundExceptions {
@@ -33,10 +37,7 @@ public ResponseEntity<ProductResponseDto>createProduct(@RequestBody ProductReque
                                                             @RequestBody ProductRequestDto requestDto) throws CategoryNotFoundExceptions {
         return ResponseEntity.ok(productService.updateProduct(id,requestDto));
 }
-@GetMapping("/")
-    public ResponseEntity<List<ProductResponseDto>> getAllProduct(){
-        return ResponseEntity.ok(productService.getAllProducts());
-}
+
 @GetMapping("/get/{id}")
     public ResponseEntity<ProductResponseDto> getById(@PathVariable ("id")long id){
         return ResponseEntity.ok(productService.getProductById(id));

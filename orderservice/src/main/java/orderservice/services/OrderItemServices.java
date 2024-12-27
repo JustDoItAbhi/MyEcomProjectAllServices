@@ -4,8 +4,8 @@ import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.Orders;
 
 public interface OrderItemServices {
-   OrderResponseDto getCartItems(String userId);
+   OrderResponseDto getCartItems(String UserEmail,long cartId);
    boolean deleteOrder(long id);
-   Orders getById(long id);
+   Orders getOrderById(long id);
    String getUserRoles();
 }

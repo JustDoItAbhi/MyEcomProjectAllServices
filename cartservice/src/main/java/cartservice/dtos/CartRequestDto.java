@@ -12,31 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class CartRequestDto {
-    private String userId;
     private List<CartItems> item = new ArrayList<>();
     private double totalprices;
 
-//    public String getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(String userId) {
-//        this.userId = userId;
-//    }
-//
-//    public List<CartItems> getItem() {
-//        return item;
-//    }
-//
-//    public void setItem(List<CartItems> item) {
-//        this.item = item;
-//    }
-//
-//    public double getTotalprices() {
-//        return totalprices;
-//    }
-//
-//    public void setTotalprices(double totalprices) {
-//        this.totalprices = totalprices;
-//    }
 }

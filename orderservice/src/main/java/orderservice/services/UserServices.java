@@ -1,7 +1,8 @@
-package cartservice.service;
+package orderservice.services;
 
-import cartservice.entity.UserDetails;
-import cartservice.userdtos.UserResponseDto;
+
+
+import orderservice.users.UserDetails;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface UserServices {
     boolean deleteUser(long id);
     List<UserDetails>getAllUsers();
     String deleteIfEmailEquslToEmail();
+    UserDetails getUserById(String email);
 }
+

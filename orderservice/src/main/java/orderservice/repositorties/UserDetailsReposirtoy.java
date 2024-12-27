@@ -1,6 +1,7 @@
-package cartservice.repository;
+package orderservice.repositorties;
 
-import cartservice.entity.UserDetails;
+
+import orderservice.users.UserDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

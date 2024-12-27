@@ -1,10 +1,12 @@
-package cartservice.service;
+package orderservice.services;
 
-import cartservice.entity.UserDetails;
-import cartservice.mapper.UserMapper;
-import cartservice.repository.UserDetailsReposirtoy;
-import cartservice.userdtos.UserResponseDto;
-import cartservice.client.UserclientRestTemplate;
+import orderservice.exceptions.CannotFetchDataFromUserService;
+import orderservice.exceptions.SignUpException;
+import orderservice.repositorties.UserDetailsReposirtoy;
+import orderservice.templates.UserclientRestTemplate;
+import orderservice.users.UserDetails;
+import orderservice.users.userdtos.UserResponseDto;
+import orderservice.users.usermapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,31 +28,28 @@ public class UserServicesImpl implements UserServices{
     }
 
     @Override
-    public  UserDetails createUser(String email) {
-        Optional<UserDetails> existingUser = userDetailsReposirtoy.findByUserEmail(email);
+    public UserDetails createUser(String email) {//public use
+        Optional<UserDetails> existingUser = userDetailsReposirtoy.findByUserEmail(email);// if use already registered in system
 
         if (existingUser.isEmpty()){
-            try {
-                UserResponseDto responseDto =userclientRestTemplate.getUserById(email);
-                if(responseDto==null){
-                    throw new RuntimeException("NO SUCH USER EXISTS "+email);
+                UserResponseDto responseDto =userclientRestTemplate.getUserById(email);// try fetch user from userservice
+                if(responseDto.getUserEmail()==null){//if user is not in user service then throw exception and request for sign up
+                    throw new SignUpException("PLEASE SIGN UP AS NEW USER "+ email);
                 }
-                userDetailsReposirtoy.save(UserMapper.fromEntity(responseDto));
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e);
+              return   userDetailsReposirtoy.save(UserMapper.fromEntity(responseDto));// other wise return user and saved in order service
             }
-        }
-        return existingUser.get();
+
+        return existingUser.get();// or else return user if user is present in order service
     }
 
     @Override
-    public boolean deleteUser(long id) {
+    public boolean deleteUser(long id) {//only admin use
         userDetailsReposirtoy.deleteById(id);
         return true;
     }
 
     @Override
-    public List<UserDetails> getAllUsers() {
+    public List<UserDetails> getAllUsers() {//get all users if need only admin use
         List<UserResponseDto> response = userclientRestTemplate.getAllUser();
 
         if (response == null) {
@@ -82,6 +81,15 @@ public class UserServicesImpl implements UserServices{
         }
 
         return "EXTRA IDS DELETED";
+    }
+
+    @Override
+    public UserDetails getUserById(String email) {
+        UserResponseDto dto =userclientRestTemplate.getUserById(email);
+        if(dto==null){
+            throw new CannotFetchDataFromUserService("USER NOT FOUND "+email);
+        }
+        return UserMapper.fromEntity(dto);
     }
 }
 
