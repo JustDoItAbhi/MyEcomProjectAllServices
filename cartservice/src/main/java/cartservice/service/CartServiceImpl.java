@@ -57,7 +57,7 @@ public class CartServiceImpl implements IcartServices {
         carts.setUserId(dto.getUserId());
         List<CartItems> cartItemsList = new ArrayList<>();
         for (CartItems cartItems : dto.getItem()) {
-            ProductResponseDto responseDto =productServiceClient.fetchProductbYiD(cartItems.getProductId());
+            ProductResponseDto responseDto =productServiceClient.fetchProductById(cartItems.getProductId());
 
             if (responseDto == null) {
                 throw new RuntimeException("Product not found: " + cartItems.getProductId());
@@ -140,7 +140,7 @@ public class CartServiceImpl implements IcartServices {
 
     @Override
     public ProductResponseDto getByIds(long id) {
-        ProductResponseDto responseDto =productServiceClient.fetchProductbYiD(id);
+        ProductResponseDto responseDto =productServiceClient.fetchProductById(id);
 
         if (responseDto == null) {
             throw new RuntimeException("Product not found: " +id);
@@ -188,12 +188,7 @@ public class CartServiceImpl implements IcartServices {
 
     @Override
     public List<ProductResponseDto> getAllProducts() {
-List<ProductResponseDto>responseDtos=productServiceClient.fetchProduct();
-//List<Products>products=new ArrayList<>();
-//for(ProductResponseDto dto:responseDtos){
-//    products.add(ProductMapper.fromProductResponseDto(dto));
-//}
-
+    List<ProductResponseDto>responseDtos=productServiceClient.fetchProduct();
         return responseDtos;
     }
 

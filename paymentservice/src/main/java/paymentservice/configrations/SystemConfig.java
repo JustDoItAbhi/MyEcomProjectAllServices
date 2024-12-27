@@ -1,6 +1,7 @@
 package paymentservice.configrations;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,7 @@ public class SystemConfig {
     @LoadBalanced
     public RestClient restClient(){
         return RestClient.builder()
-                .baseUrl("http://ORDERSERVICE/order")
+                .baseUrl("http://localhost:8086/order")
                 .build();
     }
     @Bean

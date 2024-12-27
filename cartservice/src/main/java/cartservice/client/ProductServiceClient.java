@@ -4,6 +4,8 @@ import cartservice.dtos.ProductResponseDto;
 import cartservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,26 +17,37 @@ import java.util.List;
 
 @Service
 public class ProductServiceClient {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-  private RestTemplateBuilder restTemplateBuilder;
+    private final ProductRepository productRepository;
+  private final RestTemplateBuilder restTemplateBuilder;
+    private final DiscoveryClient discoveryClient;
 
+    public ProductServiceClient(ProductRepository productRepository,
+                                RestTemplateBuilder restTemplateBuilder, DiscoveryClient discoveryClient) {
+        this.productRepository = productRepository;
+        this.restTemplateBuilder = restTemplateBuilder;
+        this.discoveryClient = discoveryClient;
+    }
 
     public List<ProductResponseDto> fetchProduct() {
         RestTemplate restTemplate=restTemplateBuilder.build();
-        String url="http://localhost:8080/product/";
-ResponseEntity<ProductResponseDto[]> response=restTemplate.getForEntity(url,ProductResponseDto[].class);
-
+        ServiceInstance serviceInstance = discoveryClient.getInstances("productservice").get(0);
+        String serviceAUri = serviceInstance.getUri().toString() + "/product/";
+//        String url="http://PRODUCTSERVICE/product/";
+        ResponseEntity<ProductResponseDto[]> response=restTemplate.getForEntity(serviceAUri,ProductResponseDto[].class);
+        if(response.getBody()==null){
+        throw new RuntimeException("entity not found");
+}
         return List.of(response.getBody());
     }
 
 
 
-    public ProductResponseDto fetchProductbYiD(long id) {
+    public ProductResponseDto fetchProductById(long id) {
         RestTemplate restTemplate=restTemplateBuilder.build();
-        String url="http://localhost:8080/product/get/"+id;
-        ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(url,ProductResponseDto.class);
+        ServiceInstance serviceInstance = discoveryClient.getInstances("productservice").get(0);
+        String serviceAUri = serviceInstance.getUri().toString() + "/product/get/"+id;
+//        String url="http://PRODUCTSERVICE/product/get/"+id;
+        ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(serviceAUri,ProductResponseDto.class);
 
         return response.getBody();
     }

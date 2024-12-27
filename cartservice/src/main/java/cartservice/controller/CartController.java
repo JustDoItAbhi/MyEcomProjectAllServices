@@ -54,24 +54,22 @@ public class CartController {
         return ResponseEntity.ok(icartServices.confirmCart(userId));
     }
 
-    @GetMapping("/")
+    @GetMapping("/getallCart")
     public ResponseEntity<List<CartItemResponseDto>> getAllItems() {
         return ResponseEntity.ok(icartServices.getAllCartItems());
     }
+@GetMapping("/")
+public ResponseEntity<List<ProductResponseDto>> getAllProducts() {//get all products to test
+    return ResponseEntity.ok(icartServices.getAllProducts());
+}
 
     @GetMapping("/GETUSERROLE")
-    public ResponseEntity<String> getUSERrOLE() {
+    public ResponseEntity<String> getUSERrOLE() {// GET USER ROLE
         return ResponseEntity.ok(icartServices.getUserRoles());
-    }
-
-    @GetMapping("/GETALL/")//getall prodcut
-    public ResponseEntity<List<ProductResponseDto>> getProductOnlyByI() {
-        return ResponseEntity.ok(icartServices.getAllProducts());
     }
 
     @DeleteMapping("/deleteCartById/{id}")
     public ResponseEntity<Boolean> deleteCartById(@PathVariable("id") long id) {// delete details user by id
         return ResponseEntity.ok(icartServices.deleteCart(id));
-
     }
 }

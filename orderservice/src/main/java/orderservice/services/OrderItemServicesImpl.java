@@ -8,6 +8,7 @@ import orderservice.entity.Orders;
 import orderservice.mappers.OrderMapper;
 import orderservice.repositorties.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,15 +20,15 @@ import java.util.HashMap;
 
 @Service
 public class OrderItemServicesImpl implements OrderItemServices {
-    private OrderRepository orderRepository;
-    private RestTemplate restTemplate;
-    private HashMap<Long,Object>ordersMap;
-    private Incomingcalls incomingcalls;
+    private final OrderRepository orderRepository;
+    private final RestTemplateBuilder restTemplateBuilder;
+    private final HashMap<Long,Object>ordersMap;
+    private final Incomingcalls incomingcalls;
 
-
-    public OrderItemServicesImpl(OrderRepository orderRepository, RestTemplate restTemplate, HashMap<Long, Object> ordersMap, Incomingcalls incomingcalls) {
+    public OrderItemServicesImpl(OrderRepository orderRepository,
+                                 RestTemplateBuilder restTemplateBuilder, HashMap<Long, Object> ordersMap, Incomingcalls incomingcalls) {
         this.orderRepository = orderRepository;
-        this.restTemplate = restTemplate;
+        this.restTemplateBuilder = restTemplateBuilder;
         this.ordersMap = ordersMap;
         this.incomingcalls = incomingcalls;
     }
@@ -43,8 +44,11 @@ public class OrderItemServicesImpl implements OrderItemServices {
         orders.setPrice(resposneDtos.getTotal());
         if(resposneDtos.getTotal()<=0.0){
             orders.setOrderStatus(OrderStatus.PENDING);
+        }else {
+            orders.setOrderStatus(OrderStatus.SUCESSFULL);
+            //if order is succefull then redirect to login if cannot login then sign up
+
         }
-        orders.setOrderStatus(OrderStatus.SUCESSFULL);
         orderRepository.save(orders);
         return OrderMapper.fromEntity(orders);
     }

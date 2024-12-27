@@ -3,6 +3,8 @@ package orderservice.configrations;
 import orderservice.dtos.CartResposneDtos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,34 +17,38 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class Incomingcalls implements WebMvcConfigurer {
-    private RestTemplateBuilder restTemplateBuilder;
+public class Incomingcalls  {
+    private final RestTemplateBuilder restTemplateBuilder;
+    private final DiscoveryClient discoveryClient;
 
-    public Incomingcalls(RestTemplateBuilder restTemplateBuilder) {
+    public Incomingcalls(RestTemplateBuilder restTemplateBuilder, DiscoveryClient discoveryClient) {
         this.restTemplateBuilder = restTemplateBuilder;
+        this.discoveryClient = discoveryClient;
     }
 
     public CartResposneDtos fetchProduct(String userId) {
         RestTemplate restTemplate=restTemplateBuilder.build();
-        String url="http://localhost:8085/cart/getCartById/"+userId;
-        ResponseEntity<CartResposneDtos>response=restTemplate.getForEntity(url, CartResposneDtos.class);
+        ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
+        String serviceAUri = serviceInstance.getUri().toString() + "/cart/getCartById/"+userId;
+//String url="http://CARTSERVICE/cart/getCartById/"+userId;
+        ResponseEntity<CartResposneDtos>response=restTemplate.getForEntity(serviceAUri, CartResposneDtos.class);
         if(response.getBody()==null){
             throw new RuntimeException("CANNOT FETCH CART "+ userId);
         }
         return response.getBody();
     }
 
-    private String getJwtToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
-            String token= jwtAuth.getToken().getTokenValue();
-            System.out.println("JWT Token: " + token);
-            return token;
-        }
-        throw new IllegalStateException("JWT token is not available");
-    }
-    @Override
+//    private String getJwtToken() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication instanceof JwtAuthenticationToken) {
+//            JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
+//            String token= jwtAuth.getToken().getTokenValue();
+//            System.out.println("JWT Token: " + token);
+//            return token;
+//        }
+//        throw new IllegalStateException("JWT token is not available");
+//    }
+
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*");
         System.out.println("ENTERED BY CART SERVICE");

@@ -1,11 +1,9 @@
 package paymentservice.controller;
 
 import com.stripe.exception.StripeException;
+import com.stripe.model.Event;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import paymentservice.entity.OrderPayment;
 import paymentservice.services.PaymentService;
 
@@ -25,4 +23,5 @@ private final PaymentService paymentService;
     public ResponseEntity<String> getOrderForPayment(@PathVariable("id")long id) throws StripeException {
         return ResponseEntity.ok(paymentService.createPaymentEntity(id));
     }
+
 }

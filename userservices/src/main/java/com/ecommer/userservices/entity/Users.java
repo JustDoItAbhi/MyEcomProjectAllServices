@@ -8,8 +8,8 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+//@Getter
+//@Setter
 @Entity
 @Table(name = "USERS")
 public class Users extends BaseModels{
@@ -29,8 +29,6 @@ private int userPostelCode;
 private List<Roles> rolesList;
 @ManyToOne
 private  Token token;
-
-
 
     public String getUserName() {
         return userName;
@@ -64,20 +62,28 @@ private  Token token;
         this.userPassword = userPassword;
     }
 
-    public List<Roles> getRolesList() {
-        return rolesList;
+    public String getUserHouseNumber() {
+        return userHouseNumber;
     }
 
-    public void setRolesList(List<Roles> rolesList) {
-        this.rolesList = rolesList;
+    public void setUserHouseNumber(String userHouseNumber) {
+        this.userHouseNumber = userHouseNumber;
     }
 
-    public Token getToken() {
-        return token;
+    public String getUserStreet() {
+        return userStreet;
     }
 
-    public void setToken(Token token) {
-        this.token = token;
+    public void setUserStreet(String userStreet) {
+        this.userStreet = userStreet;
+    }
+
+    public String getUserLandMark() {
+        return userLandMark;
+    }
+
+    public void setUserLandMark(String userLandMark) {
+        this.userLandMark = userLandMark;
     }
 
     public String getUserCity() {
@@ -110,5 +116,21 @@ private  Token token;
 
     public void setUserPostelCode(int userPostelCode) {
         this.userPostelCode = userPostelCode;
+    }
+
+    public List<Roles> getRolesList() {
+        return rolesList;
+    }
+
+    public void setRolesList(List<Roles> rolesList) {
+        this.rolesList = rolesList;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
     }
 }

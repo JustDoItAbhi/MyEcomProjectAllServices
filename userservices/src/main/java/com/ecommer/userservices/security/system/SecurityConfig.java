@@ -71,9 +71,10 @@ import java.util.stream.Collectors;
     @Order(2)
     public SecurityFilterChain protectedFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()  // Disable CSRF for API
+//                .csrf().disable()  // Disable CSRF for API
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
+                        .requestMatchers("/user/login").authenticated()
                         .requestMatchers(HttpMethod.GET,"/user/","/user/delete/","/debug","/getUserByid/").permitAll()
                         .anyRequest().permitAll()
                 )

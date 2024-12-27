@@ -3,8 +3,6 @@ package paymentservice.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.Getter;
-import lombok.Setter;
 import paymentservice.dtos.OrderStatus;
 
 import java.time.LocalDateTime;
@@ -26,9 +24,6 @@ public class OrderPayment extends BaseModels{
     public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
-
-
-
     public String getUserId() {
         return userId;
     }
