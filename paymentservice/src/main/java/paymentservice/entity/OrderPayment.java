@@ -3,11 +3,15 @@ package paymentservice.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import paymentservice.dtos.OrderStatus;
 
 import java.time.LocalDateTime;
 
-
+@Getter
+@Setter
 @Entity
 public class OrderPayment extends BaseModels{
     private long orderId;
@@ -15,7 +19,7 @@ public class OrderPayment extends BaseModels{
     private String userId;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-    private double price;
+    private long price;
 
     public long getOrderId() {
         return orderId;
@@ -24,6 +28,17 @@ public class OrderPayment extends BaseModels{
     public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -40,11 +55,11 @@ public class OrderPayment extends BaseModels{
         this.orderStatus = orderStatus;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 }

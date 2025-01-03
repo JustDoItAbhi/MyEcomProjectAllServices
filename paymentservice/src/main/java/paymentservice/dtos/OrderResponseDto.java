@@ -5,36 +5,28 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
+@Getter
+@Setter
 public class OrderResponseDto {
-    private long id;
-    private LocalDateTime createdAt;
-    private String userId;
+    private long orderid;
+    private long cartId;
     private OrderStatus  orderStatus;
-    private double price;
+    private long price;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public long getOrderid() {
+        return orderid;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setOrderid(long orderid) {
+        this.orderid = orderid;
     }
 
-    public long getId() {
-        return id;
+    public long getCartId() {
+        return cartId;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
     }
 
     public OrderStatus getOrderStatus() {
@@ -45,11 +37,11 @@ public class OrderResponseDto {
         this.orderStatus = orderStatus;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 }

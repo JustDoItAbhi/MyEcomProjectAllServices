@@ -1,27 +1,30 @@
 package paymentservice.controller;
 
 import com.stripe.exception.StripeException;
-import com.stripe.model.Event;
+import exceptions.OrderNotFetchedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import paymentservice.entity.OrderPayment;
-import paymentservice.services.PaymentService;
+import paymentservice.dtos.CheckoutResponseDto;
+import paymentservice.services.PaymentGateway;
+
 
 @RestController
 @RequestMapping("/pay")
 public class PaymentController {
-private final PaymentService paymentService;
 
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
+    private final PaymentGateway paymentGateway;
+
+    public PaymentController(PaymentGateway paymentGateway) {
+        this.paymentGateway = paymentGateway;
     }
-//    @GetMapping("/getLink/{userId}")
-//public ResponseEntity<String> getPaymentDetails(@PathVariable("userId")long userId) throws StripeException {
-//        return ResponseEntity.ok(paymentService.toPay(userId));
-//    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<String> getOrderForPayment(@PathVariable("id")long id) throws StripeException {
-        return ResponseEntity.ok(paymentService.createPaymentEntity(id));
+    public ResponseEntity<CheckoutResponseDto> getOrderForPayment(@PathVariable("id")long id) throws StripeException, OrderNotFetchedException {
+        return ResponseEntity.ok(paymentGateway.toPay(id));
     }
 
+@GetMapping("/SUCCESS")
+public ResponseEntity<String> paidSuccefully( )  {
+    return ResponseEntity.ok("CONGRATULATIONS YOU MADE THE PAYMENT , YOUR ORDER IS READY TO DELIVER");
+}
 }

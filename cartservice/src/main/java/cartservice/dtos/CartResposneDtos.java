@@ -1,14 +1,11 @@
 package cartservice.dtos;
 
-import cartservice.entity.CartItems;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CartResposneDtos {
-    private long userId;
+    private long cartId;
     private List<CartItemResponseDto> items = new ArrayList<>();
     private long total;
     private LocalDateTime cartCreatedTime;
@@ -21,12 +18,12 @@ public class CartResposneDtos {
         this.cartCreatedTime = cartCreatedTime;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getCartId() {
+        return cartId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
     }
 
     public List<CartItemResponseDto> getItems() {

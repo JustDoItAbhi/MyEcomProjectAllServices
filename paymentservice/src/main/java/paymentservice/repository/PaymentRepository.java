@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import paymentservice.entity.Payments;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payments,Long> {
+    Payments findByTransectionalId(String paymentIntent);
 }

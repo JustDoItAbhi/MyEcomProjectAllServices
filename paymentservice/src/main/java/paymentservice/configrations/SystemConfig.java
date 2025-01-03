@@ -16,13 +16,7 @@ import paymentservice.dtos.OrderResponseDto;
 @Configuration
 public class SystemConfig {
 
-    @Bean
-    @LoadBalanced
-    public RestClient restClient(){
-        return RestClient.builder()
-                .baseUrl("http://localhost:8086/order")
-                .build();
-    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -47,5 +41,9 @@ public class SystemConfig {
         JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
         authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return authenticationConverter;
+    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

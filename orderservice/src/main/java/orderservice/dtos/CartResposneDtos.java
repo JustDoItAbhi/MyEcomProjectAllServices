@@ -12,12 +12,7 @@ import org.springframework.web.client.RestClient;
 @Getter
 @Setter
 public class CartResposneDtos {
-    private String userId;
-    private double total;
+    private long cartId;
+    private long total;
     //    private List<CartItemsResponseDto> items = new ArrayList<>();
-
-    @Configuration
-    public static class SystemConfig {
-
-    }
 }

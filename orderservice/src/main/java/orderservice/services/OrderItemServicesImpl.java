@@ -9,8 +9,10 @@ import orderservice.exceptions.OrderCannotPLacedexception;
 import orderservice.exceptions.SignUpException;
 import orderservice.mappers.OrderMapper;
 import orderservice.repositorties.OrderRepository;
+import orderservice.repositorties.UserDetailsReposirtoy;
 import orderservice.templates.UserclientRestTemplate;
 import orderservice.users.userdtos.UserResponseDto;
+import orderservice.users.usermapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.security.core.Authentication;
@@ -29,15 +31,17 @@ public class OrderItemServicesImpl implements OrderItemServices {
     private final HashMap<Long,Object>ordersMap;
     private final Incomingcalls incomingcalls;
     private final UserclientRestTemplate template;
+    private final UserDetailsReposirtoy userDetailsReposirtoy;
 
-    public OrderItemServicesImpl(OrderRepository orderRepository,
-                                 RestTemplateBuilder restTemplateBuilder, HashMap<Long, Object> ordersMap,
-                                 Incomingcalls incomingcalls, UserclientRestTemplate template) {
+    public OrderItemServicesImpl(OrderRepository orderRepository, RestTemplateBuilder restTemplateBuilder, HashMap<Long, Object> ordersMap,
+                                 Incomingcalls incomingcalls, UserclientRestTemplate template,
+                                 UserDetailsReposirtoy userDetailsReposirtoy) {
         this.orderRepository = orderRepository;
         this.restTemplateBuilder = restTemplateBuilder;
         this.ordersMap = ordersMap;
         this.incomingcalls = incomingcalls;
         this.template = template;
+        this.userDetailsReposirtoy = userDetailsReposirtoy;
     }
 
     @Override
@@ -46,12 +50,13 @@ public class OrderItemServicesImpl implements OrderItemServices {
         if(dto==null){
             throw new SignUpException("USER NOT FOUND PLEASE SIGN UP  "+userEmail);
         }
+        userDetailsReposirtoy.save(UserMapper.fromEntity(dto));
         CartResposneDtos resposneDtos=incomingcalls.fetchProduct(cartId);
         if(resposneDtos==null){
                 throw new OrderCannotPLacedexception(" CANNOT FIND CART "+cartId);
         }
         Orders orders= new Orders();
-        orders.setUserId(resposneDtos.getUserId());
+        orders.setCartId(resposneDtos.getCartId());
         orders.setPrice(resposneDtos.getTotal());
         if(resposneDtos.getTotal()<=0.0){
             orders.setOrderStatus(OrderStatus.PENDING);

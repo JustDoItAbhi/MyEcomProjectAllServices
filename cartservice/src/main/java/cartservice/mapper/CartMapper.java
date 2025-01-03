@@ -11,7 +11,7 @@ import java.util.List;
 public class CartMapper {
     public static CartResposneDtos fromCart(Carts carts){
         CartResposneDtos resposneDtos=new CartResposneDtos();
-        resposneDtos.setUserId(carts.getId());
+        resposneDtos.setCartId(carts.getId());
         resposneDtos.setTotal(carts.getTotal());
         resposneDtos.setCartCreatedTime(carts.getCartCreatedTime());
         List<CartItemResponseDto>dto=new ArrayList<>();

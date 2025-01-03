@@ -3,6 +3,7 @@ package orderservice.services;
 
 
 import orderservice.users.UserDetails;
+import orderservice.users.userdtos.UserResponseDto;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ public interface UserServices {
     boolean deleteUser(long id);
     List<UserDetails>getAllUsers();
     String deleteIfEmailEquslToEmail();
-    UserDetails getUserById(String email);
+    UserDetails getUserByEmail(String email);
+
+
 }
 

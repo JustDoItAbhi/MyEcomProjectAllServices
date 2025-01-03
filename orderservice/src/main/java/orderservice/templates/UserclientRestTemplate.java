@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
@@ -24,9 +25,9 @@ import java.util.List;
 
 @Service
 public class UserclientRestTemplate {
-    private UserDetailsReposirtoy reposirtoy;
-    private RestTemplateBuilder restTemplateBuilder;
-    private DiscoveryClient discoveryClient;
+    private final UserDetailsReposirtoy reposirtoy;
+    private final RestTemplateBuilder restTemplateBuilder;
+    private final DiscoveryClient discoveryClient;
 
     public UserclientRestTemplate(UserDetailsReposirtoy reposirtoy, RestTemplateBuilder restTemplateBuilder, DiscoveryClient discoveryClient) {
         this.reposirtoy = reposirtoy;
@@ -45,28 +46,31 @@ public class UserclientRestTemplate {
         }
         return Arrays.asList(template.getBody());
     }
-    public UserResponseDto getUserById(String email){
+    public UserResponseDto getUserById(String email)throws SignUpException {
         RestTemplate restTemplate = restTemplateBuilder.build();
         List<String> services = discoveryClient.getServices();
         System.out.println("Registered services: " + services);
-
         List<ServiceInstance> instances = discoveryClient.getInstances("USERSERVICE");
         if (instances.isEmpty()) {
             throw new RuntimeException("User service is not available");
         }
         ServiceInstance serviceInstance = instances.get(0);
         String url = serviceInstance.getUri().toString() + "/user/getUserByid/" + email;
-
-        ResponseEntity<UserResponseDto> response = restTemplate.getForEntity(url, UserResponseDto.class);
-
-        if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
-            throw new RuntimeException("PLEASE SIGN UP " + email);
+        try {
+            ResponseEntity<UserResponseDto> response = restTemplate.getForEntity(url, UserResponseDto.class);
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+                throw new SignUpException("DEAR " + email+" SIGNUP http://localhost:8090/user/signup");
+            }
+            return response.getBody();
+        } catch (HttpClientErrorException.NotFound ex) {
+            // Handle 404 specifically
+            throw new SignUpException( email + ". PLEASE SIGN UP BY LINK == http://localhost:8090/user/signup");
+        } catch (HttpClientErrorException ex) {
+            // Handle other client errors
+            throw new RuntimeException("An error occurred while calling the user service: " + ex.getMessage(), ex);
         }
 
-        return response.getBody();
     }
-
-
     private String getJwtToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof JwtAuthenticationToken) {

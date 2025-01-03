@@ -23,7 +23,7 @@ public class SecurityConfig {
                     .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
 //                        .requestMatchers(  "/order/**").hasRole("ADMIN")
-                        .requestMatchers("/order/getCartById/","/order/").permitAll()
+//                        .requestMatchers("/order/").permitAll()
                         .requestMatchers("/pay/").permitAll()
                                 .anyRequest().permitAll()// prohabited all other functions
                 )

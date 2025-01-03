@@ -1,6 +1,7 @@
 package com.ecommer.userservices.users.usercontroller;
 
 
+import com.ecommer.userservices.exceptions.SignUpUserException;
 import com.ecommer.userservices.users.userdtos.*;
 import com.ecommer.userservices.users.userservices.UserServices;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -68,7 +69,7 @@ public class UserController {
         }
     }
     @GetMapping("/getUserByid/{email}")//admin
-    public ResponseEntity<UserResponseDto> getAll(@PathVariable ("email")String email) {
+    public ResponseEntity<UserResponseDto> getAll(@PathVariable ("email")String email) throws SignUpUserException {
         return ResponseEntity.ok(userServices.getById(email));
     }
     @GetMapping("/")//admin

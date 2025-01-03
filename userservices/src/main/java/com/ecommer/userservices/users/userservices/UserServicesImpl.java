@@ -3,6 +3,7 @@ package com.ecommer.userservices.users.userservices;
 import com.ecommer.userservices.entity.Roles;
 import com.ecommer.userservices.entity.Users;
 import com.ecommer.userservices.exceptions.EmailNotFoundException;
+import com.ecommer.userservices.exceptions.SignUpUserException;
 import com.ecommer.userservices.exceptions.UserNotFoundException;
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;
@@ -139,10 +140,10 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public UserResponseDto getById(String email) {
+    public UserResponseDto getById(String email) throws SignUpUserException {
         Optional<Users>existingUser=userRepository.findByUserEmail(email);
         if(existingUser.isEmpty()){
-            throw new RuntimeException("user not found "+email);
+            throw new SignUpUserException("user not found "+email);
         }
 
         return UserMapper.fromEntity(existingUser.get());

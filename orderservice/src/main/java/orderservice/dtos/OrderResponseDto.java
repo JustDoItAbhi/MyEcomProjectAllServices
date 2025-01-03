@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import orderservice.entity.OrderStatus;
 @Getter
-
 @Setter
 public class OrderResponseDto {
-    private long id;
-    private String userId;
+    private long orderid;
+    private long cartId;
     private OrderStatus  orderStatus;
-    private double price;
+    private long price;
 }

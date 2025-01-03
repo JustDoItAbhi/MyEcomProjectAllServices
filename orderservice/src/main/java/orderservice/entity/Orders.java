@@ -10,10 +10,10 @@ import java.util.List;
 @Setter
 @Entity
 public class Orders extends BaseModels{
-    private String userId;
+    private long cartId;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-    private double price;
+    private long price;
     //    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 //    private List<OrderItems> items;
 }

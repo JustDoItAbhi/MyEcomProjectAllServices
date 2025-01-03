@@ -82,14 +82,13 @@ public class UserServicesImpl implements UserServices{
 
         return "EXTRA IDS DELETED";
     }
-
     @Override
-    public UserDetails getUserById(String email) {
-        UserResponseDto dto =userclientRestTemplate.getUserById(email);
-        if(dto==null){
-            throw new CannotFetchDataFromUserService("USER NOT FOUND "+email);
+    public UserDetails getUserByEmail(String userEmail) {
+        Optional<UserDetails> exitingUser=userDetailsReposirtoy.findByUserEmail(userEmail);
+        if(exitingUser.isEmpty()){
+            throw new CannotFetchDataFromUserService("USER NOT FOUND "+userEmail);
         }
-        return UserMapper.fromEntity(dto);
+        return exitingUser.get();
     }
 }
 

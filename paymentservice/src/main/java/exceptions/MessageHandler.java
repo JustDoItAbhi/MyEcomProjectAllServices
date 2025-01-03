@@ -21,4 +21,14 @@ public class MessageHandler {
     return new  ResponseEntity<>(responseDto, HttpStatus.OK);
 }
 
+    @ExceptionHandler(OrderNotFetchedException.class)
+    public ResponseEntity<MessageResponseDto> orderNotFetchedExceptionResponseEntity(OrderNotFetchedException e){
+        MessageResponseDto responseDto=new MessageResponseDto(
+                e.getMessage(),
+                404,
+                LocalDateTime.now()
+        );
+        return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
+
 }

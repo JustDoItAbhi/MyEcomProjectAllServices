@@ -7,11 +7,11 @@ import paymentservice.entity.OrderPayment;
 public class Mapper {
     public static OrderPayment fromDto(OrderResponseDto dto){
         OrderPayment orderPayment=new OrderPayment();
-        orderPayment.setOrderId(dto.getId());
+        orderPayment.setOrderId(dto.getOrderid());
         orderPayment.setOrderStatus(dto.getOrderStatus());
         orderPayment.setPrice(dto.getPrice());
 //        orderPayment.setCreatedAt(dto.getCreatedAt());
-        orderPayment.setUserId(dto.getUserId());
+//        orderPayment.setUserId(dto.getCartId());
         return orderPayment;
     }
 }

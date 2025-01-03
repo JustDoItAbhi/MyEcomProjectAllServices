@@ -2,6 +2,7 @@ package orderservice.controllers;
 
 import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.Orders;
+import orderservice.exceptions.SignUpException;
 import orderservice.services.OrderItemServices;
 import orderservice.services.UserServices;
 import orderservice.users.UserDetails;
@@ -20,7 +21,8 @@ public class OrdersController {
     private UserServices userServices;
 
     @GetMapping("/getCartById/{email}/{cartId}")
-    public ResponseEntity<OrderResponseDto> getCART(@PathVariable("email") String email, @PathVariable("cartId") long cartId) {
+    public ResponseEntity<OrderResponseDto> getCART(@PathVariable("email") String email,
+                                                    @PathVariable("cartId") long cartId)throws SignUpException {
         return ResponseEntity.ok(orderItemServices.getCartItems(email, cartId));
     }
 
@@ -39,9 +41,9 @@ public class OrdersController {
         return ResponseEntity.ok(orderItemServices.getUserRoles());
     }
 
-    @GetMapping("/GETUSER/{email}")
+    @GetMapping("/getUserForDelivery/{email}")
     public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
-        return ResponseEntity.ok(userServices.getUserById(email));
+        return ResponseEntity.ok(userServices.getUserByEmail(email));
 
     }
 }

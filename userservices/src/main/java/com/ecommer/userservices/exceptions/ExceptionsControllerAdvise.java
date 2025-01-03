@@ -41,5 +41,14 @@ public class ExceptionsControllerAdvise {
         );
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(SignUpUserException.class)
+    public ResponseEntity<MessageResponseDto>signupexpention(SignUpUserException e){
+        MessageResponseDto dto=new MessageResponseDto(
+                e.getMessage()+"PLEASE GO TO USER API AND SIGN UP ",
+                404,
+                LocalDateTime.now()
 
+        );
+        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+    }
 }
