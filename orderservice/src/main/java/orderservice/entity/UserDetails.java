@@ -1,11 +1,12 @@
-package deliveryservice.deliveryservice.template;
+package orderservice.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
-public class UserResponseDto {
+
+@Entity
+public class UserDetails extends BaseModels {
     private long userId;
     private String userName;
     private String userPhone;
@@ -69,7 +70,6 @@ public class UserResponseDto {
     }
 
     public String getUserCity() {
-
         return userCity;
     }
 

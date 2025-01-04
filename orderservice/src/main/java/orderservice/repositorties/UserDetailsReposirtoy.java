@@ -1,7 +1,7 @@
 package orderservice.repositorties;
 
 
-import orderservice.users.UserDetails;
+import orderservice.entity.UserDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

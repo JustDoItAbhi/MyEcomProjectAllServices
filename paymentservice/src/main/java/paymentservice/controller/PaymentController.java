@@ -25,6 +25,8 @@ public class PaymentController {
 
 @GetMapping("/SUCCESS")
 public ResponseEntity<String> paidSuccefully( )  {
-    return ResponseEntity.ok("CONGRATULATIONS YOU MADE THE PAYMENT , YOUR ORDER IS READY TO DELIVER");
+    return ResponseEntity.ok("CONGRATULATIONS YOU MADE THE PAYMENT, YOUR ORDER IS READY TO DELIVER\n" +
+            "PLEASE CLICK THE LINK AND ENTER YOUR EMAIL FOR ADDRESS\n" +
+            "   http://localhost:8091/deliveryUser/youremail");
 }
 }

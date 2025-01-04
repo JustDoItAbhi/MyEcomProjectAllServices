@@ -27,7 +27,6 @@ public class OrderMapper {
         responseDto.setCartId(order.getCartId());
         responseDto.setOrderStatus(order.getOrderStatus());
         responseDto.setPrice(order.getPrice());
-
         return responseDto;
     }
 }

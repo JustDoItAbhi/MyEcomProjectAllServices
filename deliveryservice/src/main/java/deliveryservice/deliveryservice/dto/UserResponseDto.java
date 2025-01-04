@@ -1,13 +1,8 @@
-package orderservice.users;
-
-import jakarta.persistence.Entity;
-import orderservice.entity.BaseModels;
+package deliveryservice.deliveryservice.dto;
 
 import java.util.List;
 
-
-@Entity
-public class UserDetails extends BaseModels {
+public class UserResponseDto {
     private long userId;
     private String userName;
     private String userPhone;
@@ -71,6 +66,7 @@ public class UserDetails extends BaseModels {
     }
 
     public String getUserCity() {
+
         return userCity;
     }
 

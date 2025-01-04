@@ -2,8 +2,7 @@ package orderservice.services;
 
 
 
-import orderservice.users.UserDetails;
-import orderservice.users.userdtos.UserResponseDto;
+import orderservice.entity.UserDetails;
 
 import java.util.List;
 

@@ -1,10 +1,7 @@
 package deliveryservice.deliveryservice.mapper;
 
 import deliveryservice.deliveryservice.entity.UserAddress;
-import deliveryservice.deliveryservice.template.UserResponseDto;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import deliveryservice.deliveryservice.dto.UserResponseDto;
 
 public class UserMapper {
     public static UserAddress fromEntity(UserResponseDto users){
@@ -12,8 +9,6 @@ public class UserMapper {
         responseDto.setId(users.getUserId());
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
-        responseDto.setUserPassword(users.getUserPassword());
-        responseDto.setUserEmail(users.getUserEmail());
         responseDto.setUserCity(users.getUserCity());
         responseDto.setUserCountry(users.getUserCountry());
         responseDto.setUserState(users.getUserState());

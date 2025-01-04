@@ -1,12 +1,13 @@
 package deliveryservice.deliveryservice.template;
 
+import deliveryservice.deliveryservice.dto.UserResponseDto;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
+@Component
 public class CallingUserService {
 private RestTemplateBuilder restTemplateBuilder;
 private DiscoveryClient discoveryClient;

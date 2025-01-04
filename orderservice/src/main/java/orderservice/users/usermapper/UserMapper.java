@@ -1,7 +1,7 @@
 package orderservice.users.usermapper;
 
 
-import orderservice.users.UserDetails;
+import orderservice.entity.UserDetails;
 import orderservice.users.userdtos.UserResponseDto;
 
 import java.util.ArrayList;

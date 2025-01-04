@@ -4,7 +4,7 @@ import orderservice.exceptions.CannotFetchDataFromUserService;
 import orderservice.exceptions.SignUpException;
 import orderservice.repositorties.UserDetailsReposirtoy;
 import orderservice.templates.UserclientRestTemplate;
-import orderservice.users.UserDetails;
+import orderservice.entity.UserDetails;
 import orderservice.users.userdtos.UserResponseDto;
 import orderservice.users.usermapper.UserMapper;
 import org.springframework.stereotype.Service;

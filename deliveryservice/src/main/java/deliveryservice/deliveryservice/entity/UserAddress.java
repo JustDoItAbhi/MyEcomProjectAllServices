@@ -1,9 +1,12 @@
 package deliveryservice.deliveryservice.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Version;
 
 @Entity
 public class UserAddress extends BaseModels{
+    @Version
+    private Long version;
     private String userName;
     private String userPhone;
     private String userEmail;

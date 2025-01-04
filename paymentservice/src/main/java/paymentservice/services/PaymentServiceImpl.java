@@ -44,7 +44,7 @@ public class PaymentServiceImpl implements PaymentGateway {
         Product product = Product.create(productParams);
         PriceCreateParams priceParams = PriceCreateParams.builder()
                 .setCurrency("USD")
-                .setUnitAmount((long) dto.getPrice())
+                .setUnitAmount((long) dto.getPrice()*100)
                 .setProduct(product.getId()) // Link to the created product
                 .build();
         Price price = Price.create(priceParams);
@@ -52,7 +52,12 @@ public class PaymentServiceImpl implements PaymentGateway {
         PaymentLinkCreateParams linkParams = PaymentLinkCreateParams.builder()
                 .addLineItem(PaymentLinkCreateParams.LineItem.builder()
                         .setPrice(price.getId())
-                        .setQuantity(1L)
+                        .setQuantity(1L) // Adjust quantity dynamically if needed
+                        .setAdjustableQuantity(PaymentLinkCreateParams.LineItem.AdjustableQuantity.builder()
+                                .setEnabled(true) // Allow quantity adjustments
+                                .setMinimum(1L) // Minimum quantity
+                                .setMaximum(10L) // Maximum quantity
+                                .build())
                         .build())
                 .setAfterCompletion(PaymentLinkCreateParams.AfterCompletion.builder()
                         .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT)
@@ -61,12 +66,12 @@ public class PaymentServiceImpl implements PaymentGateway {
                                 .build())
                         .build())
 
-                .putMetadata("order_id", String.valueOf(dto.getOrderid())) // Add metadata
-
                 .build();
 
 
         PaymentLink paymentLink = PaymentLink.create(linkParams);
+
+
 
         return new CheckoutResponseDto.Builder()
                 .setUrl(paymentLink.getUrl())

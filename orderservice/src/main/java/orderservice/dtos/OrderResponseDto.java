@@ -1,10 +1,10 @@
 package orderservice.dtos;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 import orderservice.entity.OrderStatus;
+import orderservice.entity.UserDetails;
+
 @Getter
 @Setter
 public class OrderResponseDto {

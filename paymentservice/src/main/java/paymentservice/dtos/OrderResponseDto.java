@@ -1,12 +1,8 @@
 package paymentservice.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Getter
-@Setter
 public class OrderResponseDto {
     private long orderid;
     private long cartId;
@@ -44,4 +40,5 @@ public class OrderResponseDto {
     public void setPrice(long price) {
         this.price = price;
     }
+
 }
