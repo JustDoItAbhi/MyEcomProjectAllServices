@@ -1,5 +1,6 @@
 package deliveryservice.deliveryservice.controller;
 
+import deliveryservice.deliveryservice.dto.CartResposneDtos;
 import deliveryservice.deliveryservice.dto.DeliveryResponseDto;
 import deliveryservice.deliveryservice.dto.DeliveryServiceNotification;
 import deliveryservice.deliveryservice.entity.Delivery;
@@ -23,4 +24,9 @@ public class DeliveryController {
     public ResponseEntity<Delivery> getpaymenStatus(@RequestBody DeliveryResponseDto dto) {
         return ResponseEntity.ok(deliveryService.getNotification(dto));
     }
+    @GetMapping("/{cartId}")
+    public ResponseEntity<CartResposneDtos>getCart(@PathVariable("cartId")long cartId){
+        return ResponseEntity.ok(deliveryService.fetchCart(cartId));
+    }
+
 }

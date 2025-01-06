@@ -7,4 +7,6 @@ import paymentservice.dtos.CheckoutResponseDto;
 
 public interface PaymentGateway {
     CheckoutResponseDto toPay(long id) throws StripeException, OrderNotFetchedException;
+
+
 }

@@ -45,12 +45,8 @@ public class OrderItemServicesImpl implements OrderItemServices {
     }
 
     @Override
-    public OrderResponseDto getCartItems(String userEmail, long cartId) {
-        UserResponseDto dto=template.getUserById(userEmail);
-        if(dto==null){
-            throw new SignUpException("USER NOT FOUND PLEASE SIGN UP  "+userEmail);
-        }
-        userDetailsReposirtoy.save(UserMapper.fromEntity(dto));
+    public OrderResponseDto getCartItems(long cartId) {
+
         CartResposneDtos resposneDtos=incomingcalls.fetchProduct(cartId);
         if(resposneDtos==null){
                 throw new OrderCannotPLacedexception(" CANNOT FIND CART "+cartId);

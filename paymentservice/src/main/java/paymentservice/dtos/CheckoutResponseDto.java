@@ -9,6 +9,8 @@ public class CheckoutResponseDto {
     private final String message;
     private final List<PaymentLinkCreateParams.LineItem> lineItems;
     private final String url;
+ 
+
 
     // Private constructor to enforce the use of the builder
     private CheckoutResponseDto(Builder builder) {
@@ -16,8 +18,11 @@ public class CheckoutResponseDto {
         this.message = builder.message;
         this.lineItems = builder.lineItems;
         this.url = builder.url;
+
     }
-        public String getStatus() {
+
+
+    public String getStatus() {
         return status;
     }
     public String getMessage() {
@@ -34,7 +39,25 @@ public class CheckoutResponseDto {
         private String status;
         private String message;
         private List<PaymentLinkCreateParams.LineItem> lineItems;
+        private long orderId;
+        private long cartId;
+        private long price;
         private String url;
+
+        public Builder setOrderId(long orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+
+        public Builder setCartId(long cartId) {
+            this.cartId = cartId;
+            return this;
+        }
+
+        public Builder setPrice(long price) {
+            this.price = price;
+            return this;
+        }
 
         public Builder setStatus(String status) {
             this.status = status;

@@ -1,8 +1,9 @@
 package deliveryservice.deliveryservice.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Version;
+import deliveryservice.deliveryservice.dto.CartItemResponseDto;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class UserAddress extends BaseModels{
@@ -21,8 +22,27 @@ public class UserAddress extends BaseModels{
     private int userPostelCode;
     private String message;
     private int countryDistance;
+    private long cartId;
+    private long totalAmount;
 
 
+    public long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
+    }
+
+
+
+    public long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     public String getMessage() {
         return message;

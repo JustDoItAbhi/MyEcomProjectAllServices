@@ -18,10 +18,9 @@ public class OrdersController {
     @Autowired
     private UserServices userServices;
 
-    @GetMapping("/getCartById/{email}/{cartId}")
-    public ResponseEntity<OrderResponseDto> getCART(@PathVariable("email") String email,
-                                                    @PathVariable("cartId") long cartId)throws SignUpException {
-        return ResponseEntity.ok(orderItemServices.getCartItems(email, cartId));
+    @GetMapping("/getCartById/{cartId}")
+    public ResponseEntity<OrderResponseDto> getCART(                                                    @PathVariable("cartId") long cartId)throws SignUpException {
+        return ResponseEntity.ok(orderItemServices.getCartItems(cartId));
     }
 
     @DeleteMapping("/{id}")

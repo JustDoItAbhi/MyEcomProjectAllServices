@@ -1,5 +1,6 @@
 package deliveryservice.deliveryservice.service;
 
+import deliveryservice.deliveryservice.dto.CartResposneDtos;
 import deliveryservice.deliveryservice.dto.UserRequestDto;
 import deliveryservice.deliveryservice.dto.UserResponseDto;
 import deliveryservice.deliveryservice.entity.Destinations;
@@ -11,6 +12,7 @@ import deliveryservice.deliveryservice.exceptions.UserNotExistsExcetion;
 import deliveryservice.deliveryservice.mapper.UserMapper;
 import deliveryservice.deliveryservice.repository.DestinationRespository;
 import deliveryservice.deliveryservice.repository.UserAddressRepository;
+import deliveryservice.deliveryservice.template.CallingCartdata;
 import deliveryservice.deliveryservice.template.CallingUserService;
 import org.springframework.stereotype.Service;
 
@@ -22,33 +24,43 @@ private UserAddressRepository userAddressRepository;
 private CallingUserService callingUserService;
 private UserResponseUpdateRepository updateRepository;
 private DestinationRespository destinationRespository;
+private CallingCartdata callingCartdata;
 
     public UserServiceImpl(UserAddressRepository userAddressRepository, CallingUserService callingUserService,
-                           UserResponseUpdateRepository updateRepository, DestinationRespository destinationRespository) {
+                           UserResponseUpdateRepository updateRepository, DestinationRespository destinationRespository,
+                           CallingCartdata callingCartdata) {
         this.userAddressRepository = userAddressRepository;
         this.callingUserService = callingUserService;
         this.updateRepository = updateRepository;
         this.destinationRespository = destinationRespository;
+        this.callingCartdata = callingCartdata;
     }
 
     @Override
-    public UserAddress getUser(String userEmail) throws UserNotExistsExcetion, CountryNotFound, CityNotFound {
+    public UserAddress getUser(long cartId,String userEmail) throws UserNotExistsExcetion, CountryNotFound, CityNotFound {
         UserResponseDto existingUser = callingUserService.getUser(userEmail);
         if (existingUser == null) {
             throw new UserNotExistsExcetion("PLEASE SIGN UP " + userEmail);
         }
-
+        CartResposneDtos dtos=callingCartdata.fetchingFromCartServcie(cartId);
+        if(dtos==null){
+            throw new RuntimeException(" CART NOT FOUND "+cartId);
+        }
+        existingUser.setCartId(dtos.getCartId());
+        existingUser.setTotalAmount(dtos.getTotal());
         Destinations destinations = destinationRespository.findByCountryAndCity(
                 existingUser.getUserCountry(),
                 existingUser.getUserCity());
         if (destinations == null) {
             throw new CityNotFound("COUNTRY NOT FOUND " + existingUser.getUserCountry() + " " + existingUser.getUserCity());
         }
+
         existingUser.setCreatedAt(LocalDateTime.now());
         existingUser.setUpdatedAt(LocalDateTime.now());
         existingUser.setUserEmail(userEmail);
         existingUser.setUserPassword("NOT VISIBLE BECAUSE OF PRIVECY RASONS");
         double normalDelivery = Math.ceil(((double) destinations.getCountryDistance()/500) );
+        existingUser.setCountryDistance(destinations.getCountryDistance());
         int expressDelivery = destinations.getCountryDistance() / 120;
         if (normalDelivery <= 1) {
             existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 2 days " );

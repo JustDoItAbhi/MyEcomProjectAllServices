@@ -21,6 +21,24 @@ public class UserResponseDto {
     private LocalDateTime updatedAt;
     private String message;
     private int countryDistance;
+    private long cartId;
+    private long totalAmount;
+
+    public long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
+    }
+
+    public long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

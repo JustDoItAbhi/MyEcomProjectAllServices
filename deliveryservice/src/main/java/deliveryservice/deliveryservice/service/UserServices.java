@@ -9,7 +9,7 @@ import deliveryservice.deliveryservice.exceptions.CountryNotFound;
 import deliveryservice.deliveryservice.exceptions.UserNotExistsExcetion;
 
 public interface UserServices {
-    UserAddress getUser(String userEmail) throws UserNotExistsExcetion, CountryNotFound, CityNotFound;
+    UserAddress getUser(long cartId,String userEmail) throws UserNotExistsExcetion, CountryNotFound, CityNotFound;
     UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsExcetion;
 
 }

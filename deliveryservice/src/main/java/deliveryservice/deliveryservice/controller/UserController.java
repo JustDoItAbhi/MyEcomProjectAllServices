@@ -23,9 +23,10 @@ public class UserController {
     public UserController(UserServices userServices) {
         this.userServices = userServices;
     }
-    @GetMapping("/{userEmail}")
-    public ResponseEntity<UserAddress> loginByEmail(@PathVariable("userEmail")String userEmail) throws UserNotExistsExcetion, CityNotFound, CountryNotFound {
-        return ResponseEntity.ok(userServices.getUser(userEmail));
+
+    @GetMapping("/{cartId}/{userEmail}")
+    public ResponseEntity<UserAddress> loginByEmail(@PathVariable("cartId")long cartId,@PathVariable("userEmail")String userEmail) throws UserNotExistsExcetion, CityNotFound, CountryNotFound {
+        return ResponseEntity.ok(userServices.getUser(cartId,userEmail));
     }
     @PutMapping("/update/{email}")
     public ResponseEntity<UserResponseUpdatedEntity>updateUserAddress(@PathVariable("email")String email , @RequestBody UserRequestDto dto) throws UserNotExistsExcetion {

@@ -24,19 +24,15 @@ public class PaymentServiceImpl implements PaymentGateway {
     private String paymentRedirectUrl;
     private final OrderServiceClient orderServiceClient;
 
-
     public PaymentServiceImpl(OrderServiceClient orderServiceClient) {
         this.orderServiceClient = orderServiceClient;
     }
-
-
 
     @Override
     public CheckoutResponseDto toPay(long id) throws StripeException, OrderNotFetchedException {
         Stripe.apiKey = stripeUniversalLink;
 
         OrderResponseDto dto = orderServiceClient.getOrderDetails(id);
-
 
         ProductCreateParams productParams = ProductCreateParams.builder()
                 .setName("PRODUCT")
@@ -62,23 +58,25 @@ public class PaymentServiceImpl implements PaymentGateway {
                 .setAfterCompletion(PaymentLinkCreateParams.AfterCompletion.builder()
                         .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT)
                         .setRedirect(PaymentLinkCreateParams.AfterCompletion.Redirect.builder()
-                                .setUrl(paymentRedirectUrl)
+                                .setUrl(paymentRedirectUrl+"/"+dto.getCartId()+"/enterEmailHere")
                                 .build())
                         .build())
 
                 .build();
 
-
         PaymentLink paymentLink = PaymentLink.create(linkParams);
-
-
-
-        return new CheckoutResponseDto.Builder()
+                return new CheckoutResponseDto.Builder()
                 .setUrl(paymentLink.getUrl())
                 .setMessage("HERE IS YOUR LINK TO PAY")
                 .setStatus("SUCCESSFUL")
                 .setLineItems(linkParams.getLineItems())
+                .setCartId(dto.getCartId())
+                .setPrice(dto.getPrice())
+                .setOrderId(id)
                 .build();
     }
 
-}
+
+    }
+
+

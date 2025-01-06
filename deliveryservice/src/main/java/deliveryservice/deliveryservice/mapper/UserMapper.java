@@ -10,7 +10,7 @@ public class UserMapper {
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
         responseDto.setUserEmail(users.getUserEmail());
-        responseDto.setUserPassword("NOT VISIBLE BECAUSE OF PRIVECY RASONS");
+        responseDto.setUserPassword("NOT VISIBLE BECAUSE OF PRIVCY RASONS");
         responseDto.setUserCity(users.getUserCity());
         responseDto.setUserCountry(users.getUserCountry());
         responseDto.setUserState(users.getUserState());
@@ -22,6 +22,8 @@ public class UserMapper {
         responseDto.setCountryDistance(users.getCountryDistance());
         responseDto.setCreatedAt(users.getCreatedAt());
         responseDto.setUpdatedAt(users.getUpdatedAt());
+        responseDto.setCartId(users.getCartId());
+        responseDto.setTotalAmount(users.getTotalAmount());
         return responseDto;
     }
 }
