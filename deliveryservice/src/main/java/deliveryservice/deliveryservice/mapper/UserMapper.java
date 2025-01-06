@@ -9,6 +9,8 @@ public class UserMapper {
         responseDto.setId(users.getUserId());
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
+        responseDto.setUserEmail(users.getUserEmail());
+        responseDto.setUserPassword("NOT VISIBLE BECAUSE OF PRIVECY RASONS");
         responseDto.setUserCity(users.getUserCity());
         responseDto.setUserCountry(users.getUserCountry());
         responseDto.setUserState(users.getUserState());
@@ -16,6 +18,10 @@ public class UserMapper {
         responseDto.setUserHouseNumber(users.getUserHouseNumber());
         responseDto.setUserStreet(users.getUserStreet());
         responseDto.setUserLandMark(users.getUserLandMark());
+        responseDto.setMessage(users.getMessage());
+        responseDto.setCountryDistance(users.getCountryDistance());
+        responseDto.setCreatedAt(users.getCreatedAt());
+        responseDto.setUpdatedAt(users.getUpdatedAt());
         return responseDto;
     }
 }

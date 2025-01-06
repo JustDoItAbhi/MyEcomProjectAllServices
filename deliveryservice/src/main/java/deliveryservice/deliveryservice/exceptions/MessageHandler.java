@@ -11,13 +11,31 @@ import java.time.LocalDateTime;
 public class MessageHandler {
     private LocalDateTime localDateTime;
     @ExceptionHandler(UserNotExistsExcetion.class)
-    public ResponseEntity<MessageResponseDto> userNotExits(UserNotExistsExcetion e){
+    public ResponseEntity<MessageResponseDto> cityNotExits(UserNotExistsExcetion e){
         MessageResponseDto responseDto=new MessageResponseDto(
                 e.getMessage()+"PLEASE SIGN UP",
                 404,
                 LocalDateTime.now()
         );
         return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(CountryNotFound.class)
+    public ResponseEntity<MessageResponseDto> countryNotExits(CountryNotFound e){
+        MessageResponseDto responseDto=new MessageResponseDto(
+                e.getMessage()+"ORDER CAN ONLY DELIVER IN EU COUNTRIES",
+                404,
+                LocalDateTime.now()
+        );
+        return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(CityNotFound.class)
+    public ResponseEntity<MessageResponseDto> cityNotExits(CountryNotFound e){
+        MessageResponseDto responseDto=new MessageResponseDto(
+                e.getMessage()+"PLEASE CHOOSE CAPITAL CITY ONLY",
+                200,
+                LocalDateTime.now()
+        );
+        return new  ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 }

@@ -20,8 +20,7 @@ public class DeliveryController {
     }
 
     @GetMapping("/notifyPaymentDetails")
-    public ResponseEntity<Delivery> getpaymenStatus(@RequestBody DeliveryResponseDto dto){
+    public ResponseEntity<Delivery> getpaymenStatus(@RequestBody DeliveryResponseDto dto) {
         return ResponseEntity.ok(deliveryService.getNotification(dto));
     }
-
 }

@@ -1,5 +1,6 @@
 package deliveryservice.deliveryservice.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Version;
 
@@ -18,6 +19,26 @@ public class UserAddress extends BaseModels{
     private String userState;
     private String userCountry;
     private int userPostelCode;
+    private String message;
+    private int countryDistance;
+
+
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getCountryDistance() {
+        return countryDistance;
+    }
+
+    public void setCountryDistance(int countryDistance) {
+        this.countryDistance = countryDistance;
+    }
 
     public String getUserName() {
         return userName;

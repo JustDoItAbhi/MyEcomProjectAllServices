@@ -9,16 +9,7 @@ public class OrderMapper {
         Orders orders=new Orders();
         orders.setCartId(dtos.getCartId());
         orders.setPrice(dtos.getTotal());
-//        List<OrderItems>itemsList=new ArrayList<>();
-//        for(CartItemsResponseDto itemsResponseDto: dtos.getItems()){
-//            OrderItems items=new OrderItems();
-//            items.setProductName(itemsResponseDto.getProductName());
-//            items.setPrice(itemsResponseDto.getPrice());
-//            items.setQuantity(itemsResponseDto.getQuantity());
-//            items.setProductId(itemsResponseDto.getProductId());
-//            itemsList.add(items);
-//        }
-//        orders.setItems(itemsList);
+
         return orders;
     }
     public static OrderResponseDto fromEntity(Orders order){

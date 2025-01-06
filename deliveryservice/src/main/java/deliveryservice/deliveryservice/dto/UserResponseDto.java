@@ -1,5 +1,6 @@
 package deliveryservice.deliveryservice.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserResponseDto {
@@ -16,6 +17,42 @@ public class UserResponseDto {
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String message;
+    private int countryDistance;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getCountryDistance() {
+        return countryDistance;
+    }
+
+    public void setCountryDistance(int countryDistance) {
+        this.countryDistance = countryDistance;
+    }
 
     public long getUserId() {
         return userId;
