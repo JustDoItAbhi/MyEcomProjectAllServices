@@ -7,8 +7,7 @@ import java.util.List;
 
 @Entity
 public class UserAddress extends BaseModels{
-    @Version
-    private Long version;
+
     private String userName;
     private String userPhone;
     private String userEmail;
@@ -24,6 +23,7 @@ public class UserAddress extends BaseModels{
     private int countryDistance;
     private long cartId;
     private long totalAmount;
+
 
 
     public long getCartId() {

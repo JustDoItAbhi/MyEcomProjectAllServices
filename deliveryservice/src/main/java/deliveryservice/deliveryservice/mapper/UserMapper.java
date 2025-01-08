@@ -24,6 +24,7 @@ public class UserMapper {
         responseDto.setUpdatedAt(users.getUpdatedAt());
         responseDto.setCartId(users.getCartId());
         responseDto.setTotalAmount(users.getTotalAmount());
+
         return responseDto;
     }
 }

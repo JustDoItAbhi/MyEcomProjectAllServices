@@ -73,7 +73,7 @@ import java.util.stream.Collectors;
         http
                 .csrf().disable()  // Disable CSRF for API
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
                         .requestMatchers("/user/login").authenticated()
 //                        .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/user/","/user/delete/","/debug","/getUserByid/").permitAll()

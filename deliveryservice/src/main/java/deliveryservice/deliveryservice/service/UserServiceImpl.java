@@ -12,72 +12,81 @@ import deliveryservice.deliveryservice.exceptions.UserNotExistsExcetion;
 import deliveryservice.deliveryservice.mapper.UserMapper;
 import deliveryservice.deliveryservice.repository.DestinationRespository;
 import deliveryservice.deliveryservice.repository.UserAddressRepository;
+import deliveryservice.deliveryservice.repository.UserResponseUpdateRepository;
 import deliveryservice.deliveryservice.template.CallingCartdata;
 import deliveryservice.deliveryservice.template.CallingUserService;
+import deliveryservice.deliveryservice.template.NominatimClinet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
+@Primary
 public class UserServiceImpl implements UserServices{
 private UserAddressRepository userAddressRepository;
 private CallingUserService callingUserService;
-private UserResponseUpdateRepository updateRepository;
 private DestinationRespository destinationRespository;
+private UserResponseUpdateRepository updateRepository;
 private CallingCartdata callingCartdata;
 
     public UserServiceImpl(UserAddressRepository userAddressRepository, CallingUserService callingUserService,
-                           UserResponseUpdateRepository updateRepository, DestinationRespository destinationRespository,
-                           CallingCartdata callingCartdata) {
+                           DestinationRespository destinationRespository,
+                           UserResponseUpdateRepository updateRepository, CallingCartdata callingCartdata) {
         this.userAddressRepository = userAddressRepository;
         this.callingUserService = callingUserService;
-        this.updateRepository = updateRepository;
         this.destinationRespository = destinationRespository;
+        this.updateRepository = updateRepository;
         this.callingCartdata = callingCartdata;
     }
 
     @Override
     public UserAddress getUser(long cartId,String userEmail) throws UserNotExistsExcetion, CountryNotFound, CityNotFound {
-        UserResponseDto existingUser = callingUserService.getUser(userEmail);
-        if (existingUser == null) {
+        UserResponseDto existingUser = callingUserService.getUser(userEmail);// fetching user from user service
+        if (existingUser == null) { //validation for user
             throw new UserNotExistsExcetion("PLEASE SIGN UP " + userEmail);
         }
+
+        // fetching cart service
         CartResposneDtos dtos=callingCartdata.fetchingFromCartServcie(cartId);
+        // validation of cart service
         if(dtos==null){
             throw new RuntimeException(" CART NOT FOUND "+cartId);
         }
-        existingUser.setCartId(dtos.getCartId());
-        existingUser.setTotalAmount(dtos.getTotal());
+        existingUser.setCartId(dtos.getCartId());// saved cartId in UserAdrress
+        existingUser.setTotalAmount(dtos.getTotal());// save amount in UserAdrress
+
+        // fetching country and city from database
         Destinations destinations = destinationRespository.findByCountryAndCity(
                 existingUser.getUserCountry(),
                 existingUser.getUserCity());
+        // validting city and country
         if (destinations == null) {
             throw new CityNotFound("COUNTRY NOT FOUND " + existingUser.getUserCountry() + " " + existingUser.getUserCity());
         }
 
-        existingUser.setCreatedAt(LocalDateTime.now());
-        existingUser.setUpdatedAt(LocalDateTime.now());
-        existingUser.setUserEmail(userEmail);
-        existingUser.setUserPassword("NOT VISIBLE BECAUSE OF PRIVECY RASONS");
-        double normalDelivery = Math.ceil(((double) destinations.getCountryDistance()/500) );
-        existingUser.setCountryDistance(destinations.getCountryDistance());
-        int expressDelivery = destinations.getCountryDistance() / 120;
-        if (normalDelivery <= 1) {
-            existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 2 days " );
-        } else {
 
-                existingUser.setMessage("PARCEL WILL DELIVER IN "+((int)normalDelivery+1)+" days" );
-            }
-//        if(destinations.getCountryDistance()/120<=24){
-//            destinations.setMessage("EXPRESS your order will deliver in  ONE DAYS maximum total travel from lviv to "
-//                    +destinations.getCity()+" is "+destinations.getCountryDistance());
-//        }
-            return UserMapper.fromEntity(existingUser);
+        existingUser.setUserPassword("NOT VISIBLE BECAUSE OF PRIVECY RASONS");// delivery service dont have rights to check password
+        existingUser.setCountryDistance(destinations.getCountryDistance());// setting deistanc in km to useraddress
+        if (destinations.getCountryDistance()/60<=24)   {// if delivery speed 60 km per hour and it will reach before or = 24 hours
+            existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 2 days " );// then take maximum two days for delivery
+        }else{
+            existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 7 DAYS AS YOUR CITY IS FAR "// otherwise 7 days
+                    +existingUser.getUserCity()+" is "+destinations.getCountryDistance());
+        }
+        existingUser.setCreatedAt(LocalDateTime.now());// created timestamp
+        existingUser.setUpdatedAt(LocalDateTime.now());// updated timestamp
+        existingUser.setUserEmail(userEmail);// set user email
+           UserAddress userAddress= userAddressRepository.save(UserMapper.fromEntity(existingUser));// save to database
+            return userAddress;
     }
 
 
     @Override
-    public UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsExcetion {
+    public UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsExcetion {// update only address if user want to send parcel to some other place
         UserResponseDto existingUser=callingUserService.getUser(email);
         if(existingUser==null){
             throw new UserNotExistsExcetion("PLEASE SIGN UP  "+email);

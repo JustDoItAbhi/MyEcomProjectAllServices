@@ -16,5 +16,15 @@ public class DeliveryserviceApplication {
 	public RestTemplateBuilder restTemplate(){
 		return new RestTemplateBuilder();
 	}
+	@Bean
+	public RestTemplate restTemplates() {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getInterceptors().add((request, body, execution) -> {
+			// Add your custom User-Agent header to the request
+			request.getHeaders().add("User-Agent", "DeliveryserviceForUniveristyProject/1.0");
+			return execution.execute(request, body);  // Proceed with the request
+		});
+		return restTemplate;
+	}
 
 }

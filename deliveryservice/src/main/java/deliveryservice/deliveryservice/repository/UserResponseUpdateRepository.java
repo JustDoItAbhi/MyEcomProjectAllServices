@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.service;
+package deliveryservice.deliveryservice.repository;
 
 import deliveryservice.deliveryservice.entity.UserResponseUpdatedEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
