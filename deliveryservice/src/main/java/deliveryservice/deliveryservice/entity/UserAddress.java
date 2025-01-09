@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="userAddres")
 public class UserAddress extends BaseModels{
 
     private String userName;

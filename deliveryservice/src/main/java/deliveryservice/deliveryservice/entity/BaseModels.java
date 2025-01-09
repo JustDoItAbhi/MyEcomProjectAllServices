@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseModels {
 @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private long id;
 @CreationTimestamp
 private LocalDateTime createdAt;
 @UpdateTimestamp

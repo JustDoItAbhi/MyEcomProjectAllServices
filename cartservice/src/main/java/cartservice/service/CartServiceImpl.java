@@ -6,18 +6,22 @@ import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
 import cartservice.dtos.ProductResponseDto;
 import cartservice.entity.CartItems;
+import cartservice.entity.CartStatus;
 import cartservice.entity.Carts;
+import cartservice.expcetions.expectionsfiles.OutOfStockProduct;
 import cartservice.mapper.CartMapper;
 import cartservice.mapper.Mapper;
 import cartservice.repository.CartItemsRepository;
 import cartservice.repository.CartRepository;
 import cartservice.repository.ProductRepository;
-import expcetions.CartNotFoundException;
+import cartservice.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.expcetions.expectionsfiles.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements IcartServices {
@@ -36,35 +40,57 @@ public class CartServiceImpl implements IcartServices {
     }
 
     @Override
-    public CartResposneDtos addItemToCart(CartRequestDto dto) {
+    public CartResposneDtos addItemToCart(String email, CartRequestDto dto) throws CartNotFoundException {
+Optional<Carts>existingEmail=cartRepository.findByEmail(email);
+
+if(existingEmail.isPresent()){
+    Carts carts=existingEmail.get();
+    carts.setCartStatus(CartStatus.IN_PROGRESS);
+    return CartMapper.fromCart(existingEmail.get());
+}
+
+        int intStok=0;
         Carts carts = new Carts();
+        carts.setCartStatus(CartStatus.ACCEPTED);
+        carts.setEmail(email);
         carts.setCartCreatedTime(LocalDateTime.now());
         List<CartItems> cartItemsList = new ArrayList<>();
         for (CartItems cartItems : dto.getItem()) {
+
+            Optional<CartItems>existingCartItem=cartItemsRepository.findByProductId(cartItems.getProductId());
+            if(existingCartItem.isPresent()){
+                cartItems.setQuantity(cartItems.getQuantity());
+
+            }
             ProductResponseDto responseDto =productServiceClient.fetchProductById(cartItems.getProductId());
-            if (responseDto == null) {
+            if (responseDto == null) {//velidation if product fetched or not
                 throw new RuntimeException("Product not found: " + cartItems.getProductId());
             }
-            cartItems.setProductId(responseDto.getId());
-            cartItems.setProductName(responseDto.getName());
-            cartItems.setQuantity(cartItems.getQuantity());
-            cartItems.setPrice(responseDto.getPrice());
-            cartItemsList.add(cartItems);
+                cartItems.setProductId(responseDto.getId());
+                cartItems.setProductName(responseDto.getName());
+                cartItems.setQuantity(cartItems.getQuantity());
+                cartItems.setPrice(responseDto.getPrice());
+                cartItemsList.add(cartItems);
+                intStok=responseDto.getStock()-cartItems.getQuantity();
+                if(intStok<=0){
+                    throw new OutOfStockProduct(responseDto.getName()+" THIS PRODUCT IS OUT OF STOCK ");
+                }
         }
         long amount = 0;
         for (int i = 0; i < cartItemsList.size(); i++) {
             amount += cartItemsList.get(i).getPrice() * cartItemsList.get(i).getQuantity();
         }
         carts.setTotal(amount);
+        carts.setLeftItemStock(intStok);
         carts.setItems(cartItemsList);
         Carts savedCart = cartRepository.save(carts);
         return CartMapper.fromCart(savedCart);
     }
 
     @Override
-    public CartResposneDtos removeItemFromCart(long userId, long productId) {
-        Carts cart = cartRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("Cart not found for user: " + userId));
+    public CartResposneDtos removeItemFromCart(long cartId, long productId) throws CartNotFoundException {
+        Carts cart = cartRepository.findById(cartId).orElseThrow(
+                () -> new CartNotFoundException("Cart not found for user: " + cartId));
         List<CartItems> updateCartItems = new ArrayList<>();
         for (CartItems items : cart.getItems()) {
             if (items.getProductId() != productId) {
@@ -91,6 +117,7 @@ public class CartServiceImpl implements IcartServices {
     public CartResposneDtos confirmCart(long userId) {
         Carts cart = cartRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
+        cart.setCartStatus(CartStatus.IN_PROGRESS);
 
         // Perform confirmation logic, e.g., saving the cart as an order
         // ...
@@ -109,22 +136,25 @@ public class CartServiceImpl implements IcartServices {
     public CartResposneDtos getById(long id) throws CartNotFoundException {
         Carts carts=cartRepository.findById(id).orElseThrow(
                 ()->new  CartNotFoundException("NO SUCH CART AVAILABLE PLEASE TRY AGAIN "+id));
-
+        carts.setCartStatus(CartStatus.FORWORD_TO_ORDER_SERVICE);
         return CartMapper.fromCart(carts);
     }
 
     @Override
-    public ProductResponseDto getByIds(long id) {//extra method for practice
+    public ProductResponseDto getProductByIds(long id) {//extra method for TESTING PRODUCT
         ProductResponseDto responseDto =productServiceClient.fetchProductById(id);
         if (responseDto == null) {
-            throw new RuntimeException("Product not found: " +id);
+            throw new ProductNotFoundException("Product not found: " +id);
         }
         return responseDto;
     }
 
     @Override
-    public List<CartItemResponseDto> getAllCartItems() {
+    public List<CartItemResponseDto> getAllCartItems() throws CartNotFoundException {
         List<CartItems> items = cartItemsRepository.findAll();
+        if (items.size()<=0|| items==null){
+            throw new CartNotFoundException("CART NOT FOUND PLEASE ADD TO CART FIRST BY BELOW LINK http://localhost:8085/cart/add");
+        }
         List<CartItemResponseDto> dtos = new ArrayList<>();
         for (CartItems cartItems : items) {
             dtos.add(Mapper.fromcartItems(cartItems));
@@ -145,7 +175,7 @@ public class CartServiceImpl implements IcartServices {
 
     @Override
     public boolean deleteCart(long cartId) {
-        cartRepository.deleteById(cartId);
+      cartRepository.deleteById(cartId);
         return true;
     }
 

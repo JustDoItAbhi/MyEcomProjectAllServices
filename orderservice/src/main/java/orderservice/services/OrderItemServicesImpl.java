@@ -75,6 +75,7 @@ public class OrderItemServicesImpl implements OrderItemServices {
     public Orders getOrderById(long id) {
         Orders existingOrder=orderRepository.findById(id).orElseThrow(
                 ()-> new RuntimeException("ID NOT FOUND "+ id));
+        existingOrder.setOrderStatus(OrderStatus.READY_TO_PAY);
         if(ordersMap.containsKey(id)){
             return existingOrder;
         }

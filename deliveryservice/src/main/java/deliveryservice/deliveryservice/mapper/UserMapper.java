@@ -6,7 +6,6 @@ import deliveryservice.deliveryservice.dto.UserResponseDto;
 public class UserMapper {
     public static UserAddress fromEntity(UserResponseDto users){
         UserAddress responseDto=new UserAddress();
-        responseDto.setId(users.getUserId());
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
         responseDto.setUserEmail(users.getUserEmail());

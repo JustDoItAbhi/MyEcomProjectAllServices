@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 public class MessageResponseDto {
     private String message;
     private int code;
-    private LocalDateTime time;
+//    private LocalDateTime time;
 
-    public MessageResponseDto(String message, int code, LocalDateTime time) {
+    public MessageResponseDto(String message, int code) {
         this.message = message;
         this.code = code;
-        this.time = time;
+
     }
 
     public String getMessage() {
@@ -28,12 +28,12 @@ public class MessageResponseDto {
     public void setCode(int code) {
         this.code = code;
     }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
+//
+//    public LocalDateTime getTime() {
+//        return time;
+//    }
+//
+//    public void setTime(LocalDateTime time) {
+//        this.time = time;
+//    }
 }

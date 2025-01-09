@@ -1,4 +1,4 @@
-package exceptions;
+package paymentservice.exceptions;
 
 import java.time.LocalDateTime;
 

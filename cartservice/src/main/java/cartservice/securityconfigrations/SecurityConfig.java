@@ -3,6 +3,7 @@ package cartservice.securityconfigrations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -19,7 +20,7 @@ public class SecurityConfig {
 //                .cors().disable()
                 .authorizeHttpRequests(authorize -> authorize
 
-                                .requestMatchers(" http://localhost:8090/user/","/user/").hasRole("ADMIN")
+//                                .requestMatchers(" http://localhost:8090/user/","/user/").hasRole("ADMIN")
 //                                .requestMatchers("/user/getUserByid/**").permitAll()
 //                                .requestMatchers("/cart/getCartById/**").permitAll()
 //                                .requestMatchers("/cart/add").permitAll()
@@ -27,22 +28,21 @@ public class SecurityConfig {
                 )
 
 
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                );
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+
 
         return http.build();
     }
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
-        authoritiesConverter.setAuthoritiesClaimName("roles");
-
-        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
-        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-        return authenticationConverter;
-    }
+//    @Bean
+//    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+//        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+//        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
+//        authoritiesConverter.setAuthoritiesClaimName("roles");
+//
+//        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+//        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+//        return authenticationConverter;
+//    }
 
 
 }

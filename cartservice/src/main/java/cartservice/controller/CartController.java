@@ -2,12 +2,12 @@ package cartservice.controller;
 
 import cartservice.dtos.*;
 import cartservice.service.IcartServices;
-import org.springframework.beans.factory.annotation.Autowired;
+import cartservice.expcetions.expectionsfiles.CartNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/cart")
@@ -20,18 +20,22 @@ public class CartController {
     }
 
     @GetMapping("/getallCart")// get all carts
-    public ResponseEntity<List<CartItemResponseDto>> getAllItems() {
+    public ResponseEntity<List<CartItemResponseDto>> getAllCartItems() throws CartNotFoundException {
         return ResponseEntity.ok(icartServices.getAllCartItems());
     }
 
-    @PostMapping("/add")// add cart if not available
-    public ResponseEntity<CartResposneDtos> getItams(@RequestBody CartRequestDto dtos) { //select product for cart
-        return ResponseEntity.ok(icartServices.addItemToCart(dtos));
+    @PostMapping("/add/{email}")// add cart if not available
+    public ResponseEntity<CartResposneDtos> addItemToCart(
+            @PathVariable("email") String email,
+            @RequestBody CartRequestDto dtos)  throws CartNotFoundException { //select product for cart
+//        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+//        Pattern.compile(emailRegex).matcher(email).matches();
+        return ResponseEntity.ok(icartServices.addItemToCart(email,dtos));
     }
 
 
-    @DeleteMapping("/deleteCart/userId/{cartId}/productId/{productId}")// delete product from cartItems
-    public ResponseEntity<CartResposneDtos> removeCart(@PathVariable("cartId") long cartId, @PathVariable("productId") long productId) {// delete product from cart
+    @DeleteMapping("/deleteProductFromCart/cartId/{cartId}/productId/{productId}")// delete product from cartItems
+    public ResponseEntity<CartResposneDtos> removeCart(@PathVariable("cartId") long cartId, @PathVariable("productId") long productId) throws CartNotFoundException {// delete product from cart
         return ResponseEntity.ok(icartServices.removeItemFromCart(cartId, productId));
     }
 
@@ -44,9 +48,9 @@ public class CartController {
     public ResponseEntity<Boolean> deleteCartById(@PathVariable("id") long id) {// delete details user by id
         return ResponseEntity.ok(icartServices.deleteCart(id));
     }
-    @GetMapping("/getByid/{id}")// get product to test if everything works fine
+    @GetMapping("/getProductByid/{id}")// get product to test if everything works fine
     public ResponseEntity<ProductResponseDto> getById(@PathVariable("id") long id) {//fetch product by id for practice
-        return ResponseEntity.ok(icartServices.getByIds(id));
+        return ResponseEntity.ok(icartServices.getProductByIds(id));
     }
     @GetMapping("/")// get all prodcut for practice
     public ResponseEntity<List<ProductResponseDto>> getAllProducts() {//get all products to test

@@ -1,6 +1,6 @@
-package clinets;
+package paymentservice.clinets;
 
-import exceptions.OrderNotFetchedException;
+import paymentservice.exceptions.OrderNotFetchedException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;

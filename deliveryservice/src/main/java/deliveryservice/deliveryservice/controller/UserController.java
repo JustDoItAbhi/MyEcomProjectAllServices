@@ -2,18 +2,14 @@ package deliveryservice.deliveryservice.controller;
 
 import deliveryservice.deliveryservice.dto.UserRequestDto;
 import deliveryservice.deliveryservice.dto.UserResponseDto;
-import deliveryservice.deliveryservice.entity.Delivery;
-import deliveryservice.deliveryservice.entity.Destinations;
 import deliveryservice.deliveryservice.entity.UserAddress;
 import deliveryservice.deliveryservice.entity.UserResponseUpdatedEntity;
-import deliveryservice.deliveryservice.exceptions.UserNotExistsExcetion;
-import deliveryservice.deliveryservice.exceptions.CityNotFound;
-import deliveryservice.deliveryservice.exceptions.CountryNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.UserNotExistsExcetion;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CityNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CountryNotFound;
 import deliveryservice.deliveryservice.service.UserServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/deliveryUser")
@@ -25,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/{cartId}/{userEmail}")
-    public ResponseEntity<UserAddress> loginByEmail(@PathVariable("cartId")long cartId,@PathVariable("userEmail")String userEmail) throws UserNotExistsExcetion, CityNotFound, CountryNotFound {
+    public ResponseEntity<UserAddress> loginByEmail(@PathVariable("cartId")long cartId, @PathVariable("userEmail")String userEmail) throws UserNotExistsExcetion, CityNotFound, CountryNotFound {
         return ResponseEntity.ok(userServices.getUser(cartId,userEmail));
     }
     @PutMapping("/update/{email}")

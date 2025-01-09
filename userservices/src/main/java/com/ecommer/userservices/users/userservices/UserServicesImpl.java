@@ -4,6 +4,7 @@ import com.ecommer.userservices.entity.Roles;
 import com.ecommer.userservices.entity.Users;
 import com.ecommer.userservices.exceptions.EmailNotFoundException;
 import com.ecommer.userservices.exceptions.SignUpUserException;
+import com.ecommer.userservices.exceptions.UserAlreadyExists;
 import com.ecommer.userservices.exceptions.UserNotFoundException;
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;
@@ -46,6 +47,10 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public UserResponseDto signUp(SignUp signUp) throws JsonProcessingException {
+        Optional<Users> existingUser=userRepository.findByUserEmail(signUp.getUserEmail());
+        if(existingUser.isPresent()){
+            throw new UserAlreadyExists("PLEASE LOGIN -> USER "+signUp.getUserEmail()+" ALREADY EXITS");
+        }
         Users users=new Users();
         users.setUserName(signUp.getUserName());
         users.setUserEmail(signUp.getUserEmail());

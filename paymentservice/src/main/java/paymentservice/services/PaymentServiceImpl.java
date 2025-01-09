@@ -6,13 +6,12 @@ import com.stripe.model.*;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PriceCreateParams;
 import com.stripe.param.ProductCreateParams;
-import exceptions.OrderNotFetchedException;
-import org.springframework.beans.factory.annotation.Autowired;
+import paymentservice.exceptions.OrderNotFetchedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import paymentservice.dtos.OrderResponseDto;
 import paymentservice.dtos.CheckoutResponseDto;
-import clinets.OrderServiceClient;
+import paymentservice.clinets.OrderServiceClient;
 
 @Component
 public class PaymentServiceImpl implements PaymentGateway {

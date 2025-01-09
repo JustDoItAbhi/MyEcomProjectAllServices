@@ -1,10 +1,6 @@
 package cartservice.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,10 +8,30 @@ import java.util.List;
 
 @Entity
 public class Carts extends BaseModels{
+    private String email;
     @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private List<CartItems> items = new ArrayList<>();
     private long total;
     private LocalDateTime cartCreatedTime;
+    private int leftItemStock;
+    @Enumerated(EnumType.STRING)
+    private CartStatus cartStatus;
+
+    public CartStatus getCartStatus() {
+        return cartStatus;
+    }
+
+    public void setCartStatus(CartStatus cartStatus) {
+        this.cartStatus = cartStatus;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public LocalDateTime getCartCreatedTime() {
         return cartCreatedTime;
@@ -40,7 +56,11 @@ public class Carts extends BaseModels{
         this.items = items;
     }
 
+    public int getLeftItemStock() {
+        return leftItemStock;
+    }
 
-
-
+    public void setLeftItemStock(int leftItemStock) {
+        this.leftItemStock = leftItemStock;
+    }
 }

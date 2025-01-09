@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.exceptions;
+package deliveryservice.deliveryservice.exceptions.exceptionfiles;
 
 public class CountryNotFound extends Throwable {
 

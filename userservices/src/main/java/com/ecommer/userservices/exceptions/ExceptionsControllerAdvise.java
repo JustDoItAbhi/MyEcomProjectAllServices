@@ -51,4 +51,14 @@ public class ExceptionsControllerAdvise {
         );
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(UserAlreadyExists.class)
+    public ResponseEntity<MessageResponseDto>userAlreadyExits(UserAlreadyExists e){
+        MessageResponseDto dto=new MessageResponseDto(
+                e.getMessage()+"PLEASE GO TO USER API AND SIGN UP ",
+                404,
+                LocalDateTime.now()
+
+        );
+        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+    }
 }

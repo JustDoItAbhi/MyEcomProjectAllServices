@@ -18,22 +18,22 @@ public class OrdersController {
     @Autowired
     private UserServices userServices;
 
-    @GetMapping("/getCartById/{cartId}")
+    @GetMapping("/getCartById/{cartId}")// first api to call cart service
     public ResponseEntity<OrderResponseDto> getCART(                                                    @PathVariable("cartId") long cartId)throws SignUpException {
         return ResponseEntity.ok(orderItemServices.getCartItems(cartId));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")// delete order
     public ResponseEntity<Boolean> deleteOrder(@PathVariable("id") long id) {
         return ResponseEntity.ok(orderItemServices.deleteOrder(id));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Orders> getOrderById(@PathVariable("id") long id) {
+    @GetMapping("/{id}")// confirm order by id
+    public ResponseEntity<Orders> confirmOrderById(@PathVariable("id") long id) {
         return ResponseEntity.ok(orderItemServices.getOrderById(id));
     }
 
-    @GetMapping("/GETUSERROLE")
+    @GetMapping("/GETUSERROLE")// for personal use to check role
     public ResponseEntity<String> getUSERrOLE() {
         return ResponseEntity.ok(orderItemServices.getUserRoles());
     }

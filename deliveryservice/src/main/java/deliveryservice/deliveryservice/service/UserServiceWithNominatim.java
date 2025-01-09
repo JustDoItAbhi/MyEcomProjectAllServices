@@ -7,9 +7,10 @@ import deliveryservice.deliveryservice.dto.UserResponseDto;
 import deliveryservice.deliveryservice.entity.Destinations;
 import deliveryservice.deliveryservice.entity.UserAddress;
 import deliveryservice.deliveryservice.entity.UserResponseUpdatedEntity;
-import deliveryservice.deliveryservice.exceptions.CityNotFound;
-import deliveryservice.deliveryservice.exceptions.CountryNotFound;
-import deliveryservice.deliveryservice.exceptions.UserNotExistsExcetion;
+
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CityNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CountryNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.UserNotExistsExcetion;
 import deliveryservice.deliveryservice.mapper.UserMapper;
 import deliveryservice.deliveryservice.repository.DestinationRespository;
 import deliveryservice.deliveryservice.repository.UserAddressRepository;
@@ -25,6 +26,7 @@ import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+@Service
 
 // in memory
 public class UserServiceWithNominatim implements UserServices{

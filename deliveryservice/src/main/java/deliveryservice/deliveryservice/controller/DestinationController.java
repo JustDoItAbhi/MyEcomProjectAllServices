@@ -1,8 +1,8 @@
 package deliveryservice.deliveryservice.controller;
 
 import deliveryservice.deliveryservice.entity.Destinations;
-import deliveryservice.deliveryservice.exceptions.CityNotFound;
-import deliveryservice.deliveryservice.exceptions.CountryNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CityNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CountryNotFound;
 import deliveryservice.deliveryservice.service.DestinationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

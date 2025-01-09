@@ -1,4 +1,4 @@
-package exceptions;
+package paymentservice.exceptions;
 
 public class OrderNotFetchedException extends Exception{
     public OrderNotFetchedException() {

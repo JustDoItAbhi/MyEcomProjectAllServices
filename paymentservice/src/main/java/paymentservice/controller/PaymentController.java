@@ -1,7 +1,7 @@
 package paymentservice.controller;
 
 import com.stripe.exception.StripeException;
-import exceptions.OrderNotFetchedException;
+import paymentservice.exceptions.OrderNotFetchedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import paymentservice.dtos.CheckoutResponseDto;

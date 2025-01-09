@@ -2,8 +2,8 @@ package deliveryservice.deliveryservice.service;
 
 import deliveryservice.deliveryservice.dto.DesignationRequestDto;
 import deliveryservice.deliveryservice.entity.Destinations;
-import deliveryservice.deliveryservice.exceptions.CityNotFound;
-import deliveryservice.deliveryservice.exceptions.CountryNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CityNotFound;
+import deliveryservice.deliveryservice.exceptions.exceptionfiles.CountryNotFound;
 
 import java.util.List;
 

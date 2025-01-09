@@ -1,4 +1,4 @@
-package delivery;
+package paymentservice.delivery;
 
 public class DeliveryServiceNotification {
     private String orderId;

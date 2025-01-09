@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class NominatimClinet {
-    private Double LVIV_LAT = 49.842957;// location of warehouse
-    private Double LVIV_LON=	24.031111;// location of warehouse
+    private Double LVIV_LAT = 49.83826;// location of warehouse
+    private Double LVIV_LON=	24.02324;// location of warehouse
 
     private final RestTemplateBuilder restTemplateBuilder;
     private final String NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
