@@ -28,8 +28,6 @@ public class CartController {
     public ResponseEntity<CartResposneDtos> addItemToCart(
             @PathVariable("email") String email,
             @RequestBody CartRequestDto dtos)  throws CartNotFoundException { //select product for cart
-//        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
-//        Pattern.compile(emailRegex).matcher(email).matches();
         return ResponseEntity.ok(icartServices.addItemToCart(email,dtos));
     }
 

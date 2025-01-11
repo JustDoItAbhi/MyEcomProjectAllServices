@@ -20,9 +20,9 @@ public class PaymentController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CheckoutResponseDto> getOrderForPayment(@PathVariable("id") long id) throws StripeException, OrderNotFetchedException {
-        return ResponseEntity.ok(paymentGateway.toPay(id));
+    @GetMapping("/{id}/{email}")
+    public ResponseEntity<CheckoutResponseDto> getOrderForPayment(@PathVariable("id") long id,@PathVariable ("email")String email) throws StripeException, OrderNotFetchedException {
+        return ResponseEntity.ok(paymentGateway.toPay(id,email));
     }
 
 }

@@ -13,9 +13,7 @@ import java.util.List;
 @Table(name = "ROLES")
 public class Roles extends BaseModels{
     private String roleType;
-    @ManyToOne
-    @JsonManagedReference
-    private Users users;
+    private String usersEmail;
 
     public String getRoleType() {
         return roleType;
@@ -25,11 +23,11 @@ public class Roles extends BaseModels{
         this.roleType = roleType;
     }
 
-    public Users getUsers() {
-        return users;
+    public String getUsersEmail() {
+        return usersEmail;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsersEmail(String usersEmail) {
+        this.usersEmail = usersEmail;
     }
 }

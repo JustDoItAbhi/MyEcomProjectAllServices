@@ -1,6 +1,8 @@
 package cartservice.service;
 
+import cartservice.client.CallingUserService;
 import cartservice.client.ProductServiceClient;
+import cartservice.client.UserResponseDto;
 import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
@@ -9,6 +11,7 @@ import cartservice.entity.CartItems;
 import cartservice.entity.CartStatus;
 import cartservice.entity.Carts;
 import cartservice.expcetions.expectionsfiles.OutOfStockProduct;
+import cartservice.expcetions.expectionsfiles.UserNotExistsException;
 import cartservice.mapper.CartMapper;
 import cartservice.mapper.Mapper;
 import cartservice.repository.CartItemsRepository;
@@ -30,25 +33,32 @@ public class CartServiceImpl implements IcartServices {
     private final ProductServiceClient productServiceClient;
     private final ProductRepository productRepository;
     private final CartItemsRepository cartItemsRepository;
+    private final CallingUserService callingUserService;
 
     public CartServiceImpl(CartRepository cartRepository, ProductServiceClient productServiceClient,
-                           ProductRepository productRepository, CartItemsRepository cartItemsRepository) {
+                           ProductRepository productRepository,
+                           CartItemsRepository cartItemsRepository, CallingUserService callingUserService) {
         this.cartRepository = cartRepository;
         this.productServiceClient = productServiceClient;
         this.productRepository = productRepository;
         this.cartItemsRepository = cartItemsRepository;
+        this.callingUserService = callingUserService;
     }
 
     @Override
     public CartResposneDtos addItemToCart(String email, CartRequestDto dto) throws CartNotFoundException {
-Optional<Carts>existingEmail=cartRepository.findByEmail(email);
+        UserResponseDto responseDto1=fetchUserDataAndValidate(email);
+        if(responseDto1==null){
+            throw new UserNotExistsException(" PLEASE SIGN UP "+email+" NOT EXITS");
+        }
 
+
+Optional<Carts>existingEmail=cartRepository.findByEmail(email);
 if(existingEmail.isPresent()){
     Carts carts=existingEmail.get();
     carts.setCartStatus(CartStatus.IN_PROGRESS);
     return CartMapper.fromCart(existingEmail.get());
 }
-
         int intStok=0;
         Carts carts = new Carts();
         carts.setCartStatus(CartStatus.ACCEPTED);
@@ -56,16 +66,12 @@ if(existingEmail.isPresent()){
         carts.setCartCreatedTime(LocalDateTime.now());
         List<CartItems> cartItemsList = new ArrayList<>();
         for (CartItems cartItems : dto.getItem()) {
-
             Optional<CartItems>existingCartItem=cartItemsRepository.findByProductId(cartItems.getProductId());
             if(existingCartItem.isPresent()){
                 cartItems.setQuantity(cartItems.getQuantity());
+            }
+            ProductResponseDto responseDto =fetchProductandValidate(cartItems.getProductId());
 
-            }
-            ProductResponseDto responseDto =productServiceClient.fetchProductById(cartItems.getProductId());
-            if (responseDto == null) {//velidation if product fetched or not
-                throw new RuntimeException("Product not found: " + cartItems.getProductId());
-            }
                 cartItems.setProductId(responseDto.getId());
                 cartItems.setProductName(responseDto.getName());
                 cartItems.setQuantity(cartItems.getQuantity());
@@ -85,6 +91,20 @@ if(existingEmail.isPresent()){
         carts.setItems(cartItemsList);
         Carts savedCart = cartRepository.save(carts);
         return CartMapper.fromCart(savedCart);
+    }
+    private ProductResponseDto fetchProductandValidate(long productId){
+        ProductResponseDto responseDto =productServiceClient.fetchProductById(productId);
+        if (responseDto == null) {//velidation if product fetched or not
+            throw new RuntimeException("Product not found: " + productId);
+        }
+      return responseDto;
+    }
+    private UserResponseDto fetchUserDataAndValidate(String email){
+        UserResponseDto existingUser =callingUserService.getUser(email); // fetching user from user service
+        if (existingUser == null) { //validation for user
+            throw new UserNotExistsException(" PLEASE SIGN UP EMAIL " + email+ "NOT EXITS");
+        }
+        return existingUser;
     }
 
     @Override
@@ -121,7 +141,6 @@ if(existingEmail.isPresent()){
 
         // Perform confirmation logic, e.g., saving the cart as an order
         // ...
-
         // Optionally clear the cart
 //        cart.getItems().clear();
 //        cart.setTotal(0);

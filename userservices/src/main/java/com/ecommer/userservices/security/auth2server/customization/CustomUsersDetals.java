@@ -16,6 +16,7 @@ public class CustomUsersDetals implements UserDetails {
 //    private Users user;
     private String password;
     private  String username;
+    private long userId;
     private boolean accountNonExpired;
     private  boolean accountNonLocked;
     private  boolean credentialsNonExpired;
@@ -27,6 +28,10 @@ public class CustomUsersDetals implements UserDetails {
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public void setAccountNonExpired(boolean accountNonExpired) {
@@ -58,6 +63,7 @@ public class CustomUsersDetals implements UserDetails {
     public CustomUsersDetals(Users user) {
 //        this.username = user.getUsername();
         this.password = user.getUserPassword();
+        this.userId=user.getId();
         this.username = user.getUserEmail();
         this.accountNonExpired = true;
         this.accountNonLocked = true;
@@ -75,8 +81,6 @@ public class CustomUsersDetals implements UserDetails {
         } else {
             System.out.println("No roles assigned to user: " + user.getUserName());
         }
-
-
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -86,6 +90,10 @@ public class CustomUsersDetals implements UserDetails {
 
     public String getUserEmail() {
         return username;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     public void setUserEmail(String userEmail) {

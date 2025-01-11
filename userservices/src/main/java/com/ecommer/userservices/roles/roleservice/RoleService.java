@@ -9,4 +9,5 @@ public interface RoleService {
     RoleResponseDto createRole(RoleRequestDto requestDto);
     boolean deleteRole(long id);
     List<RoleResponseDto> getAllRoles();
+
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import paymentservice.dtos.OrderResponseDto;
 import paymentservice.dtos.CheckoutResponseDto;
 import paymentservice.clinets.OrderServiceClient;
+import paymentservice.exceptions.UserNotFoundException;
 
 @Component
 public class PaymentServiceImpl implements PaymentGateway {
@@ -28,7 +29,10 @@ public class PaymentServiceImpl implements PaymentGateway {
     }
 
     @Override
-    public CheckoutResponseDto toPay(long id) throws StripeException, OrderNotFetchedException {
+    public CheckoutResponseDto toPay(long id,String email) throws StripeException, OrderNotFetchedException {
+        if(email==null){
+            throw new UserNotFoundException("PLEASE ENTER EMAIL "+email);
+        }
         Stripe.apiKey = stripeUniversalLink;
 
         OrderResponseDto dto = orderServiceClient.getOrderDetails(id);
@@ -57,7 +61,7 @@ public class PaymentServiceImpl implements PaymentGateway {
                 .setAfterCompletion(PaymentLinkCreateParams.AfterCompletion.builder()
                         .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT)
                         .setRedirect(PaymentLinkCreateParams.AfterCompletion.Redirect.builder()
-                                .setUrl(paymentRedirectUrl+"/"+dto.getCartId()+"/enterEmailHere")
+                                .setUrl(paymentRedirectUrl+"/"+dto.getCartId()+"/"+email)
                                 .build())
                         .build())
 

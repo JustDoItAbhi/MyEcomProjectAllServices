@@ -24,7 +24,7 @@ private String userCity;
 private String userState;
 private String userCountry;
 private int userPostelCode;
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "users")
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 @JsonBackReference
 private List<Roles> rolesList;
 @ManyToOne

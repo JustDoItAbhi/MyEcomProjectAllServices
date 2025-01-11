@@ -10,7 +10,7 @@ import lombok.Setter;
 public class RoleResponseDto {
     private long roleId;
     private String role;
-    private Users users;
+    private String usersEmail;
 
     public long getRoleId() {
         return roleId;
@@ -28,19 +28,19 @@ public class RoleResponseDto {
         this.role = role;
     }
 
-    public Users getUsers() {
-        return users;
+    public String getUsersEmail() {
+        return usersEmail;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsersEmail(String usersEmail) {
+        this.usersEmail = usersEmail;
     }
 
     public static RoleResponseDto fromEntity(Roles roles){
         RoleResponseDto responseDto=new RoleResponseDto();
         responseDto.setRoleId(roles.getId());
         responseDto.setRole(roles.getRoleType());
-        responseDto.setUsers(responseDto.getUsers());
+        responseDto.setUsersEmail(roles.getUsersEmail());
         return responseDto;
     }
 }

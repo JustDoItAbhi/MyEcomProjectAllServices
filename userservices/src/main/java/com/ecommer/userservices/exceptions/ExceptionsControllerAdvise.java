@@ -44,7 +44,7 @@ public class ExceptionsControllerAdvise {
     @ExceptionHandler(SignUpUserException.class)
     public ResponseEntity<MessageResponseDto>signupexpention(SignUpUserException e){
         MessageResponseDto dto=new MessageResponseDto(
-                e.getMessage()+"PLEASE GO TO USER API AND SIGN UP ",
+                e.getMessage(),
                 404,
                 LocalDateTime.now()
 

@@ -2,6 +2,7 @@ package com.ecommer.userservices.kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,8 @@ public class KafkaProducerClinet {
     }
 
     public void sendMessage(String topic, String message){
-        System.out.println("hello kafka"+ " i am running");
+        System.out.println("SENDING MESSAGE TO KAFKA "+message);
         kafkaTemplate.send(topic,message);
+        System.out.println("eamil sent "+topic);
     }
 }

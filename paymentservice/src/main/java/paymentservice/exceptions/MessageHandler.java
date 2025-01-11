@@ -1,5 +1,6 @@
 package paymentservice.exceptions;
 
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,5 +30,15 @@ public class MessageHandler {
         );
         return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<MessageResponseDto> userNotFound(UserNotFoundException e){
+        MessageResponseDto responseDto=new MessageResponseDto(
+                e.getMessage(),
+                404,
+                LocalDateTime.now()
+        );
+        return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
+
 
 }

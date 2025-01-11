@@ -7,6 +7,7 @@ import cartservice.expcetions.expectionsfiles.ProductAlreadyExists;
 import cartservice.expcetions.expectionsfiles.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -17,7 +18,7 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionsController {
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<Map<String,Object>> getExceptionForSignup(Exception e){
+    public ResponseEntity<Map<String,Object>> getCartNotFoundException(Exception e){
         Map<String,Object>response=new HashMap<>();
         response.put("message ",e.getMessage());
         response.put("error code ",e.getClass().getName());
@@ -27,7 +28,7 @@ public class GlobalExceptionsController {
     }
     //if product not found exception
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ExceptionMessageDto> getExceptionForSignup(ProductNotFoundException e){
+    public ResponseEntity<ExceptionMessageDto> getExceptionForProduct(ProductNotFoundException e){
         ExceptionMessageDto dto=new ExceptionMessageDto(
                 e.getMessage(),
                 404,
@@ -45,9 +46,9 @@ public class GlobalExceptionsController {
         );
         return new  ResponseEntity<>(dto,HttpStatus.NOT_FOUND);
     }
-    // product out of stock exception
-    @ExceptionHandler(OutOfStockProduct.class)
-    public ResponseEntity<ExceptionMessageDto> productAlreadyExists(OutOfStockProduct e){
+    // user not found exception
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionMessageDto> UserNotFound(UsernameNotFoundException e){
         ExceptionMessageDto dto=new ExceptionMessageDto(
                 e.getMessage(),
                 404,

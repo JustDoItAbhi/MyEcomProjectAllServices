@@ -2,10 +2,8 @@ package com.ecommer.userservices.users.userservices;
 
 import com.ecommer.userservices.entity.Roles;
 import com.ecommer.userservices.entity.Users;
-import com.ecommer.userservices.exceptions.EmailNotFoundException;
-import com.ecommer.userservices.exceptions.SignUpUserException;
-import com.ecommer.userservices.exceptions.UserAlreadyExists;
-import com.ecommer.userservices.exceptions.UserNotFoundException;
+import com.ecommer.userservices.exceptions.*;
+
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;
 import com.ecommer.userservices.repository.RoleRepository;
@@ -34,8 +32,7 @@ public class UserServicesImpl implements UserServices {
     private KafkaProducerClinet kafkaProducerClinet;
     private ObjectMapper objectMapper;
 
-    public UserServicesImpl(UserRepository userRepository, RoleRepository roleRepository,
-                            TokenRepository tokenRepository, BCryptPasswordEncoder passwordEncoder,
+    public UserServicesImpl(UserRepository userRepository, RoleRepository roleRepository, TokenRepository tokenRepository, BCryptPasswordEncoder passwordEncoder,
                             KafkaProducerClinet kafkaProducerClinet, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -65,31 +62,32 @@ public class UserServicesImpl implements UserServices {
         users.setUserStreet(signUp.getUserStreet());
         userRepository.save(users);
 
-      Optional<Roles> savedRole=roleRepository.findByRoleType(signUp.getRoles());
-      if(savedRole.isEmpty()) {
-          throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
-      }
-      Roles roles=savedRole.get();
+        Optional<Roles> savedRole=roleRepository.findByRoleType(signUp.getRoles());
+        if(savedRole.isEmpty()) {
+            throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
+        }
+        Roles roles=savedRole.get();
         List<Roles>rolesList=new ArrayList<>();
-        roles.setUsers(users);
+        roles.setUsersEmail(signUp.getUserEmail());
         rolesList.add(roles);
         roleRepository.save(roles);
         users.setRolesList(rolesList);
 
+
         SendEmailDto emailDto=new SendEmailDto();
         emailDto.setTo(users.getUserEmail());
         emailDto.setFrom("Pattorney0@gmail.com");
-        emailDto.setSubject("WELCOME TO KAFKA");
-        emailDto.setBody("thanks for joining " +" / "+
-                users.getUserName()+" / "+
-                users.getUserPhone()+" / "+
-                users.getUserEmail()+" / "+
-                users.getUserHouseNumber()+" / "+
-                users.getUserStreet()+" / "+
-                users.getUserLandMark()+" / "+
-                users.getUserCity()+" / "+
-                users.getUserState()+" / "+
-                users.getUserCountry()+" / "+
+        emailDto.setSubject("WELCOME TO E-COMMERCE SERVICE");
+        emailDto.setBody("thanks for joining " +" ☻ "+
+                users.getUserName()+"  "+
+                users.getUserPhone()+"  "+
+                users.getUserEmail()+"  "+
+                users.getUserHouseNumber()+"  "+
+                users.getUserStreet()+"  "+
+                users.getUserLandMark()+"  "+
+                users.getUserCity()+"  "+
+                users.getUserState()+"  "+
+                users.getUserCountry()+"  "+
                 users.getUserPostelCode());
         kafkaProducerClinet.sendMessage("sendemail",
                 objectMapper.writeValueAsString(emailDto));
@@ -167,12 +165,16 @@ public class UserServicesImpl implements UserServices {
         users.setUserPhone(dto.getUserPhone());
         users.setUserPostelCode(dto.getPostelCode());
         users.setUserHouseNumber(dto.getUserHouseNumber());
-       Optional<Roles>rolesOptional=roleRepository.findByRoleType(dto.getRoles());
-        Roles roles=rolesOptional.get();
+        Optional<Roles> savedRole = roleRepository.findByRoleType(dto.getRoles());
+        if(savedRole.isEmpty()) {
+            throw new RuntimeException("ROLE NOT FOUND " +dto.getRoles());
+        }
+        Roles roles=savedRole.get();
         List<Roles>rolesList=new ArrayList<>();
-//        roles.setUsers(users);
+        roles.setUsersEmail(dto.getUserEmail());
         rolesList.add(roles);
         roleRepository.save(roles);
+        users.setRolesList(rolesList);
         users.setUserLandMark(dto.getUserLandMark());
         users.setUserStreet(dto.getUserStreet());
         users.setUserCity(dto.getCity());

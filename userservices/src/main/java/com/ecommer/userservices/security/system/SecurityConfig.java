@@ -1,5 +1,8 @@
 package com.ecommer.userservices.security.system;
 
+import com.ecommer.userservices.security.auth2server.customization.CustomJwtAuthenticationConverter;
+import com.ecommer.userservices.security.auth2server.customization.CustomUsersDetals;
+import com.ecommer.userservices.security.auth2server.customization.CustomiseGrandAuthority;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -15,6 +18,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -38,6 +43,7 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,57 +72,56 @@ import java.util.stream.Collectors;
                         .jwt(Customizer.withDefaults()));
         return http.build();
     }
-
-    @Bean
-    @Order(2)
-    public SecurityFilterChain protectedFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()  // Disable CSRF for API
-                .authorizeHttpRequests(auth -> auth
+        @Bean
+        @Order(2)
+        public SecurityFilterChain protectedFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .csrf().disable()  // Disable CSRF for API
+                    .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
-                        .requestMatchers("/user/login").authenticated()
+                                    .requestMatchers("/user/login").authenticated()
 //                        .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/user/","/user/delete/","/debug","/getUserByid/").permitAll()
-                        .anyRequest().permitAll()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                )
-                .formLogin(Customizer.withDefaults());
-        return http.build();
-    }
+                                    .anyRequest().permitAll()
+                    )
+                    .oauth2ResourceServer(oauth2 -> oauth2
+                            .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                    )
+                    .formLogin(Customizer.withDefaults());
+            return http.build();
+        }
 
 
 
-    @Bean
-    public JWKSource<SecurityContext> jwkSource() {
-        KeyPair keyPair = generateRsaKey();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        RSAKey rsaKey = new RSAKey.Builder(publicKey)
-                .privateKey(privateKey)
-                .keyID(UUID.randomUUID().toString())
-                .build();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return new ImmutableJWKSet<>(jwkSet);
-    }
+        @Bean
+        public JWKSource<SecurityContext> jwkSource() {
+            KeyPair keyPair = generateRsaKey();
+            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+            RSAKey rsaKey = new RSAKey.Builder(publicKey)
+                    .privateKey(privateKey)
+                    .keyID(UUID.randomUUID().toString())
+                    .build();
+            JWKSet jwkSet = new JWKSet(rsaKey);
+            return new ImmutableJWKSet<>(jwkSet);
+        }
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
-        authoritiesConverter.setAuthoritiesClaimName("roles");
+        @Bean
+        public JwtAuthenticationConverter jwtAuthenticationConverter() {
+            JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+            authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
+            authoritiesConverter.setAuthoritiesClaimName("roles");
 
-        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
-        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-        return authenticationConverter;
-    }
-    @Bean
-    public HttpFirewall allowSemicolonFirewall() {
-        StrictHttpFirewall firewall = new StrictHttpFirewall();
-        firewall.setAllowSemicolon(true); // Allow semicolons in URLs
-        return firewall;
-    }
+            JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+            authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+            return authenticationConverter;
+        }
+        @Bean
+        public HttpFirewall allowSemicolonFirewall() {
+            StrictHttpFirewall firewall = new StrictHttpFirewall();
+            firewall.setAllowSemicolon(true); // Allow semicolons in URLs
+            return firewall;
+        }
 
 
 
@@ -149,7 +154,7 @@ import java.util.stream.Collectors;
             return new BCryptPasswordEncoder();
         }
 
-    @Bean
+        @Bean
         public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
             return (context) -> {
                 if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
@@ -163,5 +168,5 @@ import java.util.stream.Collectors;
                 }
             };
         }
-}
+    }
 
