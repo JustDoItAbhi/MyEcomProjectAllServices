@@ -1,11 +1,15 @@
 package paymentservice.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.*;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PriceCreateParams;
 import com.stripe.param.ProductCreateParams;
+import paymentservice.customiseloginforemail.KafkaProducerClinet;
+import paymentservice.customiseloginforemail.SendEmailDto;
 import paymentservice.exceptions.OrderNotFetchedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,13 +27,17 @@ public class PaymentServiceImpl implements PaymentGateway {
     @Value("${payment.redirect.url}")
     private String paymentRedirectUrl;
     private final OrderServiceClient orderServiceClient;
+    private final KafkaProducerClinet kafkaProducerClinet;
+    private final ObjectMapper objectMapper;
 
-    public PaymentServiceImpl(OrderServiceClient orderServiceClient) {
+    public PaymentServiceImpl(OrderServiceClient orderServiceClient, KafkaProducerClinet kafkaProducerClinet, ObjectMapper objectMapper) {
         this.orderServiceClient = orderServiceClient;
+        this.kafkaProducerClinet = kafkaProducerClinet;
+        this.objectMapper = objectMapper;
     }
 
     @Override
-    public CheckoutResponseDto toPay(long id,String email) throws StripeException, OrderNotFetchedException {
+    public CheckoutResponseDto toPay(long id,String email) throws StripeException, OrderNotFetchedException, JsonProcessingException {
         if(email==null){
             throw new UserNotFoundException("PLEASE ENTER EMAIL "+email);
         }
@@ -67,7 +75,17 @@ public class PaymentServiceImpl implements PaymentGateway {
 
                 .build();
 
+
         PaymentLink paymentLink = PaymentLink.create(linkParams);
+        SendEmailDto emailDto=new SendEmailDto();
+        emailDto.setTo(email);
+        emailDto.setFrom("Pattorney0@gmail.com");
+        emailDto.setSubject("PLEASE PAY FOR YOUR ORDER");
+        emailDto.setBody("here is link to pay "+ paymentLink.getUrl()+" currency "+paymentLink.getCurrency());
+
+        kafkaProducerClinet.sendMessage("sendemail",
+                objectMapper.writeValueAsString(emailDto));
+
                 return new CheckoutResponseDto.Builder()
                 .setUrl(paymentLink.getUrl())
                 .setMessage("HERE IS YOUR LINK TO PAY")
