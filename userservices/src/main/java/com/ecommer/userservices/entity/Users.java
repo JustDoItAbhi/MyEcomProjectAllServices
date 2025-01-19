@@ -6,27 +6,30 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-//@Getter
-//@Setter
+@Getter
+@Setter
 @Entity
 @Table(name = "USERS")
 public class Users extends BaseModels{
 private String userName;
-private String userPhone;
-private String userEmail;
-private String userPassword;
-private String userHouseNumber;
-private String userStreet;
-private String userLandMark;
-private String userCity;
-private String userState;
-private String userCountry;
-private int userPostelCode;
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-@JsonBackReference
-private List<Roles> rolesList;
+@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+@JoinTable(name = "user_roles",
+        joinColumns = @JoinColumn(name="user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Roles> rolesList;
+    private String userPhone;
+    private String userEmail;
+    private String userPassword;
+    private String userHouseNumber;
+    private String userStreet;
+    private String userLandMark;
+    private String userCity;
+    private String userState;
+    private String userCountry;
+    private int userPostelCode;
 @ManyToOne
 private  Token token;
 

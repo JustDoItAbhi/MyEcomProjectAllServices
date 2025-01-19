@@ -45,17 +45,20 @@ public class UserController {
                                                                          @PathVariable ("passoword")String password){
         return ResponseEntity.ok(userServices.resetPassword(email,password));
     }
-    @GetMapping("/debug")//admin
+    @GetMapping("/debug") // admin
     public ResponseEntity<String> debugAdminRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authenticated");
         }
-        // Proceed if authentication is present
+
+        // Retrieve roles from authentication
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String roles = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(", "));
+
         return ResponseEntity.ok("User roles: " + roles);
     }
 

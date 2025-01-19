@@ -2,15 +2,18 @@ package com.ecommer.userservices.roles.roledtos;
 
 import com.ecommer.userservices.entity.Roles;
 import com.ecommer.userservices.entity.Users;
+import com.ecommer.userservices.users.userdtos.UserResponseDto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Data
 public class RoleResponseDto {
     private long roleId;
     private String role;
-    private String usersEmail;
+    private Users usersId;
 
     public long getRoleId() {
         return roleId;
@@ -28,19 +31,19 @@ public class RoleResponseDto {
         this.role = role;
     }
 
-    public String getUsersEmail() {
-        return usersEmail;
+    public Users getUsersId() {
+        return usersId;
     }
 
-    public void setUsersEmail(String usersEmail) {
-        this.usersEmail = usersEmail;
+    public void setUsersId(Users usersId) {
+        this.usersId = usersId;
     }
 
     public static RoleResponseDto fromEntity(Roles roles){
         RoleResponseDto responseDto=new RoleResponseDto();
         responseDto.setRoleId(roles.getId());
         responseDto.setRole(roles.getRoleType());
-        responseDto.setUsersEmail(roles.getUsersEmail());
+        responseDto.setUsersId(roles.getUsersList());
         return responseDto;
     }
 }

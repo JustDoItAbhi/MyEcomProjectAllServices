@@ -1,8 +1,7 @@
-package com.ecommer.userservices.security;
+package com.ecommer.userservices.security.auth2server.customization;
 
 import com.ecommer.userservices.entity.Users;
 import com.ecommer.userservices.repository.UserRepository;
-import com.ecommer.userservices.security.auth2server.customization.CustomUsersDetals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

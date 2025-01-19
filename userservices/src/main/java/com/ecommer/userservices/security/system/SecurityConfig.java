@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
@@ -42,10 +44,8 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
@@ -78,11 +78,11 @@ import java.util.stream.Collectors;
             http
                     .csrf().disable()  // Disable CSRF for API
                     .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
                                     .requestMatchers("/user/login").authenticated()
-//                        .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/user/","/user/delete/","/debug","/getUserByid/").permitAll()
-                                    .anyRequest().permitAll()
+                                    .anyRequest().authenticated()
                     )
                     .oauth2ResourceServer(oauth2 -> oauth2
                             .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
@@ -123,6 +123,13 @@ import java.util.stream.Collectors;
             return firewall;
         }
 
+//        @Bean
+//        public DaoAuthenticationProvider authenticationProvider() {
+//            DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//            authProvider.setUserDetailsService(userDetailsService);
+//            authProvider.setPasswordEncoder(passwordEncoder());
+//            return authProvider;
+//        }
 
 
         private static KeyPair generateRsaKey() {
@@ -153,8 +160,7 @@ import java.util.stream.Collectors;
         public BCryptPasswordEncoder encoder(){
             return new BCryptPasswordEncoder();
         }
-
-        @Bean
+        @Bean//by me
         public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
             return (context) -> {
                 if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
@@ -163,10 +169,57 @@ import java.util.stream.Collectors;
                                 .stream()
                                 .map(c -> c.replaceFirst("^ROLE_", ""))
                                 .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
-                        claims.put("roles", AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities()));
+                        claims.put("roles", roles);
+                        Authentication authentication = context.getPrincipal();
+                        Long userId = ((CustomUsersDetals)authentication.getPrincipal()).getUserId();
+                        claims.put("userId",userId);
                     });
+
                 }
             };
         }
+//@Bean//by naman
+//public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
+//    return (context) -> {
+//        if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
+//            context.getClaims().claims((claims) -> {
+//                Set<String> roles = AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
+//                        .stream()
+//                        .map(c -> c.replaceFirst("^ROLE_", ""))
+//                        .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+//                claims.put("roles", AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities()));
+//            });
+//        }
+//    };
+//}
+//        @Bean
+//        public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
+//            return new OAuth2TokenCustomizer<JwtEncodingContext>() {
+//                @Override
+//                public void customize(JwtEncodingContext context) {
+//                    if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
+//                        context.getClaims().claims(new Consumer<Map<String, Object>>() {
+//                            @Override
+//                            public void accept(Map<String, Object> claims) {
+//                                Set<String> authorities = AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities());
+//                                Set<String> roles = new HashSet<>();
+//
+//                                for (String authority : authorities) {
+//                                    if (authority.startsWith("ROLE_")) {
+//                                        roles.add(authority.substring(5));
+//                                    } else {
+//                                        roles.add(authority);
+//                                    }
+//                                }
+//
+//                                claims.put("roles", new HashSet<>(roles)); // Avoid immutability for simplicity
+//                                // Extract and add username to claims
+//
+//                            }
+//                        });
+//                    }
+//                }
+//            };
+//        }
     }
 

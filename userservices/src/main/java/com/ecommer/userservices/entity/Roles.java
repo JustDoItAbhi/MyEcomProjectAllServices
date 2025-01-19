@@ -1,5 +1,6 @@
 package com.ecommer.userservices.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,7 +14,8 @@ import java.util.List;
 @Table(name = "ROLES")
 public class Roles extends BaseModels{
     private String roleType;
-    private String usersEmail;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Users usersList;
 
     public String getRoleType() {
         return roleType;
@@ -23,11 +25,11 @@ public class Roles extends BaseModels{
         this.roleType = roleType;
     }
 
-    public String getUsersEmail() {
-        return usersEmail;
+    public Users getUsersList() {
+        return usersList;
     }
 
-    public void setUsersEmail(String usersEmail) {
-        this.usersEmail = usersEmail;
+    public void setUsersList(Users usersList) {
+        this.usersList = usersList;
     }
 }

@@ -7,14 +7,42 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
 public abstract class BaseModels {
 @Id
-@GeneratedValue(strategy = GenerationType.SEQUENCE)
+@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+@CreationTimestamp
+private LocalDateTime createdAt;
+@UpdateTimestamp
+private LocalDateTime updatedAt;
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

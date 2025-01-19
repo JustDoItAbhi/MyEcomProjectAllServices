@@ -2,12 +2,14 @@ package com.ecommer.userservices.users.userdtos;
 
 import lombok.NonNull;
 
+import java.util.List;
+
 public class UpdateUserRequestDto {
     private String userName;
     private String userPhone;
     private String userPassword;
     private String userEmail;
-    private String roles;
+    private List<String> roles;
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
@@ -48,11 +50,11 @@ public class UpdateUserRequestDto {
         this.userEmail = userEmail;
     }
 
-    public String getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 

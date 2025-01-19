@@ -2,9 +2,10 @@ package com.ecom.productservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestClient;
 
@@ -16,14 +17,29 @@ public class SecurityConfig  {
             http
                     .authorizeHttpRequests((authorize -> authorize
                             .requestMatchers("/product/create").hasRole("ADMIN")//only admin can create
-                            .requestMatchers("/category/create").hasRole("ADMIN")
-                                    .anyRequest().permitAll()
-                    )
-);
-        http.headers(headers -> headers.httpStrictTransportSecurity().disable())
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
-                );
+                            .requestMatchers("/category/create","/category/update/","/category/price/id").hasRole("ADMIN")
+                            .requestMatchers("/category/searchByCategoryName/{name}","/category/","/product/").permitAll()
+                            .requestMatchers("/category/getbyid").hasRole("ADMIN")
+                                    .anyRequest().authenticated()
+                    ))
+                                    .oauth2ResourceServer(oauth2 -> oauth2
+                                            .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                    );
+//);
+//        http.headers(headers -> headers.httpStrictTransportSecurity().disable())
+//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
+//                );
          return http.build();
+    }
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
+        authoritiesConverter.setAuthoritiesClaimName("roles");
+
+        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return authenticationConverter;
     }
 
 @Bean

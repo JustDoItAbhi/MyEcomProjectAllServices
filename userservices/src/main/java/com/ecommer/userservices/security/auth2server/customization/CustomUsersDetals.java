@@ -5,15 +5,17 @@ import com.ecommer.userservices.entity.Users;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @JsonDeserialize
 @NoArgsConstructor
 public class CustomUsersDetals implements UserDetails {
-//    private Users user;
     private String password;
     private  String username;
     private long userId;
@@ -23,6 +25,7 @@ public class CustomUsersDetals implements UserDetails {
     private boolean enabled;
     private String userEmail;
     private List<GrantedAuthority>authorities;
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -61,30 +64,19 @@ public class CustomUsersDetals implements UserDetails {
     }
 
     public CustomUsersDetals(Users user) {
-//        this.username = user.getUsername();
+        this.username = user.getUserEmail();
         this.password = user.getUserPassword();
         this.userId=user.getId();
-        this.username = user.getUserEmail();
+        this.userEmail = user.getUserEmail();
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-//        this.username =user.getUserName();
-        authorities=new ArrayList<>();
-
-        // Check if roles are null or empty
-        if (user.getRolesList() != null && !user.getRolesList().isEmpty()) {
-            for (Roles roles1 : user.getRolesList()) {
-                System.out.println("Adding role: " + roles1.getRoleType());
-                authorities.add(new CustomiseGrandAuthority(roles1));
-            }
-        } else {
-            System.out.println("No roles assigned to user: " + user.getUserName());
-        }
+        this.authorities=user.getRolesList().stream().map(CustomiseGrandAuthority::new)
+                .collect(Collectors.toList());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         return this.authorities;
     }
 
@@ -94,10 +86,6 @@ public class CustomUsersDetals implements UserDetails {
 
     public long getUserId() {
         return userId;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
     @Override
@@ -125,4 +113,5 @@ public class CustomUsersDetals implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
 }

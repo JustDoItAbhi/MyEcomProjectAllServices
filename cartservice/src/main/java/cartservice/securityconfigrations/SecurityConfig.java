@@ -23,26 +23,28 @@ public class SecurityConfig {
 //                                .requestMatchers(" http://localhost:8090/user/","/user/").hasRole("ADMIN")
 //                                .requestMatchers("/user/getUserByid/**").permitAll()
 //                                .requestMatchers("/cart/getCartById/**").permitAll()
-//                                .requestMatchers("/cart/add").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/cart/add/{email}").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
 
-
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                )
+                .formLogin(Customizer.withDefaults());
 
 
         return http.build();
     }
-//    @Bean
-//    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-//        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-//        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
-//        authoritiesConverter.setAuthoritiesClaimName("roles");
-//
-//        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
-//        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-//        return authenticationConverter;
-//    }
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
+        authoritiesConverter.setAuthoritiesClaimName("roles");
+
+        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return authenticationConverter;
+    }
 
 
 }

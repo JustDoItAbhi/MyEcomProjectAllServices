@@ -20,7 +20,7 @@ public class SignUp {
     private String userPassword;
    @NonNull
    private String userEmail;
-    private String roles;
+    private List<String> roles;
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
@@ -61,11 +61,11 @@ public class SignUp {
         this.userEmail = userEmail;
     }
 
-    public String getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 

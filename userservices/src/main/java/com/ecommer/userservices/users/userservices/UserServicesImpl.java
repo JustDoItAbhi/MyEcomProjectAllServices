@@ -9,6 +9,7 @@ import com.ecommer.userservices.kafka.SendEmailDto;
 import com.ecommer.userservices.repository.RoleRepository;
 import com.ecommer.userservices.repository.TokenRepository;
 import com.ecommer.userservices.repository.UserRepository;
+import com.ecommer.userservices.roles.roledtos.RoleResponseDto;
 import com.ecommer.userservices.users.userdtos.*;
 import com.ecommer.userservices.users.usermapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +20,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,20 +63,16 @@ public class UserServicesImpl implements UserServices {
         users.setUserHouseNumber(signUp.getUserHouseNumber());
         users.setUserLandMark(signUp.getUserLandMark());
         users.setUserStreet(signUp.getUserStreet());
-        userRepository.save(users);
-
-        Optional<Roles> savedRole=roleRepository.findByRoleType(signUp.getRoles());
-        if(savedRole.isEmpty()) {
-            throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
+        List<Roles> rolesList = new ArrayList<>();
+        for(String roles:signUp.getRoles()) {
+            Optional<Roles> savedRole = roleRepository.findByRoleType(roles);
+            if (savedRole.isEmpty()) {
+                throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
+            }
+            rolesList.add(savedRole.get());
         }
-        Roles roles=savedRole.get();
-        List<Roles>rolesList=new ArrayList<>();
-        roles.setUsersEmail(signUp.getUserEmail());
-        rolesList.add(roles);
-        roleRepository.save(roles);
         users.setRolesList(rolesList);
-
-
+        userRepository.save(users);
         SendEmailDto emailDto=new SendEmailDto();
         emailDto.setTo(users.getUserEmail());
         emailDto.setFrom("Pattorney0@gmail.com");
@@ -154,26 +153,25 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public UserResponseDto updateUser(String email, UpdateUserRequestDto dto) {
-        Optional<Users>existingUser=userRepository.findByUserEmail(dto.getUserEmail());
-        if(existingUser.isEmpty()){
-            throw new UserNotFoundException("DEAR CUSTOMER PLEASE SIGN UP FIRST "+dto.getUserName());
+        Optional<Users> existingUser = userRepository.findByUserEmail(dto.getUserEmail());
+        if (existingUser.isEmpty()) {
+            throw new UserNotFoundException("DEAR CUSTOMER PLEASE SIGN UP FIRST " + dto.getUserName());
         }
-        Users users=existingUser.get();
+        Users users = existingUser.get();
         users.setUserName(dto.getUserName());
 //        users.setUserEmail(dto.getUserEmail());
         users.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
         users.setUserPhone(dto.getUserPhone());
         users.setUserPostelCode(dto.getPostelCode());
         users.setUserHouseNumber(dto.getUserHouseNumber());
-        Optional<Roles> savedRole = roleRepository.findByRoleType(dto.getRoles());
-        if(savedRole.isEmpty()) {
-            throw new RuntimeException("ROLE NOT FOUND " +dto.getRoles());
-        }
-        Roles roles=savedRole.get();
         List<Roles>rolesList=new ArrayList<>();
-        roles.setUsersEmail(dto.getUserEmail());
-        rolesList.add(roles);
-        roleRepository.save(roles);
+        for(String roles:dto.getRoles()) {
+            Optional<Roles> savedRole = roleRepository.findByRoleType(roles);
+            if (savedRole.isEmpty()) {
+                throw new RuntimeException("ROLE NOT FOUND " + dto.getRoles());
+            }
+            rolesList.add(savedRole.get());
+        }
         users.setRolesList(rolesList);
         users.setUserLandMark(dto.getUserLandMark());
         users.setUserStreet(dto.getUserStreet());

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RoleService {
     RoleResponseDto createRole(RoleRequestDto requestDto);
-    boolean deleteRole(long id);
+    boolean deleteRole(long roleId,long userId);
     List<RoleResponseDto> getAllRoles();
 
 }

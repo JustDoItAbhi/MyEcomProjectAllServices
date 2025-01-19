@@ -3,11 +3,17 @@ package cartservice.controller;
 import cartservice.dtos.*;
 import cartservice.service.IcartServices;
 import cartservice.expcetions.expectionsfiles.CartNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cart")
@@ -53,5 +59,21 @@ public class CartController {
     @GetMapping("/")// get all prodcut for practice
     public ResponseEntity<List<ProductResponseDto>> getAllProducts() {//get all products to test
         return ResponseEntity.ok(icartServices.getAllProducts());
+    }
+    @GetMapping("/debug") // admin
+    public ResponseEntity<String> debugAdminRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authenticated");
+        }
+
+        // Retrieve roles from authentication
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(", "));
+
+        return ResponseEntity.ok("User roles: " + roles);
     }
 }
