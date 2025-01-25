@@ -1,5 +1,6 @@
 package cartservice.controller;
 
+import cartservice.client.UserResponseDto;
 import cartservice.dtos.*;
 import cartservice.service.IcartServices;
 import cartservice.expcetions.expectionsfiles.CartNotFoundException;
@@ -75,5 +76,9 @@ public class CartController {
                 .collect(Collectors.joining(", "));
 
         return ResponseEntity.ok("User roles: " + roles);
+    }
+    @GetMapping("/getUser/{email}")// get all prodcut for practice
+    public ResponseEntity<UserResponseDto> getuserforTESTING(@PathVariable ("email")String email ){//get all products to test
+        return ResponseEntity.ok(icartServices.testUser(email));
     }
 }

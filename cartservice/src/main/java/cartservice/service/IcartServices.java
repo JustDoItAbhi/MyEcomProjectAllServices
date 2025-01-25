@@ -1,5 +1,6 @@
 package cartservice.service;
 
+import cartservice.client.UserResponseDto;
 import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
@@ -20,6 +21,7 @@ public interface IcartServices {
     CartItemResponseDto getCartItemById(String userId);
     List<ProductResponseDto> getAllProducts();
     boolean deleteCart(long cartId);
+    UserResponseDto testUser(String email);
 
 
 

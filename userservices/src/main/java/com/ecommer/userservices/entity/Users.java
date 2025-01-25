@@ -5,21 +5,25 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "USERS")
-public class Users extends BaseModels{
-private String userName;
-@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-@JoinTable(name = "user_roles",
-        joinColumns = @JoinColumn(name="user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
+public class Users {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long userId;
+
+    private String userName;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "fk_users_id", referencedColumnName = "userId")
     private List<Roles> rolesList;
+
     private String userPhone;
     private String userEmail;
     private String userPassword;
@@ -30,8 +34,14 @@ private String userName;
     private String userState;
     private String userCountry;
     private int userPostelCode;
-@ManyToOne
-private  Token token;
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;
@@ -129,11 +139,4 @@ private  Token token;
         this.rolesList = rolesList;
     }
 
-    public Token getToken() {
-        return token;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
 }

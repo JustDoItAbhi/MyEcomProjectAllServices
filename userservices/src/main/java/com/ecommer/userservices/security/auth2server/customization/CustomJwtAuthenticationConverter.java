@@ -1,5 +1,6 @@
 package com.ecommer.userservices.security.auth2server.customization;
 
+import com.ecommer.userservices.entity.Roles;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
             for (String role: roles) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(role));
+                grantedAuthorities.add(new CustomiseGrandAuthority(role));
             } // collected role from token for implemention in security configration
 
             return grantedAuthorities;

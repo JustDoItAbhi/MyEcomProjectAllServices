@@ -12,7 +12,7 @@ public class UserMapper {
     public static UserResponseDto fromEntity(Users users){
 //        BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
         UserResponseDto responseDto=new UserResponseDto();
-        responseDto.setUserId(users.getId());
+        responseDto.setUserId(users.getUserId());
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
         responseDto.setUserPassword(users.getUserPassword());

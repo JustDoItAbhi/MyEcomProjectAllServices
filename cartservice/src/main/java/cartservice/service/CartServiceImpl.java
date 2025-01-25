@@ -198,6 +198,15 @@ if(existingEmail.isPresent()){
         return true;
     }
 
+    @Override
+    public UserResponseDto testUser(String email) {
+        UserResponseDto responseDto1=fetchUserDataAndValidate(email);
+        if(responseDto1==null){
+            throw new UserNotExistsException(" PLEASE SIGN UP "+email+" NOT EXITS");
+        }
+        return responseDto1;
+    }
+
 
 }
 

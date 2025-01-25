@@ -13,7 +13,6 @@ import java.util.List;
 public class RoleResponseDto {
     private long roleId;
     private String role;
-    private Users usersId;
 
     public long getRoleId() {
         return roleId;
@@ -29,21 +28,5 @@ public class RoleResponseDto {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Users getUsersId() {
-        return usersId;
-    }
-
-    public void setUsersId(Users usersId) {
-        this.usersId = usersId;
-    }
-
-    public static RoleResponseDto fromEntity(Roles roles){
-        RoleResponseDto responseDto=new RoleResponseDto();
-        responseDto.setRoleId(roles.getId());
-        responseDto.setRole(roles.getRoleType());
-        responseDto.setUsersId(roles.getUsersList());
-        return responseDto;
     }
 }

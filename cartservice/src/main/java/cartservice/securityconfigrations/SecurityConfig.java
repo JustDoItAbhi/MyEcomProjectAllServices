@@ -24,13 +24,14 @@ public class SecurityConfig {
 //                                .requestMatchers("/user/getUserByid/**").permitAll()
 //                                .requestMatchers("/cart/getCartById/**").permitAll()
                                 .requestMatchers("/cart/add/{email}").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
 
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                )
-                .formLogin(Customizer.withDefaults());
+//                .oauth2ResourceServer(oauth2 -> oauth2
+//                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+
+//                .formLogin(Customizer.withDefaults());
 
 
         return http.build();

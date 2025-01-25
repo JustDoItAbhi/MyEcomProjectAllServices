@@ -9,7 +9,7 @@ public class UserResponseDto {
     private String userPhone;
     private String userEmail;
     private String userPassword;
-    private List<String> rolesList;
+    private List<String> roles;
     private String userCity;
     private String userState;
     private String userCountry;
@@ -58,12 +58,12 @@ public class UserResponseDto {
         this.userPassword = userPassword;
     }
 
-    public List<String> getRolesList() {
-        return rolesList;
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setRolesList(List<String> rolesList) {
-        this.rolesList = rolesList;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public String getUserCity() {

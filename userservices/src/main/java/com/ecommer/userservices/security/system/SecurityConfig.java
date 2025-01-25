@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -72,16 +74,20 @@ import java.util.stream.Collectors;
                         .jwt(Customizer.withDefaults()));
         return http.build();
     }
+
         @Bean
         @Order(2)
         public SecurityFilterChain protectedFilterChain(HttpSecurity http) throws Exception {
             http
                     .csrf().disable()  // Disable CSRF for API
                     .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST,"/role/create").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/role/**").hasRole("ADMIN")
                                     .requestMatchers("/user/login").authenticated()
-                        .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"/user/","/user/delete/","/debug","/getUserByid/").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/user/debug").hasAnyRole("ADMIN","USER")
+                            .requestMatchers(HttpMethod.GET, "/user/getallUsers").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET,"/user/delete/").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/user/getUserByid/{email}").hasRole("ADMIN")
                                     .anyRequest().authenticated()
                     )
                     .oauth2ResourceServer(oauth2 -> oauth2
@@ -89,6 +95,14 @@ import java.util.stream.Collectors;
                     )
                     .formLogin(Customizer.withDefaults());
             return http.build();
+        }
+
+        @Bean
+        public RoleHierarchy roleHierarchy() {
+            String hierarchy = "ROLE_ADMIN > ROLE_USER";
+            RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+            roleHierarchy.setHierarchy(hierarchy);
+            return roleHierarchy;
         }
 
 

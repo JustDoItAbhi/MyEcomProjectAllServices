@@ -75,7 +75,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> getAll(@PathVariable ("email")String email) throws SignUpUserException {
         return ResponseEntity.ok(userServices.getById(email));
     }
-    @GetMapping("/")//admin
+    @GetMapping("/getallUsers")//admin
     public ResponseEntity<List<UserResponseDto>> getAll() {
         return ResponseEntity.ok(userServices.getAllUsers());
     }

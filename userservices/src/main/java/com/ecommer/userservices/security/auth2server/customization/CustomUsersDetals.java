@@ -66,13 +66,14 @@ public class CustomUsersDetals implements UserDetails {
     public CustomUsersDetals(Users user) {
         this.username = user.getUserEmail();
         this.password = user.getUserPassword();
-        this.userId=user.getId();
+        this.userId=user.getUserId();
         this.userEmail = user.getUserEmail();
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-        this.authorities=user.getRolesList().stream().map(CustomiseGrandAuthority::new)
+        this.authorities = user.getRolesList().stream()
+                .map(role -> new CustomiseGrandAuthority( role.getRoleType())) // Ensure correct role format
                 .collect(Collectors.toList());
     }
     @Override

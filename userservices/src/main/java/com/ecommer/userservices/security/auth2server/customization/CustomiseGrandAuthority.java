@@ -10,8 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 public class CustomiseGrandAuthority implements GrantedAuthority {
     @JsonProperty("authority")
     private String grantAuthority;
-    public CustomiseGrandAuthority(Roles roles) {
-        this.grantAuthority = roles.getRoleType();
+    public CustomiseGrandAuthority(String roles) {
+        System.out.println("ROLE IS HERE _-----------------"+ roles);
+        this.grantAuthority = roles;
     }
     @Override
     public String getAuthority() {

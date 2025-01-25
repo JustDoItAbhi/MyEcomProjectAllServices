@@ -7,9 +7,7 @@ import com.ecommer.userservices.exceptions.*;
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;
 import com.ecommer.userservices.repository.RoleRepository;
-import com.ecommer.userservices.repository.TokenRepository;
 import com.ecommer.userservices.repository.UserRepository;
-import com.ecommer.userservices.roles.roledtos.RoleResponseDto;
 import com.ecommer.userservices.users.userdtos.*;
 import com.ecommer.userservices.users.usermapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +27,15 @@ import java.util.Optional;
 public class UserServicesImpl implements UserServices {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-    private TokenRepository tokenRepository;
     private BCryptPasswordEncoder passwordEncoder;
     private KafkaProducerClinet kafkaProducerClinet;
     private ObjectMapper objectMapper;
 
-    public UserServicesImpl(UserRepository userRepository, RoleRepository roleRepository, TokenRepository tokenRepository, BCryptPasswordEncoder passwordEncoder,
+    public UserServicesImpl(UserRepository userRepository, RoleRepository roleRepository,
+                             BCryptPasswordEncoder passwordEncoder,
                             KafkaProducerClinet kafkaProducerClinet, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
         this.kafkaProducerClinet = kafkaProducerClinet;
         this.objectMapper = objectMapper;
@@ -52,7 +48,18 @@ public class UserServicesImpl implements UserServices {
             throw new UserAlreadyExists("PLEASE LOGIN -> USER "+signUp.getUserEmail()+" ALREADY EXITS");
         }
         Users users=new Users();
+
+        List<Roles> rolesList = new ArrayList<>();
+        for(String roles:signUp.getRoles()) {
+            Optional<Roles> savedRole = roleRepository.findByRoleType(roles);
+            if (savedRole.isEmpty()) {
+                throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
+            }
+            rolesList.add(savedRole.get());
+        }
+        users.setRolesList(rolesList);
         users.setUserName(signUp.getUserName());
+//        users.setCreatedAt(LocalDateTime.now());
         users.setUserEmail(signUp.getUserEmail());
         users.setUserPassword(passwordEncoder.encode(signUp.getUserPassword()));
         users.setUserPhone(signUp.getUserPhone());
@@ -63,15 +70,6 @@ public class UserServicesImpl implements UserServices {
         users.setUserHouseNumber(signUp.getUserHouseNumber());
         users.setUserLandMark(signUp.getUserLandMark());
         users.setUserStreet(signUp.getUserStreet());
-        List<Roles> rolesList = new ArrayList<>();
-        for(String roles:signUp.getRoles()) {
-            Optional<Roles> savedRole = roleRepository.findByRoleType(roles);
-            if (savedRole.isEmpty()) {
-                throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
-            }
-            rolesList.add(savedRole.get());
-        }
-        users.setRolesList(rolesList);
         userRepository.save(users);
         SendEmailDto emailDto=new SendEmailDto();
         emailDto.setTo(users.getUserEmail());
@@ -109,7 +107,7 @@ public class UserServicesImpl implements UserServices {
         sendEmailDto.setFrom("Pattorney0@gmail.com");
         sendEmailDto.setSubject("YOU SUCESSFULLY LOGIN");
         sendEmailDto.setBody(users.getUserName()+" logged in "+ users.getUserEmail()+" by email "+ users.getUserPhone()+" by phone "
-                + users.getId()+" this is your id ");
+                + " this is your id ");
         return UserMapper.fromEntity(users);
     }
 
@@ -162,6 +160,7 @@ public class UserServicesImpl implements UserServices {
 //        users.setUserEmail(dto.getUserEmail());
         users.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
         users.setUserPhone(dto.getUserPhone());
+//        users.setUpdatedAt(LocalDateTime.now());
         users.setUserPostelCode(dto.getPostelCode());
         users.setUserHouseNumber(dto.getUserHouseNumber());
         List<Roles>rolesList=new ArrayList<>();
