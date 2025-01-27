@@ -35,6 +35,9 @@ public class CartController {
     public ResponseEntity<CartResposneDtos> addItemToCart(
             @PathVariable("email") String email,
             @RequestBody CartRequestDto dtos)  throws CartNotFoundException { //select product for cart
+        if (dtos.getItem() == null || dtos.getItem().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok(icartServices.addItemToCart(email,dtos));
     }
 

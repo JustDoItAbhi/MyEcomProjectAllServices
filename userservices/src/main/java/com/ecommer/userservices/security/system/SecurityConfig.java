@@ -87,7 +87,8 @@ import java.util.stream.Collectors;
                             .requestMatchers(HttpMethod.GET,"/user/debug").hasAnyRole("ADMIN","USER")
                             .requestMatchers(HttpMethod.GET, "/user/getallUsers").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.GET,"/user/delete/").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/user/getUserByid/{email}").hasRole("ADMIN")
+                            .requestMatchers("/user/getUserByid/{email}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/cart/**").permitAll()
                                     .anyRequest().authenticated()
                     )
                     .oauth2ResourceServer(oauth2 -> oauth2

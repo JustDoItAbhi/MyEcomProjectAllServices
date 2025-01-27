@@ -3,20 +3,20 @@ package cartservice.client;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UserResponseDto {
-    private long userId;
-    private String userName;
-    private String userPhone;
-    private String userEmail;
-    private String userPassword;
-    private List<String> roles;
-    private String userCity;
-    private String userState;
-    private String userCountry;
-    private int userPostelCode;
-    private String userHouseNumber;
-    private String userStreet;
-    private String userLandMark;
+    public class UserResponseDto {
+        private long userId;
+        private String userName;
+        private String userPhone;
+        private String userEmail;
+        private String userPassword;
+        private List<String> rolesList;
+        private String userCity;
+        private String userState;
+        private String userCountry;
+        private int userPostelCode;
+        private String userHouseNumber;
+        private String userStreet;
+        private String userLandMark;
 
     public long getUserId() {
         return userId;
@@ -58,12 +58,12 @@ public class UserResponseDto {
         this.userPassword = userPassword;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public List<String> getRolesList() {
+        return rolesList;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRolesList(List<String> rolesList) {
+        this.rolesList = rolesList;
     }
 
     public String getUserCity() {

@@ -17,11 +17,12 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long userId;
-
     private String userName;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "fk_users_id", referencedColumnName = "userId")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
     private List<Roles> rolesList;
 
     private String userPhone;

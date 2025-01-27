@@ -45,8 +45,7 @@ public class ProductServiceClient {
     public ProductResponseDto fetchProductById(long id) {
         RestTemplate restTemplate=restTemplateBuilder.build();
         ServiceInstance serviceInstance = discoveryClient.getInstances("productservice").get(0);
-        String serviceAUri = serviceInstance.getUri().toString() + "/product/get/"+id;
-//        String url="http://PRODUCTSERVICE/product/get/"+id;
+        String serviceAUri = serviceInstance.getUri() + "/product/get/"+id;
         ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(serviceAUri,ProductResponseDto.class);
 
         return response.getBody();

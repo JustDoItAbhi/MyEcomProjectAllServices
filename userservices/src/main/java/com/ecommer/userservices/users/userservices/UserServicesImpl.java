@@ -48,16 +48,18 @@ public class UserServicesImpl implements UserServices {
             throw new UserAlreadyExists("PLEASE LOGIN -> USER "+signUp.getUserEmail()+" ALREADY EXITS");
         }
         Users users=new Users();
-
         List<Roles> rolesList = new ArrayList<>();
         for(String roles:signUp.getRoles()) {
             Optional<Roles> savedRole = roleRepository.findByRoleType(roles);
             if (savedRole.isEmpty()) {
                 throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
             }
+            savedRole.get().setRoleType(roles);
             rolesList.add(savedRole.get());
+            roleRepository.save(savedRole.get());
         }
         users.setRolesList(rolesList);
+
         users.setUserName(signUp.getUserName());
 //        users.setCreatedAt(LocalDateTime.now());
         users.setUserEmail(signUp.getUserEmail());
@@ -102,12 +104,13 @@ public class UserServicesImpl implements UserServices {
        if(!passwordEncoder.matches(login.getUserPassword(),users.getUserPassword())){
            throw new UsernameNotFoundException("USER PASSWORD IS NOT CORRECT "+ login.getUserPassword());
        }
+//       users.setRolesList(users.getRolesList());
        SendEmailDto sendEmailDto=new SendEmailDto();
        sendEmailDto.setTo(users.getUserEmail());
         sendEmailDto.setFrom("Pattorney0@gmail.com");
         sendEmailDto.setSubject("YOU SUCESSFULLY LOGIN");
         sendEmailDto.setBody(users.getUserName()+" logged in "+ users.getUserEmail()+" by email "+ users.getUserPhone()+" by phone "
-                + " this is your id ");
+                + " this is your id "+users.getRolesList()+" ROLE ");
         return UserMapper.fromEntity(users);
     }
 

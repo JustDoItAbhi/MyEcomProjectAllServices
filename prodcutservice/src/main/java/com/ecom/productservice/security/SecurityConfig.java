@@ -20,6 +20,7 @@ public class SecurityConfig  {
                             .requestMatchers("/category/create","/category/update/","/category/price/id").hasRole("ADMIN")
                             .requestMatchers("/category/searchByCategoryName/{name}","/category/","/product/").permitAll()
                             .requestMatchers("/category/getbyid").hasRole("ADMIN")
+                            .requestMatchers("/product/get/**").permitAll()
                                     .anyRequest().authenticated()
                     ))
                                     .oauth2ResourceServer(oauth2 -> oauth2

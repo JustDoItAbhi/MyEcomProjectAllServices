@@ -1,7 +1,9 @@
 package com.ecommer.userservices.kafka.customiseloginforemail;
 
+import com.ecommer.userservices.entity.Users;
 import com.ecommer.userservices.kafka.KafkaProducerClinet;
 import com.ecommer.userservices.kafka.SendEmailDto;
+import com.ecommer.userservices.security.auth2server.customization.CustomiseGrandAuthority;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.context.event.EventListener;
@@ -24,6 +26,7 @@ public class AuthenticationEventListener {
     @EventListener
     public void onAuthenticationSuccess(AuthenticationSuccessEvent event) {
         // Extract user details from the event
+
         String username = event.getAuthentication().getName();
         SendEmailDto emailDto = new SendEmailDto();
         emailDto.setFrom("no-reply@example.com");
