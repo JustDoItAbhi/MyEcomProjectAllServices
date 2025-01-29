@@ -1,7 +1,4 @@
 package com.ecommer.userservices.users.userdtos;
-
-import lombok.NonNull;
-
 import java.util.List;
 
 public class UpdateUserRequestDto {

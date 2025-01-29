@@ -1,10 +1,9 @@
-package cartservice.expcetions;
+package cartservice.securityconfigrations.expcetions;
 
 
-import cartservice.expcetions.expectionsfiles.CartNotFoundException;
-import cartservice.expcetions.expectionsfiles.OutOfStockProduct;
-import cartservice.expcetions.expectionsfiles.ProductAlreadyExists;
-import cartservice.expcetions.expectionsfiles.ProductNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductAlreadyExists;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

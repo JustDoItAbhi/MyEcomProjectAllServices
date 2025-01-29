@@ -19,18 +19,17 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
 {
     private static Collection<? extends GrantedAuthority> extractResourceRoles(final Jwt jwt)
     {
-        List<String> roles = jwt.getClaim("role");// fetch role from jwt
+        List<String> roles = jwt.getClaim("roles");
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
         for (String role: roles) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role));
-        } // collected role from token for implemention in security configration
+        }
 
         return grantedAuthorities;
     }
 
-    private final JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter =
-            new JwtGrantedAuthoritiesConverter();
+    private final JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
 
     @Override

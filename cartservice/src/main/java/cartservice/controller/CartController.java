@@ -2,8 +2,9 @@ package cartservice.controller;
 
 import cartservice.client.UserResponseDto;
 import cartservice.dtos.*;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
 import cartservice.service.IcartServices;
-import cartservice.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,9 +35,6 @@ public class CartController {
     public ResponseEntity<CartResposneDtos> addItemToCart(
             @PathVariable("email") String email,
             @RequestBody CartRequestDto dtos)  throws CartNotFoundException { //select product for cart
-        if (dtos.getItem() == null || dtos.getItem().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         return ResponseEntity.ok(icartServices.addItemToCart(email,dtos));
     }
 

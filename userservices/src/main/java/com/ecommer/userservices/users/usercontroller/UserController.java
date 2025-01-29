@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -36,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(userServices.logOut(logOut), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{email}")//USER
+    @PutMapping("/update/email/{email}")//USER
     public ResponseEntity<UserResponseDto> updatDate(@PathVariable ("email")String email, @RequestBody UpdateUserRequestDto dto)  {
         return ResponseEntity.ok(userServices.updateUser(email, dto));
     }

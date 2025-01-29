@@ -2,6 +2,7 @@ package deliveryservice.deliveryservice.servicesproject.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -14,15 +15,19 @@ public class SystamConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeHttpRequests((authorize -> authorize
 //                                .requestMatchers("/deliveryUser/{cartId}/{userEmail}").hasRole("ADMIN")
+//                                .requestMatchers("/user/getUserByid/**").hasRole("ADMIN")
+//                                .requestMatchers("/user/getUserByid/**").authenticated()
 //                        .requestMatchers("/deliveryUser/{id}").authenticated()
                                 .anyRequest().authenticated()
                         )
                 )
   .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(new CustomJwtAuthenticationConverter()))
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
+//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
     }

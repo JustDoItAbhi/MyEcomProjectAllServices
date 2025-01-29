@@ -10,15 +10,15 @@ import cartservice.dtos.ProductResponseDto;
 import cartservice.entity.CartItems;
 import cartservice.entity.CartStatus;
 import cartservice.entity.Carts;
-import cartservice.expcetions.expectionsfiles.OutOfStockProduct;
-import cartservice.expcetions.expectionsfiles.UserNotExistsException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.OutOfStockProduct;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
 import cartservice.mapper.CartMapper;
 import cartservice.mapper.Mapper;
 import cartservice.repository.CartItemsRepository;
 import cartservice.repository.CartRepository;
 import cartservice.repository.ProductRepository;
-import cartservice.expcetions.expectionsfiles.CartNotFoundException;
-import cartservice.expcetions.expectionsfiles.ProductNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,6 +48,9 @@ public class CartServiceImpl implements IcartServices {
     @Override
     public CartResposneDtos addItemToCart(String email, CartRequestDto dto) throws CartNotFoundException {
         UserResponseDto responseDto1=fetchUserDataAndValidate(email);
+        if(!responseDto1.getUserEmail().equals(email)){
+            throw new UserNotExistsException(" PLEASE SIGN UP "+email+" NOT EXITS");
+        }
         if(responseDto1==null){
             throw new UserNotExistsException(" PLEASE SIGN UP "+email+" NOT EXITS");
         }
@@ -188,8 +191,8 @@ if(existingEmail.isPresent()){
 
     @Override
     public List<ProductResponseDto> getAllProducts() {
-    List<ProductResponseDto>responseDtos=productServiceClient.fetchProduct();
-        return responseDtos;
+//    List<ProductResponseDto>responseDtos=productServiceClient.fetchProduct();
+        return null;
     }
 
     @Override

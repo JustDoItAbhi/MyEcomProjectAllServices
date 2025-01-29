@@ -13,37 +13,38 @@ import deliveryservice.deliveryservice.servicesproject.mapper.UserMapper;
 import deliveryservice.deliveryservice.servicesproject.repository.DestinationRespository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserAddressRepository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserResponseUpdateRepository;
-import deliveryservice.deliveryservice.servicesproject.template.CallingCartdata;
+import deliveryservice.deliveryservice.servicesproject.template.CallingServices;
 import deliveryservice.deliveryservice.servicesproject.template.CallingUserService;
 import deliveryservice.deliveryservice.servicesproject.template.NominatimClinet;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 @Service
-
+//@Primary
 // in memory
 public class UserServiceWithNominatim implements UserServices{
     private final UserAddressRepository userAddressRepository;
     private final CallingUserService callingUserService;
     private final UserResponseUpdateRepository updateRepository;
     private final DestinationRespository destinationRespository;
-    private final CallingCartdata callingCartdata;
+    private final CallingServices callingCartdata;
     private NominatimClinet clinet;
     private final Map<Long, UserAddress> userAddressCache;
 
-    public UserServiceWithNominatim(UserAddressRepository userAddressRepository, CallingUserService callingUserService,
-                                    UserResponseUpdateRepository updateRepository, DestinationRespository destinationRespository,
-                                    CallingCartdata callingCartdata, Map<Long, UserAddress> userAddressCache, NominatimClinet clinet) {
+    public UserServiceWithNominatim(DestinationRespository destinationRespository, UserAddressRepository userAddressRepository,
+                                    CallingUserService callingUserService, UserResponseUpdateRepository updateRepository,
+                                    CallingServices callingCartdata, NominatimClinet clinet, Map<Long, UserAddress> userAddressCache) {
+        this.destinationRespository = destinationRespository;
         this.userAddressRepository = userAddressRepository;
         this.callingUserService = callingUserService;
         this.updateRepository = updateRepository;
-        this.destinationRespository = destinationRespository;
         this.callingCartdata = callingCartdata;
-        this.userAddressCache = userAddressCache;
         this.clinet = clinet;
+        this.userAddressCache = userAddressCache;
     }
 
     @Override
@@ -108,6 +109,11 @@ public class UserServiceWithNominatim implements UserServices{
     public List<UserAddress> getAll() {
         List<UserAddress>userAddressList=userAddressRepository.findAll();
         return userAddressList;
+    }
+
+    @Override
+    public UserResponseDto FetchUserDataAndValidate(String email) {
+        return null;
     }
 
     @Override

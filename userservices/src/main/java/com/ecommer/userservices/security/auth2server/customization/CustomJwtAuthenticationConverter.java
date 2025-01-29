@@ -25,7 +25,7 @@ import java.util.stream.Stream;
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
             for (String role: roles) {
-                grantedAuthorities.add(new CustomiseGrandAuthority(role));
+                grantedAuthorities.add(new CustomiseGrandAuthority(new Roles(role).getRoleType()));
             } // collected role from token for implemention in security configration
 
             return grantedAuthorities;

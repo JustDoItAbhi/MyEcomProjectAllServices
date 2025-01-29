@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -47,9 +50,13 @@ public class UserclientRestTemplate {
         return Arrays.asList(template.getBody());
     }
     public UserResponseDto getUserById(String email)throws SignUpException {
+        Jwt jwt=(Jwt)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String token =jwt.getTokenValue();
+        HttpHeaders headers=new HttpHeaders();
+        HttpEntity<?>entity=new HttpEntity<>(headers);
+
         RestTemplate restTemplate = restTemplateBuilder.build();
         List<String> services = discoveryClient.getServices();
-        System.out.println("Registered services: " + services);
         List<ServiceInstance> instances = discoveryClient.getInstances("USERSERVICE");
         if (instances.isEmpty()) {
             throw new RuntimeException("User service is not available");

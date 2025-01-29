@@ -24,7 +24,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
 //                        .requestMatchers(  "/order/**").hasRole("ADMIN")
 //                        .requestMatchers("/order/").permitAll()
-                        .requestMatchers("/pay/").permitAll()
+//                        .requestMatchers("/pay/").permitAll()
+                                .requestMatchers("/order/getCartById/{id}").permitAll()
                                 .anyRequest().permitAll()// prohabited all other functions
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

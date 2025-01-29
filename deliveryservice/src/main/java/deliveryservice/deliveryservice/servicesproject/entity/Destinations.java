@@ -2,7 +2,7 @@ package deliveryservice.deliveryservice.servicesproject.entity;
 
 import jakarta.persistence.*;
 
-@Entity
+@Entity(name="destinations")
 public class Destinations  extends BaseModels{
     @Column(name="country")
     private String country;

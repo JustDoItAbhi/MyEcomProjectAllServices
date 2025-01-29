@@ -20,16 +20,12 @@ public class SecurityConfig  {
                             .requestMatchers("/category/create","/category/update/","/category/price/id").hasRole("ADMIN")
                             .requestMatchers("/category/searchByCategoryName/{name}","/category/","/product/").permitAll()
                             .requestMatchers("/category/getbyid").hasRole("ADMIN")
-                            .requestMatchers("/product/get/**").permitAll()
+                            .requestMatchers("/product/get/**","/category/").permitAll()
                                     .anyRequest().authenticated()
                     ))
                                     .oauth2ResourceServer(oauth2 -> oauth2
                                             .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                                     );
-//);
-//        http.headers(headers -> headers.httpStrictTransportSecurity().disable())
-//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
-//                );
          return http.build();
     }
     @Bean

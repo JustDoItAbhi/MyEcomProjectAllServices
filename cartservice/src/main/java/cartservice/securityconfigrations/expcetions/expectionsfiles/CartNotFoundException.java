@@ -1,4 +1,4 @@
-package cartservice.expcetions.expectionsfiles;
+package cartservice.securityconfigrations.expcetions.expectionsfiles;
 
 public class CartNotFoundException extends Exception{
     public CartNotFoundException() {

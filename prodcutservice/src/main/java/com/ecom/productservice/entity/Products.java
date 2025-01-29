@@ -1,7 +1,8 @@
 package com.ecom.productservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import net.minidev.json.annotate.JsonIgnore;
+
 
 
 @Entity

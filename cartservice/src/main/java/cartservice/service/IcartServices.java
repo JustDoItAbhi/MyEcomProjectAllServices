@@ -5,7 +5,7 @@ import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
 import cartservice.dtos.ProductResponseDto;
-import cartservice.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
 
 
 import java.util.List;

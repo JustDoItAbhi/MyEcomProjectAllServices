@@ -20,9 +20,9 @@ public class DeliveryController {
     public ResponseEntity<Delivery> getpaymenStatus(@RequestBody DeliveryResponseDto dto) {
         return ResponseEntity.ok(deliveryService.getNotification(dto));
     }
-    @GetMapping("/{cartId}")
-    public ResponseEntity<CartResposneDtos>getCart(@PathVariable("cartId")long cartId){
-        return ResponseEntity.ok(deliveryService.fetchCart(cartId));
-    }
+//    @GetMapping("/{cartId}")
+//    public ResponseEntity<CartResposneDtos>getCart(@PathVariable("cartId")long cartId){
+//        return ResponseEntity.ok(deliveryService.fetchCart(cartId));
+//    }
 
 }

@@ -1,6 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
 import deliveryservice.deliveryservice.servicesproject.dto.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
 import deliveryservice.deliveryservice.servicesproject.entity.UserResponseUpdatedEntity;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
@@ -13,6 +14,7 @@ public interface UserServices {
     UserAddress getUser(long cartId, String userEmail) throws UserNotExistsException, CountryNotFound, CityNotFound;
     UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsException;
     List<UserAddress>getAll();
+    UserResponseDto FetchUserDataAndValidate(String email);
     boolean deleteDeliveryAddress(long id);
 
 }

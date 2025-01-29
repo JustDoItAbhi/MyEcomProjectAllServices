@@ -101,6 +101,7 @@
 			<version>0.11.5</version>
 		</dependency>
 
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-authorization-server</artifactId>
@@ -131,6 +132,14 @@
 			<artifactId>spring-security-cas</artifactId>
 			<version>6.1.0</version> <!-- Ensure this matches your Spring Security version -->
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-gateway-dependencies -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gateway-dependencies</artifactId>
+			<version>4.2.0</version>
+			<type>pom</type>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

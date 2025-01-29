@@ -21,29 +21,22 @@ public class SecurityConfig {
         http
                     .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                                .anyRequest().permitAll()
+                        .requestMatchers("/product/get/{id}").permitAll()
+                        .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")
+//                        .requestMatchers("/order/getCartById/{id}").permitAll()
+                                .anyRequest().authenticated()
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                )
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(new CustomJwtAuthenticationConverter()))
+                );
 
-                .formLogin(Customizer.withDefaults());
+//                .formLogin(Customizer.withDefaults());
 
 
         return http.build();
     }
-//    @Bean
-//    JwtDecoder jwtDecoder() {
-//        return JwtDecoders.fromIssuerLocation("http://localhost:8090");
-//    }
 
-    //
-//                                .requestMatchers(" http://localhost:8090/user/**").authenticated()
-//                                .requestMatchers("/cart/getCartById/").hasRole("USER")
-//                                .requestMatchers("/product/**").authenticated()
-//    //                                .requestMatchers(HttpMethod.GET,"/user/getUserByid/**").authenticated()
-//                                .requestMatchers("/cart/add/**").authenticated()
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();

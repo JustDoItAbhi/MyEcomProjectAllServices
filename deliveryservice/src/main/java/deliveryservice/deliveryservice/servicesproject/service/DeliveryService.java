@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface DeliveryService {
     Delivery getNotification(DeliveryResponseDto dto);
-    List<Delivery>getsll();
-    CartResposneDtos fetchCart(long cartId);
+//    List<Delivery>getsll();
+//    CartResposneDtos fetchCart(long cartId);
 }

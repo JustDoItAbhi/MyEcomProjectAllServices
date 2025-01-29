@@ -1,43 +1,55 @@
 package cartservice.client;
 
 
-import cartservice.expcetions.expectionsfiles.UserNotExistsException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
+
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
 public class CallingUserService {
-private RestTemplateBuilder restTemplateBuilder;
-private DiscoveryClient discoveryClient;
+private final RestTemplateBuilder restTemplateBuilder;
+private final DiscoveryClient discoveryClient;
 
-    public CallingUserService(RestTemplateBuilder restTemplateBuilder, DiscoveryClient discoveryClient) {
-        this.restTemplateBuilder = restTemplateBuilder;
-        this.discoveryClient = discoveryClient;
-    }
+public CallingUserService(RestTemplateBuilder restTemplateBuilder, DiscoveryClient discoveryClient) {
+    this.restTemplateBuilder = restTemplateBuilder;
+    this.discoveryClient = discoveryClient;
+}
 
-//    public UserResponseDto getUser(String userId){
-//        RestTemplate restTemplate=restTemplateBuilder.build();
-//        ServiceInstance serviceInstance=discoveryClient.getInstances("userservice").get(0);
-//        String url=serviceInstance.getUri()+"/user/getUserByid/"+userId;
-//        ResponseEntity<UserResponseDto>response=restTemplate.getForEntity(url, UserResponseDto.class);
-//        if(response.getBody()==null){
-//            throw new UserNotExistsException("USER NOT FETCHED "+userId);
-//        }
-//        return response.getBody();
-//    }
-    public UserResponseDto getUser(String email){
-        RestTemplate restTemplate=restTemplateBuilder.build();
-//        ServiceInstance serviceInstance=discoveryClient.getInstances("userservice").get(0);
-//        String url=serviceInstance.getUri()+"/user/getUserByid/"+userId;
-        String url="http://localhost:8090/user/getUserByid/"+email;
-        ResponseEntity<UserResponseDto>response=restTemplate.getForEntity(url, UserResponseDto.class);
+    public UserResponseDto getUser(String email) {
+    //storing token to header
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String token = jwt.getTokenValue();
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        // making call to user service with apigateway
+        ServiceInstance serviceInstance=discoveryClient.getInstances("userservice").get(0);
+        String url=serviceInstance.getUri()+"/user/getUserByid/"+email;
+//        String url="http://localhost:8090/user/getUserByid/" + email;
+        ResponseEntity<UserResponseDto> response = restTemplate.exchange(url, HttpMethod.GET, entity, UserResponseDto.class);
         if(response.getBody()==null){
-            throw new UserNotExistsException("USER NOT FETCHED "+email);
-        }
+                throw new UserNotExistsException("PLEASE SIGN UP "+email);
+
+}
         return response.getBody();
     }
+
+
+
+
+
+
+
+
 }

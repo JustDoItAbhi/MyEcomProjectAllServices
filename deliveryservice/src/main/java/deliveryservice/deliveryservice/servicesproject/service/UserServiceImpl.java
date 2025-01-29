@@ -14,8 +14,7 @@ import deliveryservice.deliveryservice.servicesproject.mapper.UserMapper;
 import deliveryservice.deliveryservice.servicesproject.repository.DestinationRespository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserAddressRepository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserResponseUpdateRepository;
-import deliveryservice.deliveryservice.servicesproject.template.CallingCartdata;
-import deliveryservice.deliveryservice.servicesproject.template.CallingUserService;
+import deliveryservice.deliveryservice.servicesproject.template.CallingServices;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -28,20 +27,17 @@ import java.util.Map;
 @Primary
 public class UserServiceImpl implements UserServices{
 private UserAddressRepository userAddressRepository;
-private CallingUserService callingUserService;
+private CallingServices callingServices;
 private DestinationRespository destinationRespository;
 private UserResponseUpdateRepository updateRepository;
-private CallingCartdata callingCartdata;
     private final Map<Long, UserResponseDto> userAddressCache=new HashMap<>();
 
-    public UserServiceImpl(UserAddressRepository userAddressRepository, CallingUserService callingUserService,
-                           DestinationRespository destinationRespository,
-                           UserResponseUpdateRepository updateRepository, CallingCartdata callingCartdata) {
+    public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServices callingServices,
+                           DestinationRespository destinationRespository, UserResponseUpdateRepository updateRepository) {
         this.userAddressRepository = userAddressRepository;
-        this.callingUserService = callingUserService;
+        this.callingServices = callingServices;
         this.destinationRespository = destinationRespository;
         this.updateRepository = updateRepository;
-        this.callingCartdata = callingCartdata;
     }
 
     @Override
@@ -75,16 +71,15 @@ private CallingCartdata callingCartdata;
             return responseDto;
     }
 
-    private UserResponseDto FetchUserDataAndValidate(String email){
-        UserResponseDto existingUser = callingUserService.getUser(email);// fetching user from user service
+    public UserResponseDto FetchUserDataAndValidate(String email){
+        UserResponseDto existingUser = callingServices.getUser(email);// fetching user from user service
         if (existingUser == null) { //validation for user
             throw new UserNotExistsException("PLEASE SIGN UP " + email);
         }
         return existingUser;
     }
     private CartResposneDtos fetchCartAndValidate(long cartId){
-        CartResposneDtos dtos=callingCartdata.fetchingFromCartServcie(cartId);
-        // validation of cart service
+        CartResposneDtos dtos=callingServices.fetchingFromCartServcie(cartId);
         if(dtos==null){
             throw new CartNotFount(" CART NOT FOUND "+cartId);
         }
@@ -100,7 +95,7 @@ private CallingCartdata callingCartdata;
 
     @Override
     public UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsException {// update only address if user want to send parcel to some other place
-        UserResponseDto existingUser=callingUserService.getUser(email);
+        UserResponseDto existingUser= callingServices.getUser(email);
         if(existingUser==null){
             throw new UserNotExistsException("PLEASE SIGN UP  "+email);
         }
