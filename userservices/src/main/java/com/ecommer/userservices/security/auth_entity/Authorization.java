@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "`authorization`")
-public class Authorization {
+public class Authorization {// spring boot oauth2 authorization entity
     @Id
     @Column
     private String id;

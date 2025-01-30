@@ -36,20 +36,11 @@ public CallingUserService(RestTemplateBuilder restTemplateBuilder, DiscoveryClie
         // making call to user service with apigateway
         ServiceInstance serviceInstance=discoveryClient.getInstances("userservice").get(0);
         String url=serviceInstance.getUri()+"/user/getUserByid/"+email;
-//        String url="http://localhost:8090/user/getUserByid/" + email;
         ResponseEntity<UserResponseDto> response = restTemplate.exchange(url, HttpMethod.GET, entity, UserResponseDto.class);
+
         if(response.getBody()==null){
                 throw new UserNotExistsException("PLEASE SIGN UP "+email);
-
-}
+        }
         return response.getBody();
-    }
-
-
-
-
-
-
-
-
+      }
 }

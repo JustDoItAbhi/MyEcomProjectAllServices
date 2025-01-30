@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 
     public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken>
-    {
+    {// customised jwt role base authentication to check and read roles
         private static Collection<? extends GrantedAuthority> extractResourceRoles(final Jwt jwt)
         {
             List<String> roles = jwt.getClaim("role");// fetch role from jwt

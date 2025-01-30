@@ -55,7 +55,6 @@ public class CartServiceImpl implements IcartServices {
             throw new UserNotExistsException(" PLEASE SIGN UP "+email+" NOT EXITS");
         }
 
-
 Optional<Carts>existingEmail=cartRepository.findByEmail(email);
 if(existingEmail.isPresent()){
     Carts carts=existingEmail.get();
@@ -64,6 +63,7 @@ if(existingEmail.isPresent()){
 }
         int intStok=0;
         Carts carts = new Carts();
+        carts.setEmail(responseDto1.getUserEmail());
         carts.setCartStatus(CartStatus.ACCEPTED);
         carts.setEmail(email);
         carts.setCartCreatedTime(LocalDateTime.now());
@@ -95,6 +95,7 @@ if(existingEmail.isPresent()){
         Carts savedCart = cartRepository.save(carts);
         return CartMapper.fromCart(savedCart);
     }
+
     private ProductResponseDto fetchProductandValidate(long productId){
         ProductResponseDto responseDto =productServiceClient.fetchProductById(productId);
         if (responseDto == null) {//velidation if product fetched or not
@@ -102,6 +103,7 @@ if(existingEmail.isPresent()){
         }
       return responseDto;
     }
+
     private UserResponseDto fetchUserDataAndValidate(String email){
         UserResponseDto existingUser =callingUserService.getUser(email); // fetching user from user service
         if (existingUser == null) { //validation for user
@@ -110,7 +112,9 @@ if(existingEmail.isPresent()){
         return existingUser;
     }
 
-    @Override
+
+
+    @Override// remove iteam from cart list
     public CartResposneDtos removeItemFromCart(long cartId, long productId) throws CartNotFoundException {
         Carts cart = cartRepository.findById(cartId).orElseThrow(
                 () -> new CartNotFoundException("Cart not found for user: " + cartId));

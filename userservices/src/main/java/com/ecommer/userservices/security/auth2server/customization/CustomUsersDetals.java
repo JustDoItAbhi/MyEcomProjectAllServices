@@ -13,19 +13,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JsonDeserialize
-@NoArgsConstructor
+@JsonDeserialize// json deserializer requirment of springboot oauth2 implentation
+@NoArgsConstructor// no argument constructor
 public class CustomUsersDetals implements UserDetails {
-    private String password;
-    private  String username;
-    private long userId;
-    private boolean accountNonExpired;
-    private  boolean accountNonLocked;
-    private  boolean credentialsNonExpired;
-    private boolean enabled;
-    private String userEmail;
-    private List<GrantedAuthority>authorities;
-
+    private String password;// user custome password for jwt token  implementation
+    private  String username;// user custome user for jwt token  implementation
+    private long userId;// user custome user id for jwt token implementation
+    private boolean accountNonExpired;// user custome jwt token expiry for jwt implementation
+    private  boolean accountNonLocked;// user custome jwt token credential lock for jwt implementation
+    private  boolean credentialsNonExpired;// // user custome jwt token credential non expiry for jwt implementation
+    private boolean enabled;// // user custome jwt token enable for jwt implementation
+    private String userEmail;// optional // user custome jwt token usereamil for jwt not implementation
+    private List<GrantedAuthority>authorities;//// user custome jwt token role based authority for jwt implementation
+// setters
     public void setPassword(String password) {
         this.password = password;
     }
@@ -63,7 +63,7 @@ public class CustomUsersDetals implements UserDetails {
         return username;
     }
 
-    public CustomUsersDetals(Users user) {
+    public CustomUsersDetals(Users user) {// converting user to custom user
         this.username = user.getUserEmail();
         this.password = user.getUserPassword();
         this.userId=user.getUserId();
@@ -73,14 +73,14 @@ public class CustomUsersDetals implements UserDetails {
         this.credentialsNonExpired = true;
         this.enabled = true;
         this.authorities = user.getRolesList().stream()
-                .map(role -> new CustomiseGrandAuthority( role.getRoleType())) // Ensure correct role format
+                .map(role -> new CustomiseGrandAuthority( role.getRoleType())) //  role format as string
                 .collect(Collectors.toList());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
-
+// getters
     public String getUserEmail() {
         return username;
     }

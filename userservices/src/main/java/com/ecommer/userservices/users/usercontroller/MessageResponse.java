@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class MessageResponse {
+public class MessageResponse {// customise test message for returning text output
     private String message;
 
 

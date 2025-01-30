@@ -9,15 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorizationRepository extends JpaRepository<Authorization, String> {
-    Optional<Authorization> findByState(String state);
-    Optional<Authorization> findByAuthorizationCodeValue(String authorizationCode);
-    Optional<Authorization> findByAccessTokenValue(String accessToken);
-    Optional<Authorization> findByRefreshTokenValue(String refreshToken);
-    Optional<Authorization> findByOidcIdTokenValue(String idToken);
-    Optional<Authorization> findByUserCodeValue(String userCode);
-    Optional<Authorization> findByDeviceCodeValue(String deviceCode);
-    @Query("select a from Authorization a where a.state = :token" +
+public interface AuthorizationRepository extends JpaRepository<Authorization, String> {// authorization repository
+    Optional<Authorization> findByState(String state); // find authorization with its state
+    Optional<Authorization> findByAuthorizationCodeValue(String authorizationCode);// find authorization with its code value
+    Optional<Authorization> findByAccessTokenValue(String accessToken);//find authorization with its token valu
+    Optional<Authorization> findByRefreshTokenValue(String refreshToken);// find authorization with its referesh token value
+    Optional<Authorization> findByOidcIdTokenValue(String idToken);// find authorization with its ocid token value
+    Optional<Authorization> findByUserCodeValue(String userCode);//find authorization with its user code value
+    Optional<Authorization> findByDeviceCodeValue(String deviceCode);//find authorization with its device code value
+    @Query("select a from Authorization a where a.state = :token" +// default query from spring boot authorization server
             " or a.authorizationCodeValue = :token" +
             " or a.accessTokenValue = :token" +
             " or a.refreshTokenValue = :token" +

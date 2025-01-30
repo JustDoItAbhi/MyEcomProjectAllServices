@@ -38,7 +38,6 @@ public class Incomingcalls  {
         HttpEntity<?> entity=new HttpEntity<>(headers);
         ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
         String serviceAUri = serviceInstance.getUri().toString() + "/cart/getCartById/"+cartId;
-//        String serviceAUri="http://localhost:8085/cart/getCartById/"+cartId;
         ResponseEntity<CartResposneDtos>response=restTemplate.exchange(serviceAUri, HttpMethod.GET,entity, CartResposneDtos.class);
         if(response.getBody()==null){
             throw new RuntimeException("CANNOT FETCH CART "+ cartId);
@@ -46,19 +45,5 @@ public class Incomingcalls  {
         return response.getBody();
     }
 
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**").allowedOrigins("*");
-//        System.out.println("ENTERED BY CART SERVICE");
-//    }
-//    public String getUserRoles() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication.getPrincipal() instanceof Jwt) {
-//            Jwt jwt = (Jwt) authentication.getPrincipal();
-//            System.out.println("HERE IS ROLLLLLLLLLLEEEEEEE");
-//            return jwt.getClaimAsStringList("roles").toString(); // Extract "roles" claim
-//        }
-//        return "No roles available";
-//    }
 }
 

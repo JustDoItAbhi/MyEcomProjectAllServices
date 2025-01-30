@@ -26,7 +26,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/order/").permitAll()
 //                        .requestMatchers("/pay/").permitAll()
                                 .requestMatchers("/order/getCartById/{id}").permitAll()
-                                .anyRequest().permitAll()// prohabited all other functions
+                                .anyRequest().authenticated()// prohabited all other functions
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))

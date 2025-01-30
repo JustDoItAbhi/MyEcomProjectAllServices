@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/client")
-public class ClientController {
+public class ClientController {// registrerd OICD client controller
     @Autowired
-    public CustomizeRegeredClientService service;
-    @PostMapping("/register")
+    public CustomizeRegeredClientService service;// constructor
+    @PostMapping("/register")// post mapping to register a client
     public ResponseEntity<RegisteredClient> createClient(@RequestBody ClientRequestDto dto){
         return ResponseEntity.ok(service.createRegeretedClient(dto));
     }

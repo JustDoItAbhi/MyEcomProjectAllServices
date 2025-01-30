@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 @Component
-public class JpaOAuth2AuthorizationConsentService implements OAuth2AuthorizationConsentService {
+public class JpaOAuth2AuthorizationConsentService implements OAuth2AuthorizationConsentService {// authorization server concent implementation
     private final AuthorizationConsentRepository authorizationConsentRepository;
     private final RegisteredClientRepository registeredClientRepository;
 

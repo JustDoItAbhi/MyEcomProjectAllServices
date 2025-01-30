@@ -17,14 +17,14 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class CustomizeRegeredClientServiceImpl implements CustomizeRegeredClientService{
+public class CustomizeRegeredClientServiceImpl implements CustomizeRegeredClientService{// oicd registered client implementations
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;// password encoder
     @Autowired
-    private JpaRegisteredClientRepository jpaRegisteredClientRepository;
+    private JpaRegisteredClientRepository jpaRegisteredClientRepository;// jpa client repository
     @Override
-    public RegisteredClient createRegeretedClient(ClientRequestDto dto) {
-        Set<AuthorizationGrantType>authorizationGrantTypes=new HashSet<>();
+    public RegisteredClient createRegeretedClient(ClientRequestDto dto) {// method to create client
+        Set<AuthorizationGrantType>authorizationGrantTypes=new HashSet<>();// hashset to store grant type
         authorizationGrantTypes.add(AuthorizationGrantType.AUTHORIZATION_CODE);
         authorizationGrantTypes.add(AuthorizationGrantType.REFRESH_TOKEN);
         authorizationGrantTypes.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
@@ -32,7 +32,7 @@ public class CustomizeRegeredClientServiceImpl implements CustomizeRegeredClient
         authorizationGrantTypes.add(AuthorizationGrantType.JWT_BEARER);
         authorizationGrantTypes.add(AuthorizationGrantType.TOKEN_EXCHANGE);
 
-        Set<String> scopes=new HashSet<>();
+        Set<String> scopes=new HashSet<>();// set scopes for client to permit users
         scopes.add(OidcScopes.PROFILE);
         scopes.add(OidcScopes.OPENID);
         scopes.add(OidcScopes.ADDRESS);
@@ -40,8 +40,8 @@ public class CustomizeRegeredClientServiceImpl implements CustomizeRegeredClient
         scopes.add(OidcScopes.PHONE);
 
         RegisteredClient.Builder oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                    .clientId(dto.getClientId())
-                    .clientSecret(passwordEncoder.encode(dto.getClientSecret()))
+                    .clientId(dto.getClientId())// set client id
+                    .clientSecret(passwordEncoder.encode(dto.getClientSecret()))// sent password encoded
                     .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                     .redirectUri(dto.getRedirectUris())
                     .clientName(dto.getClientName())
@@ -53,11 +53,9 @@ public class CustomizeRegeredClientServiceImpl implements CustomizeRegeredClient
         for (AuthorizationGrantType grandType:authorizationGrantTypes){
             oidcClient.authorizationGrantType(grandType);
         }
-//        for (String scope:scopes){
-//            oidcClient.scope(scope);
-//        }
+
         RegisteredClient client=oidcClient.build();
-        jpaRegisteredClientRepository.save(client);
+        jpaRegisteredClientRepository.save(client);// save to database
         return client;
     }
 }

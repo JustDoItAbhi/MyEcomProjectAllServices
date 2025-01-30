@@ -21,15 +21,15 @@ public class RoleControllers {
 //    return ResponseEntity.ok(oidcClientServices.registerOidcClient(requestDto));
 //
 //}
-@PostMapping("/create")
+@PostMapping("/create")// create role post mapping
     public ResponseEntity<RoleResponseDto> createRole(@RequestBody RoleRequestDto requestDto){
     return ResponseEntity.ok(roleService.createRole(requestDto));
 }
-@DeleteMapping("/deleteById/{roleId}/{userId}")
+@DeleteMapping("/deleteById/{roleId}/{userId}")// delete role
     public ResponseEntity<Boolean> delete(@PathVariable ("roleId")long roleId,@PathVariable ("userId")long userId){
     return ResponseEntity.ok(roleService.deleteRole(roleId,userId));
 }
-@GetMapping("/")
+@GetMapping("/")// get all the roles as list
     public ResponseEntity<List<RoleResponseDto>>getllRoles(){
     return ResponseEntity.ok(roleService.getAllRoles());
 }

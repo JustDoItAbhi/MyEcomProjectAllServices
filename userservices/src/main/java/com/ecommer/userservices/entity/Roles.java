@@ -16,29 +16,29 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "ROLES")
-public class Roles {
+public class Roles {// role entity
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long roleId;
-    private String roleType;
+    private long roleId;// auto incremented role id as primary key
+    private String roleType;// role name
 
-    public Roles(String roleType) {
+    public Roles(String roleType) {// constructor
         this.roleType = roleType;
     }
 
-    public long getRoleId() {
+    public long getRoleId() {// getter
         return roleId;
     }
 
-    public void setRoleId(long roleId) {
+    public void setRoleId(long roleId) {// setter
         this.roleId = roleId;
     }
 
-    public String getRoleType() {
+    public String getRoleType() {// getter
         return roleType;
     }
 
-    public void setRoleType(String roleType) {
+    public void setRoleType(String roleType) {// setter
         this.roleType = roleType;
     }
 

@@ -3,14 +3,13 @@ package com.ecommer.userservices.kafka;
 import lombok.Getter;
 import lombok.Setter;
 
-//@Getter
-//@Setter
-public class SendEmailDto {
-private String from;
-    private String to;
-    private String subject;
-    private String body;
 
+public class SendEmailDto {// dto for kafka email notification
+private String from;// sender of email
+    private String to;// receiver of email
+    private String subject;// subject for email
+    private String body;// your message in mail body
+//getters and setters
     public String getFrom() {
         return from;
     }

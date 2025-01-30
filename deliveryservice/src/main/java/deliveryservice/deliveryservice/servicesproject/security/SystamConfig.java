@@ -20,6 +20,7 @@ public class SystamConfig {
 //                                .requestMatchers("/deliveryUser/{cartId}/{userEmail}").hasRole("ADMIN")
 //                                .requestMatchers("/user/getUserByid/**").hasRole("ADMIN")
 //                                .requestMatchers("/user/getUserByid/**").authenticated()
+//                                .requestMatchers("/deliveryUser/{cartId}/{userEmail}").permitAll()
 //                        .requestMatchers("/deliveryUser/{id}").authenticated()
                                 .anyRequest().authenticated()
                         )

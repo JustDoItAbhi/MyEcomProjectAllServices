@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserMapper {
-    public static UserResponseDto fromEntity(Users users){
-//        BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+    public static UserResponseDto fromEntity(Users users){// MAPE ENTITY TO REPOSNE DTO
         UserResponseDto responseDto=new UserResponseDto();
         responseDto.setUserId(users.getUserId());
         responseDto.setUserName(users.getUserName());
@@ -28,7 +27,7 @@ public class UserMapper {
                 .map(Roles::getRoleType) // Extracting role type
                 .collect(Collectors.toList());
 
-        responseDto.setRolesList(rolesList); // Assuming role
+        responseDto.setRolesList(rolesList);
         return responseDto;
     }
 }

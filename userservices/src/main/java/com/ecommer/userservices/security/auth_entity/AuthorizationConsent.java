@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "`authorizationConsent`")
 @IdClass(AuthorizationConsent.AuthorizationConsentId.class)
-public class AuthorizationConsent {
+public class AuthorizationConsent {// // spring boot oauth2 concent entity
     @Id
     private String registeredClientId;
     @Id

@@ -12,30 +12,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USERS")// user entity
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long userId;
-    private String userName;
+    private long userId;// user id as primary key auto incremented
+    private String userName;//user name
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "user_role", //forign key
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
-    private List<Roles> rolesList;
+    private List<Roles> rolesList;// list of roles
 
-    private String userPhone;
-    private String userEmail;
-    private String userPassword;
-    private String userHouseNumber;
-    private String userStreet;
-    private String userLandMark;
-    private String userCity;
-    private String userState;
-    private String userCountry;
-    private int userPostelCode;
-
+    private String userPhone;// user phone number
+    private String userEmail;// user email address
+    private String userPassword;// user password will be saved as encoded password
+    private String userHouseNumber;// user hourse number
+    private String userStreet;// user street name
+    private String userLandMark;// user residence near by famouce place name
+    private String userCity;// user city with correct spelling , it will be used for delivery
+    private String userState;// user state with correct spelling , it will be used for delivery
+    private String userCountry;// user country with correct spelling , it will be used for delivery
+    private int userPostelCode;// user postal code
+        // getters and setters
     public long getUserId() {
         return userId;
     }

@@ -44,6 +44,9 @@ private UserResponseUpdateRepository updateRepository;
     public UserAddress getUser(long cartId, String userEmail) throws UserNotExistsException, CountryNotFound, CityNotFound {
         UserResponseDto existingUser =FetchUserDataAndValidate(userEmail);
         CartResposneDtos dtos=fetchCartAndValidate(cartId);
+        if(dtos==null){
+            throw new CartNotFount("YOU ARE NOT ALLOWED "+ userEmail);
+        }
         existingUser.setCartId(dtos.getCartId());// saved cartId in UserAdrress
         existingUser.setTotalAmount(dtos.getTotal());// save amount in UserAdrress
         // fetching country and city from database
@@ -53,7 +56,7 @@ private UserResponseUpdateRepository updateRepository;
             existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 2 days " );// then take maximum two days for delivery
         }else{
             existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 7 DAYS AS YOUR CITY IS FAR "// otherwise 7 days
-                    +existingUser.getUserCity()+" is "+destinations.getCountryDistance());
+                    +existingUser.getUserCity()+" is "+destinations.getCountryDistance()+" killometers");
         }
 
 

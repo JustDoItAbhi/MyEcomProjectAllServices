@@ -10,7 +10,7 @@ import org.hibernate.annotations.CurrentTimestamp;
 
 @Entity
 @Table(name = "`client`")
-public class Client {
+public class Client {//// spring boot oauth2 client entity
     @Id
     private String id;
     private String clientId;

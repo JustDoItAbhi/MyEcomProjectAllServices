@@ -33,7 +33,7 @@ public class UserServicesImpl implements UserServices {
 
     public UserServicesImpl(UserRepository userRepository, RoleRepository roleRepository,
                              BCryptPasswordEncoder passwordEncoder,
-                            KafkaProducerClinet kafkaProducerClinet, ObjectMapper objectMapper) {
+                            KafkaProducerClinet kafkaProducerClinet, ObjectMapper objectMapper) {// CONSTRUCTOR
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,19 +44,19 @@ public class UserServicesImpl implements UserServices {
     @Override
     public UserResponseDto signUp(SignUp signUp) throws JsonProcessingException {
         Optional<Users> existingUser=userRepository.findByUserEmail(signUp.getUserEmail());
-        if(existingUser.isPresent()){
+        if(existingUser.isPresent()){// USER VALIDATION
             throw new UserAlreadyExists("PLEASE LOGIN -> USER "+signUp.getUserEmail()+" ALREADY EXITS");
         }
         Users users=new Users();
         List<Roles> rolesList = new ArrayList<>();
-        for(String roles:signUp.getRoles()) {
-            Optional<Roles> savedRole = roleRepository.findByRoleType(roles);
-            if (savedRole.isEmpty()) {
-                throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());
+        for(String roles:signUp.getRoles()) {// ADDING ROLE
+            Optional<Roles> savedRole = roleRepository.findByRoleType(roles);// CHECKING DATABASE IF ROLE EXISTS
+            if (savedRole.isEmpty()) {// ROLE VALIDATION
+                throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());// THROW ERROR IF ROLE NOT VALID
             }
             savedRole.get().setRoleType(roles);
             rolesList.add(savedRole.get());
-            roleRepository.save(savedRole.get());
+            roleRepository.save(savedRole.get());// SAVE DINAMICALLY USER WITH ROLE
         }
         users.setRolesList(rolesList);
 
@@ -72,8 +72,8 @@ public class UserServicesImpl implements UserServices {
         users.setUserHouseNumber(signUp.getUserHouseNumber());
         users.setUserLandMark(signUp.getUserLandMark());
         users.setUserStreet(signUp.getUserStreet());
-        userRepository.save(users);
-        SendEmailDto emailDto=new SendEmailDto();
+        userRepository.save(users);// SAVE USER IN DATABASE
+        SendEmailDto emailDto=new SendEmailDto();// KAFAK EMAIL NOTIFICATION
         emailDto.setTo(users.getUserEmail());
         emailDto.setFrom("Pattorney0@gmail.com");
         emailDto.setSubject("WELCOME TO E-COMMERCE SERVICE");
@@ -95,13 +95,16 @@ public class UserServicesImpl implements UserServices {
             }
 
     @Override
-    public UserResponseDto logIn(Login login) {
+    public UserResponseDto logIn(Login login) {// LOGIN USER
        Optional<Users> savedUser=userRepository.findByUserEmail(login.getUserEmail());
-       if(!savedUser.isPresent()){
+       if(!savedUser.isPresent()){// USER VALIDATION
+           throw  new UsernameNotFoundException("USER NOT FOUND "+ login.getUserEmail());
+       }
+       if(!savedUser.get().getUserEmail().equals(login.getUserEmail())){// PASSWORD VALIDATION
            throw  new UsernameNotFoundException("USER NOT FOUND "+ login.getUserEmail());
        }
        Users users=savedUser.get();
-       if(!passwordEncoder.matches(login.getUserPassword(),users.getUserPassword())){
+       if(!passwordEncoder.matches(login.getUserPassword(),users.getUserPassword())){// PASSWORD ENCODED VALIDATION
            throw new UsernameNotFoundException("USER PASSWORD IS NOT CORRECT "+ login.getUserPassword());
        }
 //       users.setRolesList(users.getRolesList());
@@ -110,12 +113,12 @@ public class UserServicesImpl implements UserServices {
         sendEmailDto.setFrom("Pattorney0@gmail.com");
         sendEmailDto.setSubject("YOU SUCESSFULLY LOGIN");
         sendEmailDto.setBody(users.getUserName()+" logged in "+ users.getUserEmail()+" by email "+ users.getUserPhone()+" by phone "
-                + " this is your id "+users.getRolesList()+" ROLE ");
+                + " this is your id "+users.getRolesList()+" ROLE ");// SEND EMAIL IF USER IS VALID
         return UserMapper.fromEntity(users);
     }
 
     @Override
-    public UserResponseDto logOut(LogOut logOut) {
+    public UserResponseDto logOut(LogOut logOut) {// LOGOUT METHOD
         Optional<Users>users=userRepository.findByUserEmail(logOut.getEmail());
         if(users.isEmpty()){
             throw new RuntimeException("USER NOT FOUND "+ logOut.getEmail());
@@ -125,7 +128,7 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public List<UserResponseDto> getAllUsers() {
+    public List<UserResponseDto> getAllUsers() {// GET ALL USERS
         List<Users> user=userRepository.findAll();
         List<UserResponseDto>dtos=new ArrayList<>();
         for(Users users:user){
@@ -137,13 +140,13 @@ public class UserServicesImpl implements UserServices {
 
 
     @Override
-    public boolean deleteUser(long id) {
+    public boolean deleteUser(long id) {// DELETE USER
         userRepository.deleteById(id);
         return true;
     }
 
     @Override
-    public UserResponseDto getById(String email) throws SignUpUserException {
+    public UserResponseDto getById(String email) throws SignUpUserException {// GET USER BY EMAIL
         Optional<Users>existingUser=userRepository.findByUserEmail(email);
         if(existingUser.isEmpty()){
             throw new SignUpUserException("PLEASE SIGN  UP "+email);
@@ -152,7 +155,7 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public UserResponseDto updateUser(String email, UpdateUserRequestDto dto) {
+    public UserResponseDto updateUser(String email, UpdateUserRequestDto dto) {// UPDATE USER
         Optional<Users> existingUser = userRepository.findByUserEmail(dto.getUserEmail());
         if (existingUser.isEmpty()) {
             throw new UserNotFoundException("DEAR CUSTOMER PLEASE SIGN UP FIRST " + dto.getUserName());
@@ -184,7 +187,7 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public ResponseEntity<UserResponseDto> resetPassword(String email,String password) {
+    public ResponseEntity<UserResponseDto> resetPassword(String email,String password) {// RESET PASSWORD IF USER FORGOT OR WANT TO CHANGE PASSWORD
         Optional<Users>existingUser=userRepository.findByUserEmail(email);
         if(existingUser.isEmpty()){
             throw new EmailNotFoundException("PLEASE ENTER CORRECT EMAIL OR SIGN UP "+email);

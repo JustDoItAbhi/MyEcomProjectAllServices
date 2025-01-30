@@ -1,8 +1,6 @@
 package com.ecommer.userservices.security.system;
 
-import com.ecommer.userservices.security.auth2server.customization.CustomJwtAuthenticationConverter;
-import com.ecommer.userservices.security.auth2server.customization.CustomUsersDetals;
-import com.ecommer.userservices.security.auth2server.customization.CustomiseGrandAuthority;
+import com.ecommer.userservices.security.auth2server.customization.*;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -54,51 +52,58 @@ import java.util.stream.Collectors;
     @Configuration
     @EnableWebSecurity
     public class SecurityConfig   {
-
-    @Bean
-    @Order(1)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
-            throws Exception {
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(Customizer.withDefaults());	// Enable OpenID Connect 1.0
-        http
-                .exceptionHandling((exceptions) -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+            @Bean//spring bean of annotaiton
+            @Order(1)// order placed as of importance of method to run as lower number mean high priority
+            public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)//
+                    throws Exception {
+                //default configrations
+                OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+                        // Enable OpenID Connect (OIDC) support with the default settings.
+                        // This configures the OAuth2 authorization server to support OIDC.
+                http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+                        .oidc(Customizer.withDefaults());	// Enable OpenID Connect
+                http
+                        // exception handling
+                        .exceptionHandling((exceptions) -> exceptions
+                                .defaultAuthenticationEntryPointFor(
+                                        new LoginUrlAuthenticationEntryPoint("/login"),
+                                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                                )
                         )
-                )
-                // Accept access tokens for User Info and/or Client Registration
-                .oauth2ResourceServer((resourceServer) -> resourceServer
-                        .jwt(Customizer.withDefaults()));
-        return http.build();
-    }
+                        // Accept access tokens for User Info and/or Client Registration and jwt suppport
+                        .oauth2ResourceServer((resourceServer) -> resourceServer
+                                .jwt(Customizer.withDefaults()));
+
+                return http.build();
+            }
 
         @Bean
-        @Order(2)
+        @Order(2)// 2nd level order for spring method
         public SecurityFilterChain protectedFilterChain(HttpSecurity http) throws Exception {
             http
                     .csrf().disable()  // Disable CSRF for API
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/role/**").hasRole("ADMIN")
-                                    .requestMatchers("/user/login").authenticated()
-                            .requestMatchers(HttpMethod.GET,"/user/debug").hasAnyRole("ADMIN","USER")
-                            .requestMatchers(HttpMethod.GET, "/user/getallUsers").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.GET,"/user/delete/").hasRole("ADMIN")
-                            .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")
-                                    .anyRequest().authenticated()
+                            .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()// for public use
+                        .requestMatchers(HttpMethod.POST,"/role/**").hasRole("ADMIN")// only admin can send post request
+                                    .requestMatchers("/user/login").authenticated()// only authenticated user can login
+                            .requestMatchers(HttpMethod.GET,"/user/debug").hasAnyRole("ADMIN","USER")// debug to check what role user have
+                            .requestMatchers(HttpMethod.GET, "/user/getallUsers").hasRole("ADMIN")// only admin can send get all user request
+                            .requestMatchers(HttpMethod.GET,"/user/delete/").hasRole("ADMIN")// only admin can delete a user
+                            .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")// all users will be permitted
+                                    .anyRequest().authenticated()// rest all apis are authenticated
                     )
+                    // jwt role base configrations
                     .oauth2ResourceServer(oauth2 -> oauth2
                             .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+
                     )
-                    .formLogin(Customizer.withDefaults());
+
+                    .formLogin(Customizer.withDefaults());// default login
             return http.build();
         }
 
         @Bean
-        public RoleHierarchy roleHierarchy() {
+        public RoleHierarchy roleHierarchy() {// mark admin as high priority always then user
             String hierarchy = "ROLE_ADMIN > ROLE_USER";
             RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
             roleHierarchy.setHierarchy(hierarchy);
@@ -108,20 +113,20 @@ import java.util.stream.Collectors;
 
 
         @Bean
-        public JWKSource<SecurityContext> jwkSource() {
+        public JWKSource<SecurityContext> jwkSource() {// jwt source for key setup and security context
             KeyPair keyPair = generateRsaKey();
             RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
             RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
             RSAKey rsaKey = new RSAKey.Builder(publicKey)
-                    .privateKey(privateKey)
-                    .keyID(UUID.randomUUID().toString())
+                    .privateKey(privateKey)// private key for jwt
+                    .keyID(UUID.randomUUID().toString())// rendom id
                     .build();
             JWKSet jwkSet = new JWKSet(rsaKey);
             return new ImmutableJWKSet<>(jwkSet);
         }
 
         @Bean
-        public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        public JwtAuthenticationConverter jwtAuthenticationConverter() {// role based jwt recogoniser as if ROLE_ADMIN or ADMIN
             JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
             authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
             authoritiesConverter.setAuthoritiesClaimName("roles");
@@ -131,13 +136,13 @@ import java.util.stream.Collectors;
             return authenticationConverter;
         }
         @Bean
-        public HttpFirewall allowSemicolonFirewall() {
+        public HttpFirewall allowSemicolonFirewall() {// Allow semicolons in URLs
             StrictHttpFirewall firewall = new StrictHttpFirewall();
-            firewall.setAllowSemicolon(true); // Allow semicolons in URLs
+            firewall.setAllowSemicolon(true);
             return firewall;
         }
 
-        private static KeyPair generateRsaKey() {
+        private static KeyPair generateRsaKey() {// GENERATED key pairs
             KeyPair keyPair;
             try {
                 KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -151,22 +156,22 @@ import java.util.stream.Collectors;
         }
 
         @Bean
-        public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+        public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {// jwt decoder
             return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
         }
 
         @Bean
-        public AuthorizationServerSettings authorizationServerSettings() {
+        public AuthorizationServerSettings authorizationServerSettings() {// authorization end point
             return AuthorizationServerSettings.builder()
-                    .issuer("http://localhost:8090")
+                    .issuer("http://localhost:8090")// Issuer URL for OAuth2
                     .build();
         }
         @Bean
-        public BCryptPasswordEncoder encoder(){
+        public BCryptPasswordEncoder encoder(){// password encoder bean method
             return new BCryptPasswordEncoder();
         }
         @Bean//by me
-        public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
+        public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {// jwt adding claims
             return (context) -> {
                 if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
                     context.getClaims().claims((claims) -> {
@@ -177,7 +182,7 @@ import java.util.stream.Collectors;
                         claims.put("roles", roles);
                         Authentication authentication = context.getPrincipal();
                         Long userId = ((CustomUsersDetals)authentication.getPrincipal()).getUserId();
-                        claims.put("userId",userId);
+                        claims.put("userId",userId);// aditional id implementation in jwt token
                     });
 
                 }

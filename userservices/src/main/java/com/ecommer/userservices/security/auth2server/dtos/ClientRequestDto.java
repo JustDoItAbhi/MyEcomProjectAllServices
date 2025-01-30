@@ -9,14 +9,14 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
 import java.time.Instant;
 import java.util.Set;
-public class ClientRequestDto {
-    private String clientId;
-    private String clientSecret;
-    private String clientName;
-    private String redirectUris;
-    private String postLogoutRedirectUris;
+public class ClientRequestDto {// oicd client request dto
+    private String clientId;// client id
+    private String clientSecret;// client password (encoded)
+    private String clientName;// client name
+    private String redirectUris;// redirect url
+    private String postLogoutRedirectUris;// post logout redirect url
 //    private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
-
+// getters and setters
     public String getClientId() {
         return clientId;
     }

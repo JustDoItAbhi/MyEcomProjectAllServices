@@ -58,8 +58,6 @@ public class OrderItemServicesImpl implements OrderItemServices {
             orders.setOrderStatus(OrderStatus.PENDING);
         }else {
             orders.setOrderStatus(OrderStatus.SUCESSFULL);
-            //if order is succefull then redirect to login if cannot login then sign up
-
         }
         orderRepository.save(orders);
         return OrderMapper.fromEntity(orders);

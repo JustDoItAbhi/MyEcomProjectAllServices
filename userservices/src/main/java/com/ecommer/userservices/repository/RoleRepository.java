@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Roles,Long> {
-    Optional<Roles> findByRoleType(String roles);
+public interface RoleRepository extends JpaRepository<Roles,Long> {// role repository
+    Optional<Roles> findByRoleType(String roles);// option to find role by role type as ADMIN OR USER
 }

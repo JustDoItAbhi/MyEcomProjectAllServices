@@ -15,11 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-@Primary
-public class CallingServicesImpl implements CallingServices{
+public class CallingServicesWithoutEurekaImpl implements CallingServices{
     private RestTemplateBuilder restTemplateBuilder;
 
-    public CallingServicesImpl(RestTemplateBuilder restTemplateBuilder) {
+    public CallingServicesWithoutEurekaImpl(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 

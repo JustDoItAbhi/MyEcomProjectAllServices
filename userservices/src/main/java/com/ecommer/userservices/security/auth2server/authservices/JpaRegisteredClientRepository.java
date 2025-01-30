@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 @Component
-public class JpaRegisteredClientRepository implements RegisteredClientRepository {
+public class JpaRegisteredClientRepository implements RegisteredClientRepository {// jpa client implementation
     private final ClientRepository clientRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 

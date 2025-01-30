@@ -16,19 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service// service annotation
 public class RoleServiceImpl implements RoleService{
-    @Autowired
+
     private RoleRepository roleRepository;
-    @Autowired
     private UserRepository userRepository;
+
+    public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {// constructor
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
     public RoleResponseDto createRole(RoleRequestDto requestDto) {
-        Optional<Roles>rolelist=roleRepository.findByRoleType(requestDto.getRole());
-        if(rolelist.isPresent()){
-            throw new RoleNotFoundExceptions("ROLE ALREADY EXISTES "+ requestDto.getRole());
+        Optional<Roles>rolelist=roleRepository.findByRoleType(requestDto.getRole());// fetch tole from database
+        if(rolelist.isPresent()){// role validation
+            throw new RoleNotFoundExceptions("ROLE ALREADY EXISTES "+ requestDto.getRole());// if role already exists in database then return error
         }
-        Roles roles=new Roles();
+        Roles roles=new Roles();// create new role
         roles.setRoleType(requestDto.getRole());
         roleRepository.save(roles);
         return RoleMappers.fromEntity(roles);
@@ -36,14 +41,14 @@ public class RoleServiceImpl implements RoleService{
 
     @Override
     @Transactional
-    public boolean deleteRole(long roleId,long userId) {
+    public boolean deleteRole(long roleId,long userId) {// delete role
          roleRepository.deleteById(roleId);
          userRepository.deleteById(userId);
          return true;
     }
 
     @Override
-    public List<RoleResponseDto> getAllRoles() {
+    public List<RoleResponseDto> getAllRoles() {// get all roles
         List<Roles>rolesList=roleRepository.findAll();
         List<RoleResponseDto>dtos=new ArrayList<>();
         for(Roles roles:rolesList){

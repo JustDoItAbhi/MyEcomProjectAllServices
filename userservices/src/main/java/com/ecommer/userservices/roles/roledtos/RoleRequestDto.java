@@ -3,12 +3,12 @@ package com.ecommer.userservices.roles.roledtos;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
 
-@Getter
-@Setter
-public class RoleRequestDto {
-    private String role;
-    private long usersId;
+
+public class RoleRequestDto {// role request dto
+    @NotNull
+    private String role;// role name
 
     public String getRole() {
         return role;
@@ -18,11 +18,4 @@ public class RoleRequestDto {
         this.role = role;
     }
 
-    public long getUsersId() {
-        return usersId;
-    }
-
-    public void setUsersId(long usersId) {
-        this.usersId = usersId;
-    }
 }

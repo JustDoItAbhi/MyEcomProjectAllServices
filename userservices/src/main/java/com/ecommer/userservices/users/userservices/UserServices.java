@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface UserServices {
-    UserResponseDto signUp(SignUp signUp) throws JsonProcessingException;
-    UserResponseDto logIn(Login login);
-    UserResponseDto logOut(LogOut logOut);
-    List<UserResponseDto>getAllUsers();
-    boolean deleteUser(long id);
-    UserResponseDto getById(String email) throws SignUpUserException;
-    UserResponseDto updateUser(String email, UpdateUserRequestDto dto);
-    ResponseEntity<UserResponseDto> resetPassword(String email,String password);
+    UserResponseDto signUp(SignUp signUp) throws JsonProcessingException;// SIGN UP
+    UserResponseDto logIn(Login login);// USER LOGIN
+    UserResponseDto logOut(LogOut logOut);// USER LOGOUT
+    List<UserResponseDto>getAllUsers();// GET ALL USERS
+    boolean deleteUser(long id);// DELETE A USER
+    UserResponseDto getById(String email) throws SignUpUserException;// GET USER BY EMAIL
+    UserResponseDto updateUser(String email, UpdateUserRequestDto dto);// UPDATE USER
+    ResponseEntity<UserResponseDto> resetPassword(String email,String password);// RESET PASSWORD
 }

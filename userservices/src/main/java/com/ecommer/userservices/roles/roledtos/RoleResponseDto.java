@@ -11,9 +11,9 @@ import java.util.List;
 
 @Data
 public class RoleResponseDto {
-    private long roleId;
-    private String role;
-
+    private long roleId;// role id
+    private String role;// role name
+// getters and setters
     public long getRoleId() {
         return roleId;
     }

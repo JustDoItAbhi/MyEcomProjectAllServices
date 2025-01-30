@@ -35,7 +35,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 @Component
-public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService {
+public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService {// jpa authoriation service implementation by springboot oauth2 server
     private final AuthorizationRepository authorizationRepository;
     private final RegisteredClientRepository registeredClientRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
