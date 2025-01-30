@@ -22,14 +22,14 @@ Note – currently working on AI model to get delivery status by chatgpt
 
 
 1. Browse Categories
-•	Endpoint: GET http://localhost:8080/category/
+•	Endpoint: GET http://localhost:8089/category/
 Retrieve all available product categories. Choose your preferred category from the displayed list.
 ________________________________________
 2. Search Products by Category
-•	Endpoint: GET http://localhost:8080/category/searchByCategoryName/
+•	Endpoint: GET http://localhost:8089/category/searchByCategoryName/
 Example: Search for products in the "PHONES" category.
 Alternatively, you can fetch all products using the endpoint:
-•	Endpoint: GET http://localhost:8080/product/
+•	Endpoint: GET http://localhost:8089/product/
 ________________________________________
 3. Add Products to Cart
 •	Endpoint: POST http://localhost:8085/cart/add
