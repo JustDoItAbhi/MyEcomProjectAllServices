@@ -1,6 +1,6 @@
 package com.ecom.productservice.product.dtos;
 
-public class ProductRequestDto {
+public class ProductRequestDto {// PRODCUT REQUEST DTO
     private String name;
     private String description;
     private String brand;
@@ -8,7 +8,7 @@ public class ProductRequestDto {
     private int  stock;
     private String image;
     private long categoryesId;
-
+// GETTERS AND SETTERS
     public String getName() {
         return name;
     }

@@ -6,14 +6,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "category")
-public class Categoryes extends BaseModels {
+public class Categoryes extends BaseModels {// CATEGORY ENTITY
     @Column(name = "category_name")
-    private String categoryName;
+    private String categoryName;// CATEGORY NAME
     @Column(name = "category_description")
-    private String categoryDescription;
-    @OneToMany(mappedBy = "categoryes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Products> products;
-
+    private String categoryDescription;// CATEGORY DESCRIPTTION
+    @OneToMany(mappedBy = "categoryes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)// ONE TO MANY MAPPING WITH LAZY LOADING AND DEFAULT CASCADE
+    private List<Products> products;// LIST OF PRODUCTS
+// GETTERS AND SETTERS
     public String getCategoryName() {
         return categoryName;
     }

@@ -4,46 +4,50 @@ import com.ecom.productservice.category.categoryexpections.CategoryNotFoundExcep
 import com.ecom.productservice.product.dtos.ProductRequestDto;
 import com.ecom.productservice.product.dtos.ProductResponseDto;
 import com.ecom.productservice.product.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
-public class ProductController {
-    @Autowired
+@RequestMapping("/product")// COMMON ENDPOINT FOR ALL APIS
+public class ProductController {// PRODUCT CONTROLLER
     private ProductService productService;
-    @GetMapping("/")
-    public ResponseEntity<List<ProductResponseDto>> getAllProduct(){
+
+    public ProductController(ProductService productService) {// PRODUCT SERVICE AUTOWIRE
+        this.productService = productService;
+    }
+
+    @GetMapping("/")// PUBLIC USE
+    public ResponseEntity<List<ProductResponseDto>> getAllProduct(){// GET LIST OF PRODUCT
         return ResponseEntity.ok(productService.getAllProducts());
     }
-    @PostMapping("/create")
+    @GetMapping("/get/{id}")// PUBLIC USE
+    public ResponseEntity<ProductResponseDto> getById(@PathVariable ("id")long id){// GET PRODUCT BY ITS ID
+        return ResponseEntity.ok(productService.getProductById(id));
+    }
+    @PostMapping("/create")// ADMIN USE
 public ResponseEntity<ProductResponseDto>createProduct(@RequestBody ProductRequestDto requestDto)
-        throws CategoryNotFoundExceptions {
+        throws CategoryNotFoundExceptions {// CREATE PRODUCT
     return ResponseEntity.ok(productService.createProduct(requestDto));
 }
-@DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable ("id") long id){
+@DeleteMapping("/{id}")// ADMIN USE
+    public ResponseEntity<Boolean> deleteById(@PathVariable ("id") long id){// DELETE PRODUCT
         return ResponseEntity.ok(productService.deleteProduct(id));
+}
+
+@PostMapping("/UPDATE/{id}")// ADMIN USE
+    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable("id")long id,
+                                                            @RequestBody ProductRequestDto requestDto)
+        throws CategoryNotFoundExceptions {// UPDATE PRODUCT
+        return ResponseEntity.ok(productService.updateProduct(id,requestDto));
+}
+    @GetMapping("/GETUSERROLE")// ADMIN USE
+    public ResponseEntity<String> getUSERrOLE() {// CHECK ROLE BY TOKEN
+        return ResponseEntity.ok(productService.getUserRoles());
+    }
 }
 //@DeleteMapping("/")
 //    public ResponseEntity<Boolean>deleteAll(){
 //        return ResponseEntity.ok(productService.deleteList());
 //}
-@PostMapping("/UPDATE/{id}")
-    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable("id")long id,
-                                                            @RequestBody ProductRequestDto requestDto) throws CategoryNotFoundExceptions {
-        return ResponseEntity.ok(productService.updateProduct(id,requestDto));
-}
-
-@GetMapping("/get/{id}")
-    public ResponseEntity<ProductResponseDto> getById(@PathVariable ("id")long id){
-        return ResponseEntity.ok(productService.getProductById(id));
-}
-    @GetMapping("/GETUSERROLE")
-    public ResponseEntity<String> getUSERrOLE() {
-        return ResponseEntity.ok(productService.getUserRoles());
-    }
-}

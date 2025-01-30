@@ -20,16 +20,17 @@ public class SecurityConfig  {
                             .requestMatchers("/category/create","/category/update/","/category/price/id").hasRole("ADMIN")
                             .requestMatchers("/category/searchByCategoryName/{name}","/category/","/product/").permitAll()
                             .requestMatchers("/category/getbyid").hasRole("ADMIN")
-                            .requestMatchers("/product/get/**","/category/").permitAll()
-                                    .anyRequest().authenticated()
+                            .requestMatchers("/product/get/**","/category/").permitAll()// OPEN TO USE
+                                    .anyRequest().authenticated()// REST ALL AUTHENTICATED
                     ))
+                    // JWT ROLE BASE CHECK
                                     .oauth2ResourceServer(oauth2 -> oauth2
                                             .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                                     );
          return http.build();
     }
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {// JWT ROLE PROVIDER
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
         authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
         authoritiesConverter.setAuthoritiesClaimName("roles");
@@ -40,7 +41,7 @@ public class SecurityConfig  {
     }
 
 @Bean
-    public RestClient restClient(){
+    public RestClient restClient(){// REST CLIENT BEAN
         return RestClient.builder()
                 .baseUrl("http://localhost:8085/cart/").build();
 }

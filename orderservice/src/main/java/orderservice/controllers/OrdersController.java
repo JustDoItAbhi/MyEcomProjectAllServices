@@ -8,6 +8,7 @@ import orderservice.services.UserServices;
 import orderservice.entity.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class OrdersController {
     public OrderItemServices orderItemServices;
     @Autowired
     private UserServices userServices;
-
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";
     @GetMapping("/getCartById/{cartId}")// first api to call cart service
     public ResponseEntity<OrderResponseDto> getCART(                                                    @PathVariable("cartId") long cartId)throws SignUpException {
         return ResponseEntity.ok(orderItemServices.getCartItems(cartId));
@@ -40,6 +41,9 @@ public class OrdersController {
 
     @GetMapping("/getUserForDelivery/{email}")
     public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
+        if(!email.matches(EMAIL_PATTERN)){
+            throw new UsernameNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+        }
         return ResponseEntity.ok(userServices.getUserByEmail(email));
 
     }

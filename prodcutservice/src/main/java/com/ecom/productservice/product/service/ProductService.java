@@ -7,12 +7,13 @@ import com.ecom.productservice.product.dtos.ProductResponseDto;
 import java.util.List;
 
 public interface ProductService {
-    ProductResponseDto createProduct(ProductRequestDto requestDto) throws CategoryNotFoundExceptions;
-    ProductResponseDto updateProduct(long id,ProductRequestDto requestDto) throws CategoryNotFoundExceptions;
-    ProductResponseDto getProductById(long id);
-    List<ProductResponseDto>getAllProducts();
-    boolean deleteProduct(long id);
-    boolean deleteList();
-    String getUserRoles();
+    ProductResponseDto createProduct(ProductRequestDto requestDto)
+            throws CategoryNotFoundExceptions;// CREATE PRODUCT
+    ProductResponseDto updateProduct(long id,ProductRequestDto requestDto) throws CategoryNotFoundExceptions;// UPDATE PRODUCT
+    ProductResponseDto getProductById(long id);// GET PRODUCT BY ITS ID
+    List<ProductResponseDto>getAllProducts();// GET ALL PRODUCTS
+    boolean deleteProduct(long id);// DELETE PRODUCT
+    boolean deleteList();// delete list of products
+    String getUserRoles();// check the role of token provider
 }
 

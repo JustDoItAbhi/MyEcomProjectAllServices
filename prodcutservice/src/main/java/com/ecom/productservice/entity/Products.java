@@ -7,18 +7,18 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="Products")
-public class Products extends BaseModels {
-   private String name;
-    private String description;
-    private String Brand ;
-   private int Price;
-   private int  Stock;
-    private String image;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "categoryId")
-    @JsonIgnore
+public class Products extends BaseModels {// PRODUCT ENTITY
+   private String name;// PRODUCT NAME
+    private String description;// PRODUCT DESCRIPTION
+    private String Brand ;// BRAND OF PRODUCT
+    private int Price;// PRICE OF PRODUCT
+    private int  Stock;// PRODUCT IN STOCK
+    private String image;// IMAGE URL OF PRODUCT
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)// MANY TO ONE CARDINAITY ON LAZY LOADING WITH PRESIST IN DATABASE
+    @JoinColumn(name = "categoryId")// JOIN BY COLUME CATEGORYiD
+    @JsonIgnore// json ignore annotation to avoid over loading
     private Categoryes categoryes;
-
+    // GETTERS AND SETTERS
     public String getName() {
         return name;
     }

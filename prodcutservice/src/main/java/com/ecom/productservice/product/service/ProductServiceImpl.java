@@ -20,20 +20,19 @@ import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private ProductRespository productRespository;
-    private CategoryRespository categoryRespository;
+    private final ProductRespository productRespository;
+    private final CategoryRespository categoryRespository;
 
-
+// CONSTRUCTOR
     public ProductServiceImpl(ProductRespository productRespository, CategoryRespository categoryRespository) {
         this.productRespository = productRespository;
         this.categoryRespository = categoryRespository;
-
     }
 
     @Override
-    public ProductResponseDto createProduct(ProductRequestDto requestDto) throws CategoryNotFoundExceptions {
+    public ProductResponseDto createProduct(ProductRequestDto requestDto) throws CategoryNotFoundExceptions {// CREATE PRODUCT
         Categoryes savedCategory = categoryRespository.findById(requestDto.getCategoryesId()).orElseThrow(
-                () -> new CategoryNotFoundExceptions("CATEGORY NOT FOUND " + requestDto.getCategoryesId()));
+                () -> new CategoryNotFoundExceptions("CATEGORY NOT FOUND " + requestDto.getCategoryesId()));// SEARCH BY CATEGORY
         Products products = new Products();
         products.setName(requestDto.getName());
         products.setBrand(requestDto.getBrand());
@@ -42,17 +41,17 @@ public class ProductServiceImpl implements ProductService {
         products.setDescription(requestDto.getDescription());
         products.setImage(requestDto.getImage());
         products.setCategoryes(savedCategory);
-        productRespository.save(products);
-        categoryRespository.save(savedCategory);
+        productRespository.save(products);// SAVE PRODUCT TO DATABASE
+//        categoryRespository.save(savedCategory);
         return ProductMapper.fromEntity(products);
     }
 
     @Override
-    public ProductResponseDto updateProduct(long id, ProductRequestDto requestDto) throws CategoryNotFoundExceptions {
-        Products products=productRespository.findById(id).orElseThrow(
+    public ProductResponseDto updateProduct(long id, ProductRequestDto requestDto) throws CategoryNotFoundExceptions {// UPDATE
+        Products products=productRespository.findById(id).orElseThrow(// SEARCH BY PRODUCT ID
                 ()->new ProductNotFoundException("PRODUCT NOT FOUND "+id));
         Categoryes savedCategory=categoryRespository.findById(requestDto.getCategoryesId()).orElseThrow(
-                ()->new CategoryNotFoundExceptions("CATEGORY NOT FOUND "+requestDto.getCategoryesId()));
+                ()->new CategoryNotFoundExceptions("CATEGORY NOT FOUND "+requestDto.getCategoryesId()));// CATEGORY VALIDATION
         products.setName(requestDto.getName());
         products.setBrand(requestDto.getBrand());
         products.setPrice(requestDto.getPrice());
@@ -65,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto getProductById(long id) {
+    public ProductResponseDto getProductById(long id) {// GET PRODUCT BY ID
         Optional<Products>savedProduct=productRespository.findById(id);
         if(savedProduct.isEmpty()){
             throw new ProductNotFoundException("PRODUCT NOT FOUNT "+id);
@@ -75,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> getAllProducts() {
+    public List<ProductResponseDto> getAllProducts() {// GET ALL PRODUCTS
 
         List<Products>productsList=productRespository.findAll();
         List<ProductResponseDto>responseDtos=new ArrayList<>();
@@ -86,8 +85,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean deleteProduct(long id) {
-
+    public boolean deleteProduct(long id) {// DELETE PRODUCT WHERE CATEGORY IS NULL OR PRICE NOT UPDATED OR STOCK IS 0
         Products savedProduct = productRespository.findById(id).orElseThrow(
                 () -> new ProductNotFoundException("product id not found " + id));
         if (savedProduct.getCategoryes() == null||savedProduct.getPrice() == 0 || savedProduct.getStock() == 0) {
@@ -98,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
 }
 
     @Override
-    public boolean deleteList() {
+    public boolean deleteList() {// DELETE PRODUCT ACCORDING TO DESCRIPTION
         List<Products> savedProduct = productRespository.findAll();
         for(Products productList:savedProduct){
             if(productList.getDescription().equals("IOS22")){
@@ -109,11 +107,12 @@ public class ProductServiceImpl implements ProductService {
                 return false;
             }
     @Override
-    public  String getUserRoles() {
+    public  String getUserRoles() {// CHECK ROLE OF TOKEN PROVIDER
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.getPrincipal() instanceof Jwt) {
             Jwt jwt = (Jwt) authentication.getPrincipal();
+//            Jwt jwts=(Jwt) authentication.getCredentials();
             return jwt.getClaimAsStringList("roles").toString(); // Extract "roles" claim
         }
         return "No roles available";

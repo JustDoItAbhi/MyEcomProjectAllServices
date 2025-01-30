@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class CartController {
 
     private final IcartServices icartServices;
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";
 
     public CartController(IcartServices icartServices) {
         this.icartServices = icartServices;
@@ -35,6 +36,9 @@ public class CartController {
     public ResponseEntity<CartResposneDtos> addItemToCart(
             @PathVariable("email") String email,
             @RequestBody CartRequestDto dtos)  throws CartNotFoundException { //select product for cart
+        if(!email.matches(EMAIL_PATTERN)){
+            throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+        }
         return ResponseEntity.ok(icartServices.addItemToCart(email,dtos));
     }
 
@@ -79,6 +83,9 @@ public class CartController {
     }
     @GetMapping("/getUser/{email}")// get all prodcut for practice
     public ResponseEntity<UserResponseDto> getuserforTESTING(@PathVariable ("email")String email ){//get all products to test
+        if(!email.matches(EMAIL_PATTERN)){
+            throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+        }
         return ResponseEntity.ok(icartServices.testUser(email));
     }
 }

@@ -3,7 +3,7 @@ package com.ecom.productservice.product.dtos;
 import com.ecom.productservice.entity.Categoryes;
 
 
-public class ProductResponseDto {
+public class ProductResponseDto {// PRODUCT RESPONSE DTO
     private long id;
     private String name;
     private String description;
@@ -12,7 +12,7 @@ public class ProductResponseDto {
     private int  stock;
     private String image;
     private Categoryes categoryes;
-
+// GETTERS AND SETTERS
     public long getId() {
         return id;
     }

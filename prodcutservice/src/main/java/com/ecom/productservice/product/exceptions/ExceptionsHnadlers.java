@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class ExceptionsHnadlers {
+public class ExceptionsHnadlers {// GLOBAL EXCEPTION HANDLER
     private LocalDateTime localDateTime;
-    @ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler(ProductNotFoundException.class)// PRODUCT NOT FOUND EXCEPTION
     public ResponseEntity<MessageResponse> getException(ProductNotFoundException e){
         MessageResponse response=new MessageResponse(
                 e.getMessage(),

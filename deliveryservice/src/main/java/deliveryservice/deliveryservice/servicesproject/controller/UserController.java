@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/deliveryUser")
 public class UserController {
     private UserServices userServices;
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";
 
     public UserController(UserServices userServices) {
         this.userServices = userServices;
@@ -30,10 +31,16 @@ public class UserController {
 
     @GetMapping("/{cartId}/{userEmail}")
     public ResponseEntity<UserAddress> loginByEmail(@PathVariable("cartId")long cartId, @PathVariable("userEmail")String userEmail) throws UserNotExistsException, CityNotFound, CountryNotFound {
+       if(!userEmail.matches(EMAIL_PATTERN)){
+           throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+userEmail);
+       }
         return ResponseEntity.ok(userServices.getUser(cartId,userEmail));
     }
     @PutMapping("/update/{email}")
     public ResponseEntity<UserResponseUpdatedEntity>updateUserAddress(@PathVariable("email")String email , @RequestBody UserRequestDto dto) throws UserNotExistsException {
+        if(!email.matches(EMAIL_PATTERN)){
+            throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+        }
         return ResponseEntity.ok(userServices.updateUser(email,dto));
 }
 @GetMapping("/getllDeliveries")
@@ -48,16 +55,6 @@ public class UserController {
         return ResponseEntity.ok(userServices.deleteDeliveryAddress(id));
 }
 
-
-
-//    @GetMapping("/{country}")
-//    public ResponseEntity<List<Destinations>> getByCountry(@PathVariable("country")String country) throws CountryNotFound {
-//        return ResponseEntity.ok(userServices.getDestinationByCounty(country));
-//    }
-//    @GetMapping("/{city}")
-//    public ResponseEntity<Destinations>getByCity(@PathVariable("city")String city) throws CityNotFound {
-//        return ResponseEntity.ok(userServices.getDestinationBycity(city));
-//    }
 @GetMapping("/debug") // admin
 public ResponseEntity<String> debugAdminRole() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,7 +73,18 @@ public ResponseEntity<String> debugAdminRole() {
 }
 @GetMapping("/{email}")
     public ResponseEntity<UserResponseDto> getOnlyUser(@PathVariable ("email")String email){
+    if(!email.matches(EMAIL_PATTERN)){
+        throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+    }
         return ResponseEntity.ok(userServices.FetchUserDataAndValidate(email));
 }
+//    @GetMapping("/{country}")
+//    public ResponseEntity<List<Destinations>> getByCountry(@PathVariable("country")String country) throws CountryNotFound {
+//        return ResponseEntity.ok(userServices.getDestinationByCounty(country));
+//    }
+//    @GetMapping("/{city}")
+//    public ResponseEntity<Destinations>getByCity(@PathVariable("city")String city) throws CityNotFound {
+//        return ResponseEntity.ok(userServices.getDestinationBycity(city));
+//    }
 
 }

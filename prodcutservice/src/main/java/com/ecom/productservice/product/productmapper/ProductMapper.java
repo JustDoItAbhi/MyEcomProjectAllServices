@@ -5,7 +5,7 @@ import com.ecom.productservice.product.dtos.ProductRequestDto;
 import com.ecom.productservice.product.dtos.ProductResponseDto;
 
 public class ProductMapper {
-    public static ProductResponseDto fromEntity(Products products){
+    public static ProductResponseDto fromEntity(Products products){// mapping entity to response dto
         ProductResponseDto responseDto=new ProductResponseDto();
         responseDto.setName(products.getName());
         responseDto.setId(products.getId());
@@ -17,7 +17,7 @@ public class ProductMapper {
         responseDto.setCategoryes(products.getCategoryes());
         return responseDto;
     }
-    public static ProductResponseDto forSerching(Products products){
+    public static ProductResponseDto forSerching(Products products){// mapping only to reduce time complexity
         ProductResponseDto responseDto=new ProductResponseDto();
         responseDto.setName(products.getName());
         responseDto.setId(products.getId());
@@ -29,7 +29,7 @@ public class ProductMapper {
 //        responseDto.setCategoryes(products.getCategoryes());
         return responseDto;
     }
-    public static Products fromDto(ProductRequestDto requestDto){
+    public static Products fromDto(ProductRequestDto requestDto){// mapping REQUEST DTO TO ENTITY
         Products products = new Products();
         products.setName(requestDto.getName());
         products.setBrand(requestDto.getBrand());
