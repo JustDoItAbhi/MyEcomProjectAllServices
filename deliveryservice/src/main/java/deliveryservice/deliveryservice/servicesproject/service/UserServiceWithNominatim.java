@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 @Service
 //@Primary
-// in memory
-public class UserServiceWithNominatim implements UserServices{
+// in memory// AI MODEL SERVICE WITH OLLAMA
+public class UserServiceWithNominatim implements UserServices{// STRATGRY AND LAYER PATTERN USED TO IMPLEMENT USER SERVICE
     private final UserAddressRepository userAddressRepository;
     private final CallingUserService callingUserService;
     private final UserResponseUpdateRepository updateRepository;
@@ -34,7 +34,7 @@ public class UserServiceWithNominatim implements UserServices{
     private final CallingServices callingCartdata;
     private NominatimClinet clinet;
     private final Map<Long, UserAddress> userAddressCache;
-
+// CONSTRUCTOR
     public UserServiceWithNominatim(DestinationRespository destinationRespository, UserAddressRepository userAddressRepository,
                                     CallingUserService callingUserService, UserResponseUpdateRepository updateRepository,
                                     CallingServices callingCartdata, NominatimClinet clinet, Map<Long, UserAddress> userAddressCache) {
@@ -106,7 +106,7 @@ public class UserServiceWithNominatim implements UserServices{
     }
 
     @Override
-    public List<UserAddress> getAll() {
+    public List<UserAddress> getAll() {// GET ALL USERS
         List<UserAddress>userAddressList=userAddressRepository.findAll();
         return userAddressList;
     }

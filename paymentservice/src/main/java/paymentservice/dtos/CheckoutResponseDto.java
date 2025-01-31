@@ -4,7 +4,7 @@ import com.stripe.param.PaymentLinkCreateParams;
 
 import java.util.List;
 
-public class CheckoutResponseDto {
+public class CheckoutResponseDto {// PAYMENT CHECKOUT RESPONSE DTO
     private final String status;
     private final String message;
     private final List<PaymentLinkCreateParams.LineItem> lineItems;
@@ -20,8 +20,7 @@ public class CheckoutResponseDto {
         this.url = builder.url;
 
     }
-
-
+    // GETTERS
     public String getStatus() {
         return status;
     }
@@ -43,7 +42,7 @@ public class CheckoutResponseDto {
         private long cartId;
         private long price;
         private String url;
-
+        //SETTERS
         public Builder setOrderId(long orderId) {
             this.orderId = orderId;
             return this;

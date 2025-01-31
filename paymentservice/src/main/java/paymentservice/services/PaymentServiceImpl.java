@@ -38,18 +38,18 @@ public class PaymentServiceImpl implements PaymentGateway {
 
     @Override
     public CheckoutResponseDto toPay(long id,String email) throws StripeException, OrderNotFetchedException, JsonProcessingException {
-        if(email==null){
+        if(email==null){//CHECK NULL EMAIL
             throw new UserNotFoundException("PLEASE ENTER EMAIL "+email);
         }
-        Stripe.apiKey = stripeUniversalLink;
+        Stripe.apiKey = stripeUniversalLink;// STRIP API KEY
 
         OrderResponseDto dto = orderServiceClient.getOrderDetails(id);
 
-        ProductCreateParams productParams = ProductCreateParams.builder()
+        ProductCreateParams productParams = ProductCreateParams.builder()// PRODUCT PARAM
                 .setName("PRODUCT")
                 .build();
         Product product = Product.create(productParams);
-        PriceCreateParams priceParams = PriceCreateParams.builder()
+        PriceCreateParams priceParams = PriceCreateParams.builder()//PRICE PARAM
                 .setCurrency("USD")
                 .setUnitAmount((long) dto.getPrice()*100)
                 .setProduct(product.getId()) // Link to the created product
@@ -69,23 +69,22 @@ public class PaymentServiceImpl implements PaymentGateway {
                 .setAfterCompletion(PaymentLinkCreateParams.AfterCompletion.builder()
                         .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT)
                         .setRedirect(PaymentLinkCreateParams.AfterCompletion.Redirect.builder()
-                                .setUrl(paymentRedirectUrl+"/"+dto.getCartId()+"/"+email)
+                                .setUrl(paymentRedirectUrl+"/"+dto.getCartId()+"/"+email)//REDIRECT URL
                                 .build())
                         .build())
 
                 .build();
 
 
-        PaymentLink paymentLink = PaymentLink.create(linkParams);
+        PaymentLink paymentLink = PaymentLink.create(linkParams);// PAYMENT LINK
         SendEmailDto emailDto=new SendEmailDto();
         emailDto.setTo(email);
-        emailDto.setFrom("Pattorney0@gmail.com");
-        emailDto.setSubject("PLEASE PAY FOR YOUR ORDER");
-        emailDto.setBody("here is link to pay "+ paymentLink.getUrl()+" currency "+paymentLink.getCurrency());
+        emailDto.setFrom("Pattorney0@gmail.com");//EMAIL SENDER
+        emailDto.setSubject("PLEASE PAY FOR YOUR ORDER");// SUBJECT MESSAGE
+        emailDto.setBody("here is link to pay "+ paymentLink.getUrl()+" currency "+paymentLink.getCurrency());//PAYMENT LINK AND CURRENCY
 
         kafkaProducerClinet.sendMessage("sendemail",
                 objectMapper.writeValueAsString(emailDto));
-
                 return new CheckoutResponseDto.Builder()
                 .setUrl(paymentLink.getUrl())
                 .setMessage("HERE IS YOUR LINK TO PAY")

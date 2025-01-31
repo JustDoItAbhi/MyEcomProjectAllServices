@@ -14,16 +14,14 @@ import org.springframework.web.client.RestTemplate;
 import paymentservice.dtos.OrderResponseDto;
 
 @Configuration
-public class SystemConfig {
-
-
-    @Bean
+public class SystemConfig {// SYSTEM CONFIGRATION
+    @Bean// SECURITY FILTER CHAIN
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/order/{id}").hasRole("ADMIN")
-                        .requestMatchers("/order/","/pay/").permitAll()
+                        .requestMatchers("/order/{id}").hasRole("ADMIN")// ONLY ADMIN USE
+                        .requestMatchers("/order/","/pay/").permitAll()// PUBLIC ACCESS
                         .anyRequest().permitAll()// prohabited all other functions
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -32,7 +30,7 @@ public class SystemConfig {
 
         return http.build();
     }
-    @Bean
+    @Bean// SPRING SECURITY FACTORY PATTERN FOR ROLE
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
         authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
@@ -42,7 +40,7 @@ public class SystemConfig {
         authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return authenticationConverter;
     }
-    @Bean
+    @Bean// REST TEMLATE BEAN
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

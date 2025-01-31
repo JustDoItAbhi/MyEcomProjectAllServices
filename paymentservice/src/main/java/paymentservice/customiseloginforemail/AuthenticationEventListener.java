@@ -11,25 +11,25 @@ import java.io.IOException;
 @Component
 public class AuthenticationEventListener {
 
-    private final KafkaProducerClinet kafkaProducer;
-    private final ObjectMapper objectMapper;
-
+    private final KafkaProducerClinet kafkaProducer;//KAFKA CLIENT DECLARETION
+    private final ObjectMapper objectMapper;//DEFAULT OBJECT MAPPER
+// DEPENDENCY INJECTION
     public AuthenticationEventListener(KafkaProducerClinet kafkaProducer, ObjectMapper objectMapper) {
         this.kafkaProducer = kafkaProducer;
         this.objectMapper = objectMapper;
     }
 
-    @EventListener
+    @EventListener // EVENT MANAGMENT
     public void onAuthenticationSuccess(AuthenticationSuccessEvent event) {
         // Extract user details from the event
         String username = event.getAuthentication().getName();
         SendEmailDto emailDto = new SendEmailDto();
-        emailDto.setFrom("no-reply@example.com");
-        emailDto.setTo(username);  // Assuming the username is the user's email
-        emailDto.setSubject("Login Successful");
-        emailDto.setBody("Welcome back, " + username);
+        emailDto.setFrom("no-reply@example.com");// EMAIL SENDER
+        emailDto.setTo(username);  // EMAIL RECIVER
+        emailDto.setSubject("Login Successful");// SUBJECT OF EMAIL
+        emailDto.setBody("Welcome back, " + username);// OBJECT
 
-        // Send the notification (e.g., Kafka message)
+        // Send the notification
         try {
             kafkaProducer.sendMessage("sendemail", objectMapper.writeValueAsString(emailDto));
         } catch (IOException e) {

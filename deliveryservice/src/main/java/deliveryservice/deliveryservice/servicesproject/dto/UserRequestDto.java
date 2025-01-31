@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
-public class UserRequestDto {
+public class UserRequestDto {// USER REQUEST DTO
     private String customerName;
     private String customerPhone;
     private String customerHouseNumber;
@@ -10,7 +10,7 @@ public class UserRequestDto {
     private String customerState;
     private String customerCountry;
     private int customerPostelCode;
-
+    // GETTER AND SETTER
     public String getCustomerName() {
         return customerName;
     }

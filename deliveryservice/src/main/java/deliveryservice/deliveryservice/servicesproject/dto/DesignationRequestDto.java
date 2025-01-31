@@ -1,14 +1,14 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
-import jakarta.persistence.Column;
 
-public class DesignationRequestDto {
+
+public class DesignationRequestDto {// DESIGNATION REQUEST DTO
     private String country;
     private String capitalCity;
     private String city;
     private String message;
     private int countryDistance;
-
+// GETTERS AND SETTERS
     public String getCountry() {
         return country;
     }

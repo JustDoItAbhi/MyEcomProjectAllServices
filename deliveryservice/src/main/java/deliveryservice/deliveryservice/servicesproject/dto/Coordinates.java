@@ -1,14 +1,14 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
-public class Coordinates {
+public class Coordinates {// CO-ORDINATES FOR LOCATION
     private double latitude;
     private double longitude;
-
+    // CONSTRUCTOR
     public Coordinates(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
+    // GETTER AND SETTERS
     public double getLatitude() {
         return latitude;
     }

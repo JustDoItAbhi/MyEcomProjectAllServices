@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
-public class DeliveryServiceNotification {
+public class DeliveryServiceNotification {// DELIVERY NOTIFICATION DTO
     private String orderId;
     private String paymentStatus;
     private double amount;

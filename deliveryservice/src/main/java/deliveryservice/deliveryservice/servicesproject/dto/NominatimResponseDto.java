@@ -2,7 +2,7 @@ package deliveryservice.deliveryservice.servicesproject.dto;
 
 import java.util.List;
 
-public class NominatimResponseDto {
+public class NominatimResponseDto {// NOMINATIM SERVICE REQUEST DTO
     private long place_id;
     private String licence;
     private String osm_type;
@@ -17,7 +17,7 @@ public class NominatimResponseDto {
     private String name;
     private String display_name;
     private List<String> boundingbox;
-
+    // GETTER AND SETTER
     public long getPlace_id() {
         return place_id;
     }

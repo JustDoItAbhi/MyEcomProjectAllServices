@@ -1,11 +1,11 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
-public class DeliveryResponseDto {
+public class DeliveryResponseDto {// DELIVERY RESPONSE DTO
     private long deliveryId;
     private String orderId;
     private String paymentStatus;
     private double amount;
-
+    // GETTERS AND SETTERS
     public long getDeliveryId() {
         return deliveryId;
     }

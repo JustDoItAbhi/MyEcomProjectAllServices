@@ -16,13 +16,13 @@ public class PaymentController {
 
     private final PaymentGateway paymentGateway;
 
-    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";//EMAIL VALIDATION CHECK
+   //DEPENDENCY
     public PaymentController(PaymentGateway paymentGateway) {
         this.paymentGateway = paymentGateway;
     }
 
-
-    @GetMapping("/{id}/{email}")
+    @GetMapping("/{id}/{email}")// GET PAYMENT BY EMAIL
     public ResponseEntity<CheckoutResponseDto> getOrderForPayment(@PathVariable("id") long id,@PathVariable ("email")String email) throws StripeException, OrderNotFetchedException, JsonProcessingException {
         if(!email.matches(EMAIL_PATTERN)){
             throw new UserNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);

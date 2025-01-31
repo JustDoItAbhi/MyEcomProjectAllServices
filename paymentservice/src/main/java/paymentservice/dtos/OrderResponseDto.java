@@ -3,12 +3,12 @@ package paymentservice.dtos;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class OrderResponseDto {
+public class OrderResponseDto {// ORDER RESPONSE DTO
     private long orderid;
     private long cartId;
     private OrderStatus  orderStatus;
     private long price;
-
+// GETTERS AND SETTERS
     public long getOrderid() {
         return orderid;
     }

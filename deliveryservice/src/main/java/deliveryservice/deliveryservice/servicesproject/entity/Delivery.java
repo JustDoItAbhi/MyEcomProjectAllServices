@@ -3,11 +3,11 @@ package deliveryservice.deliveryservice.servicesproject.entity;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Delivery extends BaseModels{
+public class Delivery extends BaseModels{// DELVIERY ENTITY
     private String orderId;
     private String paymentStatus;
     private double amount;
-
+    // GETTERS AND SETTERS
     public String getOrderId() {
         return orderId;
     }

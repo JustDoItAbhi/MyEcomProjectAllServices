@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartResposneDtos {
+public class CartResposneDtos {// CART RESPONSE DTO
     private long cartId;
     private List<CartItemResponseDto> items = new ArrayList<>();
     private long total;
     private LocalDateTime cartCreatedTime;
-
+// GETTERS AND SETTERS
     public LocalDateTime getCartCreatedTime() {
         return cartCreatedTime;
     }

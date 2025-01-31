@@ -10,11 +10,11 @@ import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles
 
 import java.util.List;
 
-public interface UserServices {
+public interface UserServices {// STRATRGY AND LAYER PATTERN FOR USER SERVICE
     UserAddress getUser(long cartId, String userEmail) throws UserNotExistsException, CountryNotFound, CityNotFound;
     UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsException;
-    List<UserAddress>getAll();
-    UserResponseDto FetchUserDataAndValidate(String email);
-    boolean deleteDeliveryAddress(long id);
+    List<UserAddress>getAll();// GET ALL USER ADDRESS
+    UserResponseDto FetchUserDataAndValidate(String email);// TEST USER DATA
+    boolean deleteDeliveryAddress(long id);// DELETE USER
 
 }

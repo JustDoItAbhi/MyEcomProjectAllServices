@@ -1,13 +1,13 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
 
-public class CartItemResponseDto {
+public class CartItemResponseDto {// CART ITEM RESPONSE DTO
     private long cartId;
     private long productId;
     private String productName;
     private int quantity;
     private double price;
-
+// GETTER AND SETTERS
     public long getCartId() {
         return cartId;
     }

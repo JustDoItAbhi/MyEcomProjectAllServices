@@ -14,9 +14,9 @@ import java.io.IOException;
 
 @Component
 public class  UserLoginNotificationFilter extends OncePerRequestFilter {
-    private final KafkaProducerClinet kafkaProducer;
+    private final KafkaProducerClinet kafkaProducer;// KAFKA DEPENDENCY
     private final ObjectMapper objectMapper;
-
+// CONSTRUCTOR
     public UserLoginNotificationFilter(KafkaProducerClinet kafkaProducer, ObjectMapper objectMapper) {
         this.kafkaProducer = kafkaProducer;
         this.objectMapper = objectMapper;

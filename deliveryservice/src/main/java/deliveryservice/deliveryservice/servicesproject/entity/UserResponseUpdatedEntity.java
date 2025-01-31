@@ -3,7 +3,7 @@ package deliveryservice.deliveryservice.servicesproject.entity;
 import jakarta.persistence.Entity;
 
 @Entity
-public class UserResponseUpdatedEntity extends BaseModels{
+public class UserResponseUpdatedEntity extends BaseModels{// ALTERNATIVE ADDRESS UPDATATION ENTITY
 private String upadatedUserEmail;
     private String customerName;
     private String customerPhone;
@@ -14,7 +14,7 @@ private String upadatedUserEmail;
     private String customerState;
     private String customerCountry;
     private int customerPostelCode;
-
+    // GETTERS AND SETTERS
     public String getUpadatedUserEmail() {
         return upadatedUserEmail;
     }

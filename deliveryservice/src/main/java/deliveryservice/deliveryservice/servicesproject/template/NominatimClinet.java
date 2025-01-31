@@ -13,8 +13,8 @@ public class NominatimClinet {
     private Double LVIV_LON=	24.02324;// location of warehouse
 
     private final RestTemplateBuilder restTemplateBuilder;
-    private final String NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
-
+    private final String NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";// DEFAULT LOCATION TRACE LINK
+    // CONTRUCTOR
     public NominatimClinet(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
     }
@@ -41,12 +41,12 @@ public class NominatimClinet {
 
         Coordinates coordinates  =forwardGeocode(city,country);
 
-        double lat1Rad = Math.toRadians(LVIV_LAT); // Lviv latitude
-        double lat2Rad = Math.toRadians(coordinates.getLatitude());
-        double deltaLat = Math.toRadians(coordinates.getLatitude() - LVIV_LAT);
-        double deltaLon = Math.toRadians(coordinates.getLongitude() - LVIV_LON);
+        double lat1Rad = Math.toRadians(LVIV_LAT); // Lviv warehouse latitude
+        double lat2Rad = Math.toRadians(coordinates.getLatitude());// lviv warehouse latitude
+        double deltaLat = Math.toRadians(coordinates.getLatitude() - LVIV_LAT);//subtract latitude to get distance
+        double deltaLon = Math.toRadians(coordinates.getLongitude() - LVIV_LON);// subtract longitude to get distance
 
-        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
+        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)// logic to calculate
                 + Math.cos(lat1Rad) * Math.cos(lat2Rad)
                 * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
         double c = (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));

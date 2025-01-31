@@ -1,14 +1,11 @@
-package deliveryservice.deliveryservice.servicesproject.service;
+package deliveryservice.deliveryservice.waste;
 
-import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
 import deliveryservice.deliveryservice.servicesproject.dto.DeliveryResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Delivery;
 import deliveryservice.deliveryservice.servicesproject.repository.DeliveryRespository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserAddressRepository;
 
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {

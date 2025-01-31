@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DestinationRespository extends JpaRepository<Destinations,Long> {
-    Destinations findByCountryAndCity(String country, String city);
-    Destinations findByCity(String city);
+public interface DestinationRespository extends JpaRepository<Destinations,Long> {// DESTINATION REPOSITORY
+    Destinations findByCountryAndCity(String country, String city);// FIND BY COUNTRY AND CITY
+    Destinations findByCity(String city);// FIND BY CITY
 }
 

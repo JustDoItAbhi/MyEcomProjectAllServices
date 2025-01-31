@@ -3,7 +3,7 @@ package deliveryservice.deliveryservice.servicesproject.entity;
 import jakarta.persistence.*;
 
 @Entity(name="destinations")
-public class Destinations  extends BaseModels{
+public class Destinations  extends BaseModels{// DESTINATION ENTITY
     @Column(name="country")
     private String country;
     @Column(name="capital_city")
@@ -13,7 +13,7 @@ public class Destinations  extends BaseModels{
     private String message;
     @Column(name="country_distance")
     private int countryDistance;
-
+    // GETTERS AND SETTERS
     public String getMessage() {
         return message;
     }

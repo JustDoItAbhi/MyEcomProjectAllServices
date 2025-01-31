@@ -24,15 +24,15 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Primary
-public class UserServiceImpl implements UserServices{
-private UserAddressRepository userAddressRepository;
-private CallingServices callingServices;
-private DestinationRespository destinationRespository;
-private UserResponseUpdateRepository updateRepository;
-    private final Map<Long, UserResponseDto> userAddressCache=new HashMap<>();
-
-    public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServices callingServices,
+@Primary// priotities service bean
+public class UserServiceImpl implements UserServices{// STRATRGY AND LAYER PATTERN FOR USER SERVICE IMPLEMENTATION
+private final UserAddressRepository userAddressRepository;// DECLARED USERADRESS REPOSIOTORY
+private final CallingServices callingServices;// DECLARED RESTTEMPLATE REPOSIOTORY
+private final DestinationRespository destinationRespository;// DECLARED DESTINATAION REPOSIOTORY
+private final UserResponseUpdateRepository updateRepository;// DECLARED ADDRESS UPDATE REPOSIOTORY
+private final Map<Long, UserResponseDto> userAddressCache=new HashMap<>();// OPTIONAL USE TO REDUCE TIME COMPLEXITY
+// CONTRUCTOR
+public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServices callingServices,
                            DestinationRespository destinationRespository, UserResponseUpdateRepository updateRepository) {
         this.userAddressRepository = userAddressRepository;
         this.callingServices = callingServices;
@@ -40,11 +40,11 @@ private UserResponseUpdateRepository updateRepository;
         this.updateRepository = updateRepository;
     }
 
-    @Override
+    @Override// GET CART AND USER BY IDS
     public UserAddress getUser(long cartId, String userEmail) throws UserNotExistsException, CountryNotFound, CityNotFound {
-        UserResponseDto existingUser =FetchUserDataAndValidate(userEmail);
-        CartResposneDtos dtos=fetchCartAndValidate(cartId);
-        if(dtos==null){
+        UserResponseDto existingUser =FetchUserDataAndValidate(userEmail);// FETCH USER DATA
+        CartResposneDtos dtos=fetchCartAndValidate(cartId);// FETCH CART DATA
+        if(dtos==null){// VALIDATE CART
             throw new CartNotFount("YOU ARE NOT ALLOWED "+ userEmail);
         }
         existingUser.setCartId(dtos.getCartId());// saved cartId in UserAdrress
@@ -70,7 +70,7 @@ private UserResponseUpdateRepository updateRepository;
 
         userAddressCache.put(cartId, existingUser);
         System.out.println("USER ADDRESS IS "+existingUser.getUserEmail());
-        userAddressRepository.save(responseDto);
+        userAddressRepository.save(responseDto);// SAVE TO DATABASE
             return responseDto;
     }
 
@@ -81,22 +81,22 @@ private UserResponseUpdateRepository updateRepository;
         }
         return existingUser;
     }
-    private CartResposneDtos fetchCartAndValidate(long cartId){
+    private CartResposneDtos fetchCartAndValidate(long cartId){// FETCH CART BY ID
         CartResposneDtos dtos=callingServices.fetchingFromCartServcie(cartId);
         if(dtos==null){
             throw new CartNotFount(" CART NOT FOUND "+cartId);
         }
         return dtos;
     }
-    private Destinations fetchCountriesAndCities(String country,String city) throws CityNotFound {
+    private Destinations fetchCountriesAndCities(String country,String city) throws CityNotFound {// FETCH CITY AND COUNTRY
         Destinations destinations = destinationRespository.findByCountryAndCity(country,city);
-        if (destinations == null) {
+        if (destinations == null) {// VALIDATE
             throw new CityNotFound("COUNTRY NOT FOUND " + country + " " + city);
         }
         return destinations;
     }
 
-    @Override
+    @Override// UPDATE ADDRESS
     public UserResponseUpdatedEntity updateUser(String email, UserRequestDto dto) throws UserNotExistsException {// update only address if user want to send parcel to some other place
         UserResponseDto existingUser= callingServices.getUser(email);
         if(existingUser==null){
@@ -113,18 +113,18 @@ private UserResponseUpdateRepository updateRepository;
         userAddress.setCustomerState(dto.getCustomerState());
         userAddress.setCustomerCountry(dto.getCustomerCountry());
         userAddress.setCustomerPostelCode(dto.getCustomerPostelCode());
-        updateRepository.save(userAddress);
+        updateRepository.save(userAddress);// SAVE TO DATABASE
         return userAddress;
     }
 
     @Override
-    public List<UserAddress> getAll() {
+    public List<UserAddress> getAll() {// GET ALL SAVED USERS
         List<UserAddress>userAddressList=userAddressRepository.findAll();
         return userAddressList;
     }
 
     @Override
-    public boolean deleteDeliveryAddress(long id) {
+    public boolean deleteDeliveryAddress(long id) {// DELETE DELIVERY
         userAddressRepository.deleteById(id);
         return true;
     }

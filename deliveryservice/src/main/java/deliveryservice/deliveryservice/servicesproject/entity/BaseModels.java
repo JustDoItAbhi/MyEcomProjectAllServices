@@ -10,15 +10,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class BaseModels {
+public abstract class BaseModels {// ABSTRACT BASEMODEL
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
-private long id;
+private long id;// AUTO-INCREMENTED PRIMARY ID
 @CreationTimestamp
-private LocalDateTime createdAt;
+private LocalDateTime createdAt;// CREATED AT TIME STAMP
 @UpdateTimestamp
-private LocalDateTime updatedAt;
-
+private LocalDateTime updatedAt;// UPDATED AT TIME STAMP
+    // GETTERS AND SETTERS
     public long getId() {
         return id;
     }

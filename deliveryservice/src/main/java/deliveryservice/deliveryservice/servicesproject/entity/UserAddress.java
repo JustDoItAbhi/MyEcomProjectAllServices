@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="userAddres")
-public class UserAddress extends BaseModels{
-
+public class UserAddress extends BaseModels{// USER ENTITY
     private String userName;
     private String userPhone;
     private String userEmail;
@@ -21,9 +20,7 @@ public class UserAddress extends BaseModels{
     private int countryDistance;
     private long cartId;
     private long totalAmount;
-
-
-
+    // GETTERS AND SETTESR
     public long getCartId() {
         return cartId;
     }

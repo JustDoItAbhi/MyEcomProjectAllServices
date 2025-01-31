@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SystamConfig {
+public class SystamConfig {// SYSTEM CONFIGRATION
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -22,7 +22,7 @@ public class SystamConfig {
 //                                .requestMatchers("/user/getUserByid/**").authenticated()
 //                                .requestMatchers("/deliveryUser/{cartId}/{userEmail}").permitAll()
 //                        .requestMatchers("/deliveryUser/{id}").authenticated()
-                                .anyRequest().authenticated()
+                                .anyRequest().authenticated()// PROTECTED ALL
                         )
                 )
   .oauth2ResourceServer(oauth2 -> oauth2
@@ -32,7 +32,7 @@ public class SystamConfig {
 
         return http.build();
     }
-    @Bean
+    @Bean// FACTORY DESGIN PETTERN FRO ROLE
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
         authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency

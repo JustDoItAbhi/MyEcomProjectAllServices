@@ -9,42 +9,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class MessageHandler {
-    @ExceptionHandler(UserNotExistsException.class)
+    @ExceptionHandler(UserNotExistsException.class)// USER NOT FOUND EXECPTION
     public ResponseEntity<MessageResponseDto> userNotExits(UserNotExistsException e){
         MessageResponseDto responseDto=new MessageResponseDto(
                 e.getMessage(),
                 404
-//                LocalDateTime.now()
         );
         return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(CountryNotFound.class)
+    @ExceptionHandler(CountryNotFound.class)// COUNTRY NOT FOUND EXECPTION
     public ResponseEntity countryNotExits(CountryNotFound e){
         MessageResponseDto responseDto=new MessageResponseDto(
                 e.getMessage(),
                 404
-//                LocalDateTime.now()
         );
         return new  ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(CityNotFound.class)
+    @ExceptionHandler(CityNotFound.class)// CITY NOT FOUND EXECPTION
     public ResponseEntity<MessageResponseDto> cityNotExits(CountryNotFound e){
         MessageResponseDto responseDto=new MessageResponseDto(
                 e.getMessage(),
                 200
-//                LocalDateTime.now()
         );
         return new  ResponseEntity<>(responseDto, HttpStatus.OK);
     }
     //cart not found exception
-    @ExceptionHandler(CartNotFount.class)
+    @ExceptionHandler(CartNotFount.class)// CART NOT FOUND EXECPTION
     public ResponseEntity<MessageResponseDto> cartNotExits(CartNotFount e){
         MessageResponseDto responseDto=new MessageResponseDto(
                 e.getMessage(),
                 404
-//                LocalDateTime.now()
         );
         return new  ResponseEntity<>(responseDto, HttpStatus.OK);
     }

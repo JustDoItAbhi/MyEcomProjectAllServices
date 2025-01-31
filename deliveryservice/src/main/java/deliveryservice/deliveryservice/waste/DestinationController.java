@@ -1,9 +1,9 @@
-package deliveryservice.deliveryservice.servicesproject.controller;
+package deliveryservice.deliveryservice.waste;
 
 import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CountryNotFound;
-import deliveryservice.deliveryservice.servicesproject.service.DestinationService;
+import deliveryservice.deliveryservice.servicesproject.service.destinatiaonservice.DestinationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Destination")
-public class DestinationController {
+public class DestinationController {// testing cities and countries
     private DestinationService destinationService;
-
 
     public DestinationController(DestinationService destinationService) {
         this.destinationService = destinationService;

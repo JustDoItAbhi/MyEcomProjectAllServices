@@ -3,7 +3,7 @@ package deliveryservice.deliveryservice.servicesproject.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UserResponseDto {
+public class UserResponseDto {// USER RESPONSE DTO
     private long userId;
     private String userName;
     private String userPhone;
@@ -23,7 +23,7 @@ public class UserResponseDto {
     private int countryDistance;
     private long cartId;
     private long totalAmount;
-
+    // GETTERS AND SETTERS
     public long getCartId() {
         return cartId;
     }

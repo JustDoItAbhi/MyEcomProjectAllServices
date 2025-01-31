@@ -4,7 +4,7 @@ import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 
 public class UserMapper {
-    public static UserAddress fromEntity(UserResponseDto users){
+    public static UserAddress fromEntity(UserResponseDto users){// MAPPING FROM RESPONSE DTO TO USER ENTITY
         UserAddress responseDto=new UserAddress();
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
@@ -23,7 +23,6 @@ public class UserMapper {
         responseDto.setUpdatedAt(users.getUpdatedAt());
         responseDto.setCartId(users.getCartId());
         responseDto.setTotalAmount(users.getTotalAmount());
-
         return responseDto;
     }
 }
