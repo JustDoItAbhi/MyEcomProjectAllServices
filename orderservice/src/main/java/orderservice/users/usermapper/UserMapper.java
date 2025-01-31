@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserMapper {
-//    private List<String> rolesList;
-    public static UserDetails fromEntity(UserResponseDto dto){
+
+    public static UserDetails fromEntity(UserResponseDto dto){// USER MAPPER FROM RESPONSE DTO TO USER ENTITY
             UserDetails details=new UserDetails();
             details.setUserId(dto.getUserId());
             details.setUserEmail(dto.getUserEmail());

@@ -6,7 +6,7 @@ import java.util.List;
 
 
 @Entity
-public class UserDetails extends BaseModels {
+public class UserDetails extends BaseModels { //USER SERVICE ENTITY CLASS
     private long userId;
     private String userName;
     private String userPhone;
@@ -20,7 +20,7 @@ public class UserDetails extends BaseModels {
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
-
+// GETTERS AND SETTERS
     public long getUserId() {
         return userId;
     }

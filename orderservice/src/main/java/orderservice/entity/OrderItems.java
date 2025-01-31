@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class OrderItems extends BaseModels{
+public class OrderItems extends BaseModels{// ORDER ITEM ENTITY CLASS
     private long productId;
     private String productName;
     private int quantity;

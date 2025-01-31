@@ -1,9 +1,8 @@
-package cartservice.client;
+package cartservice.client.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-    public class UserResponseDto {
+    public class UserResponseDto {// USER RESPONSE DTO TO MAP WITH USER REST TEMPLATE
         private long userId;
         private String userName;
         private String userPhone;
@@ -17,6 +16,7 @@ import java.util.List;
         private String userHouseNumber;
         private String userStreet;
         private String userLandMark;
+        // GETTERS AND SETTERS
 
     public long getUserId() {
         return userId;

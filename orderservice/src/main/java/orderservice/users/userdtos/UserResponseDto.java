@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.List;
 
 
-public class UserResponseDto {
+public class UserResponseDto {// USER RESPONSE DTO USED FOR FETCHING USER
     private long userId;
     private String userName;
     private String userPhone;
@@ -20,7 +20,7 @@ public class UserResponseDto {
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
-
+// GETTERS AND SETTERS
     public String getUserCity() {
         return userCity;
     }

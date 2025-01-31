@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserDetailsReposirtoy extends JpaRepository<UserDetails,Long> {
-    Optional<UserDetails> findByUserEmail(String userEmail);
-    void deleteByUserEmail(String userEmail);
+public interface UserDetailsReposirtoy extends JpaRepository<UserDetails,Long> {// USERDETAILS REPOSITORY
+    Optional<UserDetails> findByUserEmail(String userEmail);// FIND USER BY EMAIL
+
 }

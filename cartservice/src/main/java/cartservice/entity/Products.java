@@ -5,14 +5,14 @@ import lombok.Data;
 
 @Entity
 @Table(name="Products")
-public class Products extends BaseModels {
+public class Products extends BaseModels {// PRODUCT ENTITY CLASS TO STORE PRODUCT IN DATABASE IF REUIRED
    private String name;
     private String description;
     private String Brand ;
    private int Price;
    private int  Stock;
     private String image;
-
+// GETTERS AND SETTERS
     public String getName() {
         return name;
     }

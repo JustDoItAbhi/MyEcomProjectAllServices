@@ -15,16 +15,16 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig {// API BASE SYSTEM CONFIGRATION
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                     .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/product/get/{id}").permitAll()
-                        .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")
+                        .requestMatchers("/product/get/{id}").permitAll()// PUBLIC ACCESS
+                        .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")// USER AND ADMIN BOTH CAN ACCESS
 //                        .requestMatchers("/order/getCartById/{id}").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().authenticated()// REST ALL CALLS ARE AUTHENTICATED
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -38,7 +38,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {// OPTIONAL METHOD TO CHECK ROLE IS PROPERLY READABLE
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
         authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
         authoritiesConverter.setAuthoritiesClaimName("roles");

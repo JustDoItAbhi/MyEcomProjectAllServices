@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CartItemsResponseDto {
+public class CartItemsResponseDto {// CART ITEAM RESPONSE DTO USED FOR CART REST TEMPLATE SERVICE
     private long productId;
     private String productName;
     private int quantity;

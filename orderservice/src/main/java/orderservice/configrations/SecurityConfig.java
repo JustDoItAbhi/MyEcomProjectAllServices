@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig {// SPRING SECURITY CONFIGRATIONS
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -39,13 +39,13 @@ public class SecurityConfig {
 
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {// REST TEMPLATE BEAN WITH API GATWAY LOAD BALANCER
         return restTemplateBuilder.build();
     }
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    @Bean// SPRING SECURITY BEAN ROLE CUSTOMISATION
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {//ROLE CREATATION FACTORY DESIGN PETTERN
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthorityPrefix("ROLE_"); // Ensure consistency
+        authoritiesConverter.setAuthorityPrefix("ROLE_");
         authoritiesConverter.setAuthoritiesClaimName("roles");
 
         JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();

@@ -4,9 +4,9 @@ import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.Orders;
 import orderservice.exceptions.SignUpException;
 
-public interface OrderItemServices {
-   OrderResponseDto getCartItems(long cartId)throws SignUpException;
-   boolean deleteOrder(long id);
-   Orders getOrderById(long id);
-   String getUserRoles();
+public interface OrderItemServices {// ORDER ITEM SERVICE LAYER AND STRATRGY DEGIN PATTERN
+   OrderResponseDto getCartItems(long cartId)throws SignUpException;// // GET CART BY ITEMS
+   boolean deleteOrder(long id);// DELETE ORDER
+   Orders getOrderById(long id);// GET ORDER BY ID
+   String getUserRoles();// OPTIONAL USER ROLE CHECK
 }

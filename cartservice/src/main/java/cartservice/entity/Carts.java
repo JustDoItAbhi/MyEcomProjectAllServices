@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Carts extends BaseModels{
+public class Carts extends BaseModels{// CARTS ENTITY
     private String email;
     @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private List<CartItems> items = new ArrayList<>();
@@ -16,6 +16,7 @@ public class Carts extends BaseModels{
     private int leftItemStock;
     @Enumerated(EnumType.STRING)
     private CartStatus cartStatus;
+    // GETTERS AND SETTERS
 
     public CartStatus getCartStatus() {
         return cartStatus;

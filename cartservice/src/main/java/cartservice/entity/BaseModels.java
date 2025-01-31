@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 
 
 @MappedSuperclass
-public abstract class BaseModels {
+public abstract class BaseModels {// ABSTRACT BASEMODEL
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-private long id;
+private long id;// AUTO INCREMENTED ID AS PRIMARY KEY
     @CreationTimestamp
-private LocalDateTime createdAt;
+private LocalDateTime createdAt;// DEFAULT CREATED AT TIME STAMP
     @UpdateTimestamp
-private LocalDateTime updatedAt;
-
+private LocalDateTime updatedAt;// DEFAULT UPDATED AT TIME STAMP
+    // GETTERS AND SETTERS
     public long getId() {
         return id;
     }

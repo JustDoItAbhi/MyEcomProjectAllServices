@@ -7,7 +7,7 @@ import orderservice.entity.UserDetails;
 
 @Getter
 @Setter
-public class OrderResponseDto {
+public class OrderResponseDto {// PRDER RESPONSE DTO
     private long orderid;
     private long cartId;
     private OrderStatus  orderStatus;

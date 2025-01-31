@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartResposneDtos {
+public class CartResposneDtos {// CART RESPONSE DTO
     private CartStatus cartStatus;
     private String email;
     private long cartId;
@@ -15,7 +15,7 @@ public class CartResposneDtos {
     private LocalDateTime cartCreatedTime;
     private int balanceStock;
 
-
+// GETTERS AND SETTES
     public CartStatus getCartStatus() {
         return cartStatus;
     }

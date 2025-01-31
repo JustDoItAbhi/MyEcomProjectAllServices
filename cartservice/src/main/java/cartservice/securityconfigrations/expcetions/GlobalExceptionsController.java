@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class GlobalExceptionsController {
-    @ExceptionHandler(CartNotFoundException.class)
+public class GlobalExceptionsController {// GLOBAL EXECPTION HANDLER
+    @ExceptionHandler(CartNotFoundException.class)// CART NOT FOUND EXCEPTION
     public ResponseEntity<Map<String,Object>> getCartNotFoundException(Exception e){
         Map<String,Object>response=new HashMap<>();
         response.put("message ",e.getMessage());
@@ -26,7 +26,7 @@ public class GlobalExceptionsController {
         return new  ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
     //if product not found exception
-    @ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler(ProductNotFoundException.class)// PRODUCT NOT FOUND EXECPTION
     public ResponseEntity<ExceptionMessageDto> getExceptionForProduct(ProductNotFoundException e){
         ExceptionMessageDto dto=new ExceptionMessageDto(
                 e.getMessage(),
@@ -36,7 +36,7 @@ public class GlobalExceptionsController {
         return new  ResponseEntity<>(dto,HttpStatus.NOT_FOUND);
     }
     // product already exits in cart
-    @ExceptionHandler(ProductAlreadyExists.class)
+    @ExceptionHandler(ProductAlreadyExists.class)//PRODUCT ALREADY EXISTS
     public ResponseEntity<ExceptionMessageDto> productAlreadyExists(ProductAlreadyExists e){
         ExceptionMessageDto dto=new ExceptionMessageDto(
                 e.getMessage(),
@@ -46,7 +46,7 @@ public class GlobalExceptionsController {
         return new  ResponseEntity<>(dto,HttpStatus.NOT_FOUND);
     }
     // user not found exception
-    @ExceptionHandler(UsernameNotFoundException.class)
+    @ExceptionHandler(UsernameNotFoundException.class)// USER NOT FOUND EXECPTION
     public ResponseEntity<ExceptionMessageDto> UserNotFound(UsernameNotFoundException e){
         ExceptionMessageDto dto=new ExceptionMessageDto(
                 e.getMessage(),

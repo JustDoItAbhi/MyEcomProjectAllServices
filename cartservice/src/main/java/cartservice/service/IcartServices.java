@@ -1,10 +1,10 @@
 package cartservice.service;
 
-import cartservice.client.UserResponseDto;
+import cartservice.client.dto.UserResponseDto;
 import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
 import cartservice.dtos.CartResposneDtos;
-import cartservice.dtos.ProductResponseDto;
+import cartservice.client.dto.ProductResponseDto;
 import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
 
 
@@ -12,16 +12,16 @@ import java.util.List;
 
 public interface IcartServices {
 //    UserDetails createUser(String userID);
-    CartResposneDtos addItemToCart( String email,CartRequestDto dto) throws CartNotFoundException;
-    CartResposneDtos removeItemFromCart(long userId, long productID) throws CartNotFoundException;
-    CartResposneDtos confirmCart(long userId);
-    CartResposneDtos getById(long id) throws CartNotFoundException;
-    ProductResponseDto getProductByIds(long id);
-    List<CartItemResponseDto>getAllCartItems() throws CartNotFoundException;
-    CartItemResponseDto getCartItemById(String userId);
-    List<ProductResponseDto> getAllProducts();
-    boolean deleteCart(long cartId);
-    UserResponseDto testUser(String email);
+    CartResposneDtos addItemToCart( String email,CartRequestDto dto) throws CartNotFoundException;// ADD TO CART
+    CartResposneDtos removeItemFromCart(long userId, long productID) throws CartNotFoundException;// REMOVE PRODUCT FROM CART
+    CartResposneDtos confirmCart(long userId);// CONFIRM CART
+    CartResposneDtos getById(long id) throws CartNotFoundException;// GET CART BY ITS ID
+    ProductResponseDto getProductByIds(long id);// GET PRODUCT BY ITS ID (FOR TESTING)
+    List<CartItemResponseDto>getAllCartItems() throws CartNotFoundException;// GET ALL CART ITEAMS FOR INVENTORY
+    CartItemResponseDto getCartItemById(String userId);// GET CART ITEAM BY ITS ID
+    List<ProductResponseDto> getAllProducts();// GET ALL PRODUCTS (TESTING)
+    boolean deleteCart(long cartId);// DELETE CART BY CART ID
+    UserResponseDto testUser(String email);// TESTING USER
 
 
 

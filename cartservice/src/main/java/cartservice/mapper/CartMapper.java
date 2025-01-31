@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartMapper {
-    public static CartResposneDtos fromCart(Carts carts){
+    public static CartResposneDtos fromCart(Carts carts){// MAPPING CART ENTITY TO RESPONSE DTO
         CartResposneDtos resposneDtos=new CartResposneDtos();
         resposneDtos.setEmail(carts.getEmail());
         resposneDtos.setCartId(carts.getId());
@@ -19,7 +19,7 @@ public class CartMapper {
         resposneDtos.setCartCreatedTime(carts.getCartCreatedTime());
         List<CartItemResponseDto>dto=new ArrayList<>();
         for(CartItems cartItems: carts.getItems()){
-            dto.add(Mapper.fromcartItems(cartItems));
+            dto.add(CartItemMapper.fromcartItems(cartItems));
         }
         resposneDtos.setItems(dto);
     return resposneDtos;

@@ -1,9 +1,9 @@
 package cartservice.dtos;
 
-public class DeleteCartItemRequestDto {
+public class DeleteCartItemRequestDto {// DELETE CART ITEAM REQUEST DTO
     private String userId;
     private long cartId;
-
+// GETTERS AND SETTERS
     public String getUserId() {
         return userId;
     }

@@ -3,7 +3,7 @@ package orderservice.services;
 import orderservice.exceptions.CannotFetchDataFromUserService;
 import orderservice.exceptions.SignUpException;
 import orderservice.repositorties.UserDetailsReposirtoy;
-import orderservice.templates.UserclientRestTemplate;
+import orderservice.templatesservice.RestTemplateServiceImpl;
 import orderservice.entity.UserDetails;
 import orderservice.users.userdtos.UserResponseDto;
 import orderservice.users.usermapper.UserMapper;
@@ -12,25 +12,19 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-@Service
-public class UserServicesImpl implements UserServices{
-    private final UserDetailsReposirtoy userDetailsReposirtoy;
-//    @Qualifier("userServiceTemplte")
-    private final RestTemplate restTemplate;
-//    @Qualifier( "userServiceRestClient")
-//    private final RestClient restClient;
-    private final UserclientRestTemplate userclientRestTemplate;
-
-    public UserServicesImpl(RestTemplate restTemplate, UserclientRestTemplate userclientRestTemplate, UserDetailsReposirtoy userDetailsReposirtoy) {
-        this.restTemplate = restTemplate;
-        this.userclientRestTemplate = userclientRestTemplate;
+@Service// MANAGED BY SPRING SERVICE BEAN ANNOTATION
+public class UserServicesImpl implements UserServices{// USER SERVICE IMPLEMENTATION
+    private final UserDetailsReposirtoy userDetailsReposirtoy;// DECLARATION OF USER REPOSITORY
+    private final RestTemplateServiceImpl userclientRestTemplate;
+// DEPENDENCY INJECTION
+    public UserServicesImpl(UserDetailsReposirtoy userDetailsReposirtoy, RestTemplateServiceImpl userclientRestTemplate) {
         this.userDetailsReposirtoy = userDetailsReposirtoy;
+        this.userclientRestTemplate = userclientRestTemplate;
     }
 
     @Override
-    public UserDetails createUser(String email) {//public use
+    public UserDetails createUser(String email) {//CREATE USER
         Optional<UserDetails> existingUser = userDetailsReposirtoy.findByUserEmail(email);// if use already registered in system
-
         if (existingUser.isEmpty()){
                 UserResponseDto responseDto =userclientRestTemplate.getUserById(email);// try fetch user from userservice
                 if(responseDto.getUserEmail()==null){//if user is not in user service then throw exception and request for sign up
@@ -52,7 +46,7 @@ public class UserServicesImpl implements UserServices{
     public List<UserDetails> getAllUsers() {//get all users if need only admin use
         List<UserResponseDto> response = userclientRestTemplate.getAllUser();
 
-        if (response == null) {
+        if (response == null) {// VALIDATE USER
             throw new RuntimeException("LIST IS EMPTY ");
         }
             List<UserDetails> userDetailsList = new ArrayList<>();
@@ -65,7 +59,7 @@ public class UserServicesImpl implements UserServices{
     }
 
     @Override
-    public String deleteIfEmailEquslToEmail() {
+    public String deleteIfEmailEquslToEmail() {// DELETE FROM DATABASE IF SAME USER EMAIL EXISTS MULTIPLE TIMES
         List<UserDetails> userDetails = userDetailsReposirtoy.findAll();
         Set<String> seenEmails = new HashSet<>(); // To track seen emails
         for (UserDetails user : userDetails) {
@@ -83,7 +77,7 @@ public class UserServicesImpl implements UserServices{
         return "EXTRA IDS DELETED";
     }
     @Override
-    public UserDetails getUserByEmail(String userEmail) {
+    public UserDetails getUserByEmail(String userEmail) {// GET USER BY EMAIL
         Optional<UserDetails> exitingUser=userDetailsReposirtoy.findByUserEmail(userEmail);
         if(exitingUser.isEmpty()){
             throw new CannotFetchDataFromUserService("USER NOT FOUND "+userEmail);

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Orders extends BaseModels{
+public class Orders extends BaseModels{// ORDER ENTITY CLASS
     private long cartId;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

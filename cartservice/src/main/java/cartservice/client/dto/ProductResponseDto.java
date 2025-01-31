@@ -1,14 +1,12 @@
-package cartservice.dtos;
+package cartservice.client.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponseDto {
+public class ProductResponseDto {// PRODUCT RESPONSE DTO TO FETCH PRODUCT BY REST TEMPLATE
     private long id;
     private String name;
     private String description;

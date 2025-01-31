@@ -11,7 +11,7 @@ import org.springframework.web.client.RestClient;
 
 @Getter
 @Setter
-public class CartResposneDtos {
+public class CartResposneDtos {// CART RESPONSE DTO
     private long cartId;
     private long total;
     //    private List<CartItemsResponseDto> items = new ArrayList<>();

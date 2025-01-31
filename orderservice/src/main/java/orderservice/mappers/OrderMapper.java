@@ -5,14 +5,14 @@ import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.Orders;
 
 public class OrderMapper {
-    public static Orders fromcartResponseDto(CartResposneDtos dtos){
+    public static Orders fromcartResponseDto(CartResposneDtos dtos){//NOT USED
         Orders orders=new Orders();
         orders.setCartId(dtos.getCartId());
         orders.setPrice(dtos.getTotal());
 
         return orders;
     }
-    public static OrderResponseDto fromEntity(Orders order){
+    public static OrderResponseDto fromEntity(Orders order){// MAPPING FROM ORDER ENTITY TO RESPONSE DTO
         OrderResponseDto responseDto=new OrderResponseDto();
         responseDto.setOrderid(order.getId());
         responseDto.setCartId(order.getCartId());

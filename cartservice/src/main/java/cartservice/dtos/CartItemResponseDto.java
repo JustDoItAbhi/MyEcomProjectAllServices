@@ -2,14 +2,14 @@ package cartservice.dtos;
 
 import lombok.Data;
 
-
+// DATA TRANSFER OBJECT FOR CART ITEMS
 public class CartItemResponseDto {
     private long cartId;
     private long productId;
     private String productName;
     private int quantity;
     private double price;
-
+// GETTERS AND SETTERS
     public long getCartId() {
         return cartId;
     }

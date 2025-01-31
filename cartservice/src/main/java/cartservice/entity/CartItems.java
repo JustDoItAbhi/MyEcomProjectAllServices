@@ -1,27 +1,24 @@
 package cartservice.entity;
 
-import cartservice.dtos.ProductResponseDto;
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-public class CartItems extends BaseModels{
+public class CartItems extends BaseModels{// CART ITEMS ENTITY
     private long productId;
     private String productName;
     private int quantity;
     private double price;
-
+    //NO ARGUMENT CONSTRUCTOR
     public CartItems() {
     }
-
+// PARAMETERISE CONSTRUCTOR
     public CartItems(long productId, String productName, int quantity, double price) {
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
         this.price = price;
     }
-
+// GETTERS AND SETTERS
     public long getProductId() {
         return productId;
     }

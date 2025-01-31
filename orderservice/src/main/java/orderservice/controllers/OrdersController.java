@@ -18,9 +18,10 @@ public class OrdersController {
     public OrderItemServices orderItemServices;
     @Autowired
     private UserServices userServices;
-    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";//  EMAIL INSTANCE FOR GMAIL OR YAHOO MAIL ONLY
+
     @GetMapping("/getCartById/{cartId}")// first api to call cart service
-    public ResponseEntity<OrderResponseDto> getCART(                                                    @PathVariable("cartId") long cartId)throws SignUpException {
+    public ResponseEntity<OrderResponseDto> getCART(@PathVariable("cartId") long cartId)throws SignUpException {
         return ResponseEntity.ok(orderItemServices.getCartItems(cartId));
     }
 
@@ -39,7 +40,7 @@ public class OrdersController {
         return ResponseEntity.ok(orderItemServices.getUserRoles());
     }
 
-    @GetMapping("/getUserForDelivery/{email}")
+    @GetMapping("/getUserForDelivery/{email}")// get user by email
     public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
         if(!email.matches(EMAIL_PATTERN)){
             throw new UsernameNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);

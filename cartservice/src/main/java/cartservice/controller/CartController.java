@@ -1,6 +1,7 @@
 package cartservice.controller;
 
-import cartservice.client.UserResponseDto;
+import cartservice.client.dto.ProductResponseDto;
+import cartservice.client.dto.UserResponseDto;
 import cartservice.dtos.*;
 import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
 import cartservice.service.IcartServices;

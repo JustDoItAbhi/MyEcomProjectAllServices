@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CartRequestDto {
+public class CartRequestDto {// CART REQUEST DTO
     private List<CartItems> item = new ArrayList<>();
     private double totalprices;
 
