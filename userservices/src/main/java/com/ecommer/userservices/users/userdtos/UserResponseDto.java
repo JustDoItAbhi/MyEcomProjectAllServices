@@ -1,6 +1,7 @@
 package com.ecommer.userservices.users.userdtos;
 
 import com.ecommer.userservices.entity.Roles;
+import com.ecommer.userservices.entity.UserStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,16 @@ public class UserResponseDto {
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
+    private UserStatus userStatus;
+
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
 
     public long getUserId() {
         return userId;

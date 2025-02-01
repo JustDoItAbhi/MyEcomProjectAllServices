@@ -111,3 +111,17 @@ public class UpdateUserRequestDto {
         this.userLandMark = userLandMark;
     }
 }
+//    {
+//        "userName":"",
+//            "userPhone":"",
+//            "userPassword":"",
+//            "userEmail":"",
+//            "roles":["ADMIN"],
+//        "userHouseNumber":"",
+//            "userStreet":"",
+//            "userLandMark":"",
+//            "city":"",
+//            "state":"",
+//            "country":"",
+//            "postelCode":1442690
+//    }

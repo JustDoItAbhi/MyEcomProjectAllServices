@@ -6,11 +6,16 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,8 +27,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -39,7 +46,9 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -81,16 +90,17 @@ import java.util.stream.Collectors;
         @Order(2)// 2nd level order for spring method
         public SecurityFilterChain protectedFilterChain(HttpSecurity http) throws Exception {
             http
+//            HttpMethod.POST,"/user/signup
+//                    /resetpassword/{email}/{passoword}
                     .csrf().disable()  // Disable CSRF for API
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers(HttpMethod.POST,"/user/signup").permitAll()// for public use
-                        .requestMatchers(HttpMethod.POST,"/role/**").hasRole("ADMIN")// only admin can send post request
-                                    .requestMatchers("/user/login").authenticated()// only authenticated user can login
-                            .requestMatchers(HttpMethod.GET,"/user/debug").hasAnyRole("ADMIN","USER")// debug to check what role user have
+                        .requestMatchers("/role/**").hasRole("ADMIN")// only admin can send post request
                             .requestMatchers(HttpMethod.GET, "/user/getallUsers").hasRole("ADMIN")// only admin can send get all user request
-                            .requestMatchers(HttpMethod.GET,"/user/delete/").hasRole("ADMIN")// only admin can delete a user
-                            .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")// all users will be permitted
-                                    .anyRequest().authenticated()// rest all apis are authenticated
+                        .requestMatchers(HttpMethod.GET,"/user/delete/{id}").hasRole("ADMIN")// only admin can delete a user
+                        .requestMatchers("/user/login","/user/logout/{email}","/update/email/{email}").authenticated()// only authenticated user can login
+                        .requestMatchers("/user/getUserByid/{email}","/user/logout").hasAnyRole("ADMIN","USER")// all users will be permitted
+                        .requestMatchers(HttpMethod.GET,"/user/debug").hasAnyRole("ADMIN","USER")// debug to check what role user have
+                        .anyRequest().permitAll()// rest all api's are public
                     )
                     // jwt role base configrations
                     .oauth2ResourceServer(oauth2 -> oauth2
@@ -182,11 +192,31 @@ import java.util.stream.Collectors;
                         claims.put("roles", roles);
                         Authentication authentication = context.getPrincipal();
                         Long userId = ((CustomUsersDetals)authentication.getPrincipal()).getUserId();
-                        claims.put("userId",userId);// aditional id implementation in jwt token
+                        claims.put("userId",userId.toString());// aditional id implementation in jwt token
                     });
 
                 }
             };
         }
+        @Bean
+        public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+            return restTemplateBuilder
+                    .additionalInterceptors(new TokenInterceptor())  // Add the interceptor to restTemplate
+                    .build();
+        }
+
+        public class TokenInterceptor implements ClientHttpRequestInterceptor {
+            @Override
+            public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException, IOException {
+                Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                String token = jwt.getTokenValue();
+
+                // Set the Authorization header with Bearer Token
+                request.getHeaders().setBearerAuth(token);
+
+                return execution.execute(request, body);
+            }
+        }
+
     }
 

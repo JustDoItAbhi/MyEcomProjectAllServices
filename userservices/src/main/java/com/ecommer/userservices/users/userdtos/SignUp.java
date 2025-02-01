@@ -125,3 +125,17 @@ public class SignUp {
         this.userLandMark = userLandMark;
     }
 }
+//{
+//        "userName":"",
+//        "userPhone":"",
+//        "userPassword":"",
+//        "userEmail":"",
+//        "roles": ["ADMIN"],
+//        "userHouseNumber":"1111",
+//        "userStreet":"street",
+//        "userLandMark":"",
+//        "city":"",
+//        "state":"",
+//        "country":"",
+//        "postelCode":1442690
+//        }

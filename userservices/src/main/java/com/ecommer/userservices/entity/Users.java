@@ -35,7 +35,17 @@ public class Users {
     private String userState;// user state with correct spelling , it will be used for delivery
     private String userCountry;// user country with correct spelling , it will be used for delivery
     private int userPostelCode;// user postal code
-        // getters and setters
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus userStatus;
+
+    // getters and setters
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
     public long getUserId() {
         return userId;
     }

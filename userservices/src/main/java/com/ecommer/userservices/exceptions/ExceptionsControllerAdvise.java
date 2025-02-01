@@ -54,7 +54,7 @@ public class ExceptionsControllerAdvise {
     @ExceptionHandler(UserAlreadyExists.class)// user already exists exception
     public ResponseEntity<MessageResponseDto>userAlreadyExits(UserAlreadyExists e){
         MessageResponseDto dto=new MessageResponseDto(
-                e.getMessage()+"PLEASE GO TO USER API AND SIGN UP ",
+                e.getMessage(),
                 404,
                 LocalDateTime.now()
 

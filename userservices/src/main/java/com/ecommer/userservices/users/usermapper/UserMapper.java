@@ -12,6 +12,7 @@ public class UserMapper {
     public static UserResponseDto fromEntity(Users users){// MAPE ENTITY TO REPOSNE DTO
         UserResponseDto responseDto=new UserResponseDto();
         responseDto.setUserId(users.getUserId());
+        responseDto.setUserStatus(users.getUserStatus());
         responseDto.setUserName(users.getUserName());
         responseDto.setUserPhone(users.getUserPhone());
         responseDto.setUserPassword(users.getUserPassword());

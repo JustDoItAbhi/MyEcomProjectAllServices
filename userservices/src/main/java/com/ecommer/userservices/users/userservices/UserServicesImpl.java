@@ -1,6 +1,7 @@
 package com.ecommer.userservices.users.userservices;
 
 import com.ecommer.userservices.entity.Roles;
+import com.ecommer.userservices.entity.UserStatus;
 import com.ecommer.userservices.entity.Users;
 import com.ecommer.userservices.exceptions.*;
 
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,6 +71,7 @@ public class UserServicesImpl implements UserServices {
         users.setUserCity(signUp.getCity());
         users.setUserState(signUp.getState());
         users.setUserCountry(signUp.getCountry());
+        users.setUserStatus(UserStatus.LOGIN);
         users.setUserHouseNumber(signUp.getUserHouseNumber());
         users.setUserLandMark(signUp.getUserLandMark());
         users.setUserStreet(signUp.getUserStreet());
@@ -107,6 +110,8 @@ public class UserServicesImpl implements UserServices {
        if(!passwordEncoder.matches(login.getUserPassword(),users.getUserPassword())){// PASSWORD ENCODED VALIDATION
            throw new UsernameNotFoundException("USER PASSWORD IS NOT CORRECT "+ login.getUserPassword());
        }
+        users.setUserStatus(UserStatus.LOGIN);
+       userRepository.save(users);
 //       users.setRolesList(users.getRolesList());
        SendEmailDto sendEmailDto=new SendEmailDto();
        sendEmailDto.setTo(users.getUserEmail());
@@ -118,13 +123,21 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public UserResponseDto logOut(LogOut logOut) {// LOGOUT METHOD
-        Optional<Users>users=userRepository.findByUserEmail(logOut.getEmail());
-        if(users.isEmpty()){
-            throw new RuntimeException("USER NOT FOUND "+ logOut.getEmail());
+    public String logOut(LogOut logOut) {// LOGOUT METHOD
+        Optional<Users>savedUser=userRepository.findByUserEmail(logOut.getEmail());
+        if(savedUser.isEmpty()){
+            throw new UsernameNotFoundException("USER NOT FOUND "+ logOut.getEmail());
         }
-
-        return UserMapper.fromEntity(users.get());
+        Users user=savedUser.get();
+        // Check if userStatus is null to prevent NullPointerException
+        if (user.getUserStatus() == null || !user.getUserStatus().equals(UserStatus.LOGIN)) {
+            throw new UsernameNotFoundException("USER NOT LOGIN " + logOut.getEmail());
+        }
+        // Update the user status to LOGOUT
+        user.setUserStatus(UserStatus.LOGOUT);
+        userRepository.save(user);
+        SecurityContextHolder.clearContext();
+        return " WE WILL SEE YOU AGAIN ☻ BYE BYE";
     }
 
     @Override
@@ -141,6 +154,10 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public boolean deleteUser(long id) {// DELETE USER
+        Users user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        // Clear roles association first manuelly
+        user.getRolesList().clear();
+        userRepository.save(user);
         userRepository.deleteById(id);
         return true;
     }

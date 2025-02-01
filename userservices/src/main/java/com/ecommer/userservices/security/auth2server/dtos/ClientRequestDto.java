@@ -57,3 +57,10 @@ public class ClientRequestDto {// oicd client request dto
         this.postLogoutRedirectUris = postLogoutRedirectUris;
     }
 }
+//{
+//        "clientId":"sahib",
+//        "clientSecret":"sahib123",
+//        "clientName":"sahib",
+//        "redirectUris":"https://oauth.pstmn.io/v1/callback",
+//        "postLogoutRedirectUris":"http://127.0.0.1:8090/"
+//        }

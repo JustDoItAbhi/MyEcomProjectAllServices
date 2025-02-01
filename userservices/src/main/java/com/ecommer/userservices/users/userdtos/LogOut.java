@@ -4,11 +4,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-public class LogOut {
+public class LogOut {// LOGOUT REQUEST DTO
     private String email;
-
+    //GETTERS ANDS SETTERS
     public String getEmail() {
         return email;
     }
