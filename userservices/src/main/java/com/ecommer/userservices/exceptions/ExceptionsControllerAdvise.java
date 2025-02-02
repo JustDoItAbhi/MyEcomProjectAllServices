@@ -61,4 +61,14 @@ public class ExceptionsControllerAdvise {
         );
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(NotCorrectEmailProvidedException.class)// wrong email provided exception
+    public ResponseEntity<MessageResponseDto> notCorrectEmail(NotCorrectEmailProvidedException e){
+        MessageResponseDto dto=new MessageResponseDto(
+                e.getMessage(),
+                404,
+                LocalDateTime.now()
+
+        );
+        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+    }
 }

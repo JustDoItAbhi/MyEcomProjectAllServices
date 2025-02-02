@@ -1,6 +1,7 @@
 package com.ecommer.userservices.users.usercontroller;
 
 
+import com.ecommer.userservices.exceptions.NotCorrectEmailProvidedException;
 import com.ecommer.userservices.exceptions.SignUpUserException;
 import com.ecommer.userservices.users.userdtos.*;
 import com.ecommer.userservices.users.userservices.UserServices;
@@ -28,7 +29,7 @@ public class UserController {
     @PostMapping("/signup")// public use to sign up as a new user
     public ResponseEntity<UserResponseDto> signup(@RequestBody SignUp signUp) throws JsonProcessingException {
         if(!signUp.getUserEmail().matches(EMAIL_PATTERN)){
-            throw new UsernameNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+signUp.getUserEmail());
+            throw new NotCorrectEmailProvidedException("Invalid email! Only Gmail and Yahoo emails are allowed."+signUp.getUserEmail());
         }
         return ResponseEntity.ok(userServices.signUp(signUp));
     }

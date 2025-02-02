@@ -5,4 +5,6 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 
 public interface CustomizeRegeredClientService {// OICD client custom registratiton
     RegisteredClient createRegeretedClient(ClientRequestDto dto);// method to create registered client
+    boolean deleteClient(String clientId);
+
 }

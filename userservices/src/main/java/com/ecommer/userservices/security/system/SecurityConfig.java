@@ -94,6 +94,7 @@ import java.util.stream.Collectors;
 //                    /resetpassword/{email}/{passoword}
                     .csrf().disable()  // Disable CSRF for API
                     .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/client/register").hasRole("ADMIN")
                         .requestMatchers("/role/**").hasRole("ADMIN")// only admin can send post request
                             .requestMatchers(HttpMethod.GET, "/user/getallUsers").hasRole("ADMIN")// only admin can send get all user request
                         .requestMatchers(HttpMethod.GET,"/user/delete/{id}").hasRole("ADMIN")// only admin can delete a user

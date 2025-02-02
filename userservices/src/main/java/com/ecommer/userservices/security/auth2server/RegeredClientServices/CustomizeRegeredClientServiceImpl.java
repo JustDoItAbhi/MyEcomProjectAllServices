@@ -58,4 +58,10 @@ public class CustomizeRegeredClientServiceImpl implements CustomizeRegeredClient
         jpaRegisteredClientRepository.save(client);// save to database
         return client;
     }
+
+    @Override
+    public boolean deleteClient(String clientId) {
+//        jpaRegisteredClientRepository.
+        return false;
+    }
 }
