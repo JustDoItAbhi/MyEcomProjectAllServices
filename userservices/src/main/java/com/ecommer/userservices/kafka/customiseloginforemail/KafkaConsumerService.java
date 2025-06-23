@@ -9,7 +9,6 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "sendemail", groupId = "email-service")
     public void listen(String message) {
         System.out.println("Received message from Kafka: " + message);
-        // Parse and process the email
     }
 }
 

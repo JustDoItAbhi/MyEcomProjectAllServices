@@ -30,7 +30,7 @@ import java.util.Optional;
 public class CartServiceImpl implements IcartServices {
 
     private final CartRepository cartRepository;// CART REPOSITORY DECLARATION
-    private final ProductServiceClient productServiceClient;// PRODUCT SERVICE CLINET REPOSITORY DECLARATION
+    private final ProductServiceClient productServiceClient;// PRODUCT SERVICE CLINET  DECLARATION
     private final ProductRepository productRepository;// PRODUCT REPOSITORY DECLARATION OPTIONAL
     private final CartItemsRepository cartItemsRepository;// CART ITEAM REPOSITORY DECLARATION
     private final CallingUserService callingUserService; // USER CALLLING  DECLARATION

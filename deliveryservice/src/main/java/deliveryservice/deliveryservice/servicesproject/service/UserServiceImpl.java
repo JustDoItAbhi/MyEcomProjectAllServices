@@ -25,9 +25,9 @@ import java.util.Map;
 
 @Service
 @Primary// priotities service bean
-public class UserServiceImpl implements UserServices{// STRATRGY AND LAYER PATTERN FOR USER SERVICE IMPLEMENTATION
+public class UserServiceImpl implements UserServices{//  LAYER SERVICE FOR USER SERVICE IMPLEMENTATION
 private final UserAddressRepository userAddressRepository;// DECLARED USERADRESS REPOSIOTORY
-private final CallingServices callingServices;// DECLARED RESTTEMPLATE REPOSIOTORY
+private final CallingServices callingServices;// SERVICE TO RESTTEMPLATE
 private final DestinationRespository destinationRespository;// DECLARED DESTINATAION REPOSIOTORY
 private final UserResponseUpdateRepository updateRepository;// DECLARED ADDRESS UPDATE REPOSIOTORY
 private final Map<Long, UserResponseDto> userAddressCache=new HashMap<>();// OPTIONAL USE TO REDUCE TIME COMPLEXITY

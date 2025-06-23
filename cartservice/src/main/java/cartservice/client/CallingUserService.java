@@ -27,7 +27,6 @@ public CallingUserService(RestTemplateBuilder restTemplateBuilder, DiscoveryClie
 }
 
     public UserResponseDto getUser(String email) {// method to fetch user by user email
-    //storing token to header
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String token = jwt.getTokenValue();
         RestTemplate restTemplate = restTemplateBuilder.build();

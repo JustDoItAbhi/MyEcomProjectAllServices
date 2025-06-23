@@ -85,10 +85,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean deleteProduct(long id) {// DELETE PRODUCT WHERE CATEGORY IS NULL OR PRICE NOT UPDATED OR STOCK IS 0
+    public boolean deleteProductifanyValueIsNull(long id) {// DELETE PRODUCT WHERE CATEGORY IS NULL OR PRICE NOT UPDATED OR STOCK IS 0
         Products savedProduct = productRespository.findById(id).orElseThrow(
                 () -> new ProductNotFoundException("product id not found " + id));
         if (savedProduct.getCategoryes() == null||savedProduct.getPrice() == 0 || savedProduct.getStock() == 0) {
+
             productRespository.deleteById(id);
             return true;
         }
@@ -117,4 +118,15 @@ public class ProductServiceImpl implements ProductService {
         }
         return "No roles available";
     }
-        }
+
+    @Override
+    public String DeleteProduct(long id) {
+//        Optional<Products>savedProduct=productRespository.findById(id);
+//        if(savedProduct.isEmpty()){
+//            throw new ProductNotFoundException("NOT SUCH PRODUCT FOUND "+id);
+//        }
+       productRespository.deleteById(id);
+        return "PRODUCT OF "+ id+" IS DELETED";
+    }
+
+}

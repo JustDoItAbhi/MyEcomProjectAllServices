@@ -37,9 +37,10 @@ public class OrderServiceClient {// ORDER IMPLEMENTATION
             throw new RuntimeException("No instances of 'orderservice' found in service registry.");
         }
         ServiceInstance serviceInstance = instances.get(0);
-        String url = serviceInstance.getUri() + "/order/" + id;// API CALL
+//        String url = serviceInstance.getUri() + "/order/" + id;// API CALL
 
-        ResponseEntity<OrderResponseDto> response = restTemplate.exchange(url, HttpMethod.GET,entity, OrderResponseDto.class);
+        ResponseEntity<OrderResponseDto> response = restTemplate.exchange("http://DESKTOP-3LMJ7FF.mshome.net:8086/order/"+id, HttpMethod.GET,entity, OrderResponseDto.class);
+//        ResponseEntity<OrderResponseDto> response = restTemplate.getForEntity ("http://DESKTOP-3LMJ7FF.mshome.net:8086/order/"+id, OrderResponseDto.class);
 
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
             System.out.println("DATA FETCHED " + id);//LOG

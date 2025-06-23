@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRespository extends JpaRepository<Products,Long> {// PRODUCT REPOSITORY
+//    List<Products> findNameKeyword(String keyword);
+//    @Query("SELECT e FROM Products e WHERE e.name LIKE LOWER(CONCAT('%', :keyword, '%'))")
+//    List<Products>searchByKeyword(@Param("keyword") String keyword);
+
 }

@@ -60,7 +60,7 @@ public class RestTemplateServiceImpl implements RestTemplateService{//
         headers.setBearerAuth(token);
         HttpEntity<?> entity=new HttpEntity<>(headers);// ADDING TO HEADER
         ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
-        String serviceAUri = serviceInstance.getUri().toString() + "/cart/getCartById/"+cartId;// API
+        String serviceAUri = serviceInstance.getUri() + "/cart/getCartById/"+cartId;// API
         ResponseEntity<CartResposneDtos>response=restTemplate.exchange(serviceAUri, HttpMethod.GET,entity, CartResposneDtos.class);
         if(response.getBody()==null){// PRODUCT VALIDATION
             throw new RuntimeException("CANNOT FETCH CART "+ cartId);

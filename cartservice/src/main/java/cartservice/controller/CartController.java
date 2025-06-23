@@ -3,6 +3,7 @@ package cartservice.controller;
 import cartservice.client.dto.ProductResponseDto;
 import cartservice.client.dto.UserResponseDto;
 import cartservice.dtos.*;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.InvalidEmailException;
 import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
 import cartservice.service.IcartServices;
 import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
@@ -38,7 +39,7 @@ public class CartController {
             @PathVariable("email") String email,
             @RequestBody CartRequestDto dtos)  throws CartNotFoundException { //select product for cart
         if(!email.matches(EMAIL_PATTERN)){
-            throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+            throw new InvalidEmailException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
         }
         return ResponseEntity.ok(icartServices.addItemToCart(email,dtos));
     }

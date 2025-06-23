@@ -16,11 +16,11 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http
                     .authorizeHttpRequests((authorize -> authorize
-                            .requestMatchers("/product/create").hasRole("ADMIN")//only admin can create
+                            .requestMatchers("/product/create","/product/deleteSingleProduct/{id}","/product/UPDATE/{id}").hasRole("ADMIN")//only admin can create
                             .requestMatchers("/category/create","/category/update/","/category/price/id").hasRole("ADMIN")
                             .requestMatchers("/category/searchByCategoryName/{name}","/category/","/product/").permitAll()
                             .requestMatchers("/category/getbyid").hasRole("ADMIN")
-                            .requestMatchers("/product/get/**","/category/","/category/price/{id}").permitAll()// OPEN TO USE
+                            .requestMatchers("/category/","/category/price/{id}").permitAll()// OPEN TO USE
                                     .anyRequest().authenticated()// REST ALL AUTHENTICATED
                     ))
                     // JWT ROLE BASE CHECK

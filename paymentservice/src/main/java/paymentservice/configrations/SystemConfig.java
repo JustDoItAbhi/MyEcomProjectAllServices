@@ -20,9 +20,9 @@ public class SystemConfig {// SYSTEM CONFIGRATION
         http
                 .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/order/{id}").hasRole("ADMIN")// ONLY ADMIN USE
+//                        .requestMatchers("/order/{id}").hasRole("ADMIN")// ONLY ADMIN USE
                         .requestMatchers("/order/","/pay/").permitAll()// PUBLIC ACCESS
-                        .anyRequest().permitAll()// prohabited all other functions
+                        .anyRequest().authenticated()// prohabited all other functions
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))

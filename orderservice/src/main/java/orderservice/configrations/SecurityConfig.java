@@ -25,7 +25,7 @@ public class SecurityConfig {// SPRING SECURITY CONFIGRATIONS
 //                        .requestMatchers(  "/order/**").hasRole("ADMIN")
 //                        .requestMatchers("/order/").permitAll()
 //                        .requestMatchers("/pay/").permitAll()
-                                .requestMatchers("/order/getCartById/{id}").permitAll()
+//                                .requestMatchers("/order/getCartById/{id}").permitAll()
                                 .anyRequest().authenticated()// prohabited all other functions
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

@@ -19,7 +19,7 @@ import paymentservice.clinets.OrderServiceClient;
 import paymentservice.exceptions.UserNotFoundException;
 
 @Component
-public class PaymentServiceImpl implements PaymentGateway {
+public class PaymentServiceImpl implements PaymentGateway {// PAYMENT SERVICE IMPLEMENTATION LAYER
 
     @Value("${stripe.secret.key}")
     private String stripeUniversalLink;
@@ -29,7 +29,7 @@ public class PaymentServiceImpl implements PaymentGateway {
     private final OrderServiceClient orderServiceClient;
     private final KafkaProducerClinet kafkaProducerClinet;
     private final ObjectMapper objectMapper;
-
+    //CONSTRUCTOR
     public PaymentServiceImpl(OrderServiceClient orderServiceClient, KafkaProducerClinet kafkaProducerClinet, ObjectMapper objectMapper) {
         this.orderServiceClient = orderServiceClient;
         this.kafkaProducerClinet = kafkaProducerClinet;

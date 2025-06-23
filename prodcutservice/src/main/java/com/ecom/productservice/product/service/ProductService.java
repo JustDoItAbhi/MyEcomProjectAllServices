@@ -12,8 +12,9 @@ public interface ProductService {
     ProductResponseDto updateProduct(long id,ProductRequestDto requestDto) throws CategoryNotFoundExceptions;// UPDATE PRODUCT
     ProductResponseDto getProductById(long id);// GET PRODUCT BY ITS ID
     List<ProductResponseDto>getAllProducts();// GET ALL PRODUCTS
-    boolean deleteProduct(long id);// DELETE PRODUCT
+    boolean deleteProductifanyValueIsNull(long id);// DELETE PRODUCT
     boolean deleteList();// delete list of products
     String getUserRoles();// check the role of token provider
+    String DeleteProduct(long id);
 }
 

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServicesImpl implements UserServices {
+public class UserServicesImpl implements UserServices { //SERVICE LAYER
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder passwordEncoder;
@@ -54,7 +54,7 @@ public class UserServicesImpl implements UserServices {
         for(String roles:signUp.getRoles()) {// ADDING ROLE
             Optional<Roles> savedRole = roleRepository.findByRoleType(roles);// CHECKING DATABASE IF ROLE EXISTS
             if (savedRole.isEmpty()) {// ROLE VALIDATION
-                throw new RuntimeException("ROLE NOT FOUND " + signUp.getRoles());// THROW ERROR IF ROLE NOT VALID
+                throw new RoleNotFoundExceptions("ROLE NOT FOUND " + signUp.getRoles());// THROW ERROR IF ROLE NOT VALID
             }
             savedRole.get().setRoleType(roles);
             rolesList.add(savedRole.get());

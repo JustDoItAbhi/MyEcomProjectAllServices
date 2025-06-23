@@ -2,6 +2,7 @@ package cartservice.securityconfigrations.expcetions;
 
 
 import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.securityconfigrations.expcetions.expectionsfiles.InvalidEmailException;
 import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductAlreadyExists;
 import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,16 @@ public class GlobalExceptionsController {// GLOBAL EXECPTION HANDLER
     // user not found exception
     @ExceptionHandler(UsernameNotFoundException.class)// USER NOT FOUND EXECPTION
     public ResponseEntity<ExceptionMessageDto> UserNotFound(UsernameNotFoundException e){
+        ExceptionMessageDto dto=new ExceptionMessageDto(
+                e.getMessage(),
+                404,
+                LocalDateTime.now()
+        );
+        return new  ResponseEntity<>(dto,HttpStatus.NOT_FOUND);
+    }
+    // invalid email  exception
+    @ExceptionHandler(InvalidEmailException.class)// USER NOT FOUND EXECPTION
+    public ResponseEntity<ExceptionMessageDto> UserNotFound(InvalidEmailException e){
         ExceptionMessageDto dto=new ExceptionMessageDto(
                 e.getMessage(),
                 404,

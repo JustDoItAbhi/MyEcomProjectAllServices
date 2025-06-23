@@ -1,5 +1,6 @@
 package com.ecom.productservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class Categoryes extends BaseModels {// CATEGORY ENTITY
     private String categoryName;// CATEGORY NAME
     @Column(name = "category_description")
     private String categoryDescription;// CATEGORY DESCRIPTTION
+    @JsonIgnore
     @OneToMany(mappedBy = "categoryes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)// ONE TO MANY MAPPING WITH LAZY LOADING AND DEFAULT CASCADE
     private List<Products> products;// LIST OF PRODUCTS
 // GETTERS AND SETTERS
