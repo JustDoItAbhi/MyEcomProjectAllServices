@@ -1,8 +1,8 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dto.requests;
 
 
 
-public class DesignationRequestDto {// DESIGNATION REQUEST DTO
+public class DestinationRequestDto {// DESIGNATION REQUEST DTO
     private String country;
     private String capitalCity;
     private String city;

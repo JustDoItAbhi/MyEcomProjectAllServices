@@ -1,7 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
 import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
-import deliveryservice.deliveryservice.servicesproject.dto.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
 import deliveryservice.deliveryservice.servicesproject.entity.UserResponseUpdatedEntity;
@@ -17,7 +17,6 @@ import deliveryservice.deliveryservice.servicesproject.template.CallingServices;
 import deliveryservice.deliveryservice.servicesproject.template.CallingUserService;
 import deliveryservice.deliveryservice.servicesproject.template.NominatimClinet;
 import jakarta.transaction.Transactional;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

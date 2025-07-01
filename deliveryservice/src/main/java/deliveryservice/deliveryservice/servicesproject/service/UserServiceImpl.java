@@ -1,7 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
 import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
-import deliveryservice.deliveryservice.servicesproject.dto.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;

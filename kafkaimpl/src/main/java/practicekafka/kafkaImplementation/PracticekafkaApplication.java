@@ -1,4 +1,4 @@
-package practicekafka.practicekafka;
+package practicekafka.kafkaImplementation;
 
 
 import org.springframework.boot.SpringApplication;

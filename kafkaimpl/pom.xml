@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>practicekafka</groupId>
-	<artifactId>practicekafka</artifactId>
+	<artifactId>kafkaImpl</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>practicekafka</name>
 	<description>practicekafka project for Spring Boot</description>

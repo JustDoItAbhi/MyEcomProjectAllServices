@@ -9,6 +9,7 @@ import com.ecom.productservice.product.exceptions.ProductNotFoundException;
 import com.ecom.productservice.product.productmapper.ProductMapper;
 import com.ecom.productservice.repository.CategoryRespository;
 import com.ecom.productservice.repository.ProductRespository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,11 +23,15 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     private final ProductRespository productRespository;
     private final CategoryRespository categoryRespository;
+    private RedisTemplate<String,Object>redisTemplate;
 
 // CONSTRUCTOR
-    public ProductServiceImpl(ProductRespository productRespository, CategoryRespository categoryRespository) {
+
+
+    public ProductServiceImpl(ProductRespository productRespository, CategoryRespository categoryRespository, RedisTemplate<String, Object> redisTemplate) {
         this.productRespository = productRespository;
         this.categoryRespository = categoryRespository;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -70,17 +75,28 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException("PRODUCT NOT FOUNT "+id);
         }
         Products products=savedProduct.get();
-        return ProductMapper.forSerching(products);
+        ProductResponseDto responseDto=ProductMapper.forSerching(products);
+       ProductResponseDto response= (ProductResponseDto) redisTemplate.opsForValue().get("products");
+        if(response!=null){
+            return response;
+        }
+        return responseDto;
     }
 
     @Override
     public List<ProductResponseDto> getAllProducts() {// GET ALL PRODUCTS
+        List<ProductResponseDto>redisProduct= (List<ProductResponseDto>) redisTemplate.opsForValue().get("products");
+        if(redisProduct!=null){
+            return redisProduct;
+        }
 
         List<Products>productsList=productRespository.findAll();
         List<ProductResponseDto>responseDtos=new ArrayList<>();
         for(Products products:productsList){
             responseDtos.add(ProductMapper.forSerching(products));
         }
+        redisTemplate.opsForValue().set("products",responseDtos);
+
         return responseDtos;
     }
 

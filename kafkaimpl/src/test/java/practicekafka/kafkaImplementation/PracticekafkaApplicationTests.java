@@ -1,4 +1,4 @@
-package practicekafka.practicekafka;
+package practicekafka.kafkaImplementation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

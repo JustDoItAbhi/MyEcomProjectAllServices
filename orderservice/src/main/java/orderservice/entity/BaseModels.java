@@ -18,8 +18,7 @@ import java.time.LocalDateTime;
 public abstract class BaseModels {// COMMON BASEMODEL
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-private long id;// AUTO-INCREMENTED ID , AS PRIMARY KEY
+    private long id;// AUTO-INCREMENTED ID , AS PRIMARY KEY
     @CurrentTimestamp
-private LocalDateTime createdAt;// TIME STAMP FOR ORDER CREATED AT
-
+    private LocalDateTime createdAt;// TIME STAMP FOR ORDER CREATED AT
 }

@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dto.requests;
 
 public class UserRequestDto {// USER REQUEST DTO
     private String customerName;

@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.service.destinatiaonservice;
 
-import deliveryservice.deliveryservice.servicesproject.dto.DesignationRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dto.requests.DestinationRequestDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CountryNotFound;
@@ -11,5 +11,5 @@ public interface DestinationService {// STRATRGY AND LAYER PATTERN FOR DESTINATI
     List<Destinations> getAll();// GET ALL CITIS ND COUNTRIES
     Destinations getDestinationBycity(String city) throws CityNotFound;// GET CITY BY NAME
     Destinations getDestinationByCountyandCity(String country,String city) throws CountryNotFound;// GET COUNTRY AND CITY BY NAME
-    Destinations createDesignation(DesignationRequestDto dto);// CREATE DESTINATION
+    Destinations createDesignation(DestinationRequestDto dto);// CREATE DESTINATION
 }

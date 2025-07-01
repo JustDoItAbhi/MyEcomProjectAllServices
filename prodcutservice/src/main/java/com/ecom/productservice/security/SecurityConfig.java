@@ -2,6 +2,10 @@ package com.ecom.productservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -13,12 +17,23 @@ import org.springframework.web.client.RestClient;
 @EnableWebSecurity
 public class SecurityConfig  {
     @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory){
+        RedisTemplate<String,Object>template=new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+        GenericJackson2JsonRedisSerializer serializer=new GenericJackson2JsonRedisSerializer();
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(serializer);
+        return template;
+    }
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http
                     .authorizeHttpRequests((authorize -> authorize
                             .requestMatchers("/product/create","/product/deleteSingleProduct/{id}","/product/UPDATE/{id}").hasRole("ADMIN")//only admin can create
                             .requestMatchers("/category/create","/category/update/","/category/price/id").hasRole("ADMIN")
                             .requestMatchers("/category/searchByCategoryName/{name}","/category/","/product/").permitAll()
+                            .requestMatchers("/actuator/redis/**").permitAll()
+                            .requestMatchers("/error").permitAll()
                             .requestMatchers("/category/getbyid").hasRole("ADMIN")
                             .requestMatchers("/category/","/category/price/{id}").permitAll()// OPEN TO USE
                                     .anyRequest().authenticated()// REST ALL AUTHENTICATED
@@ -45,4 +60,5 @@ public class SecurityConfig  {
         return RestClient.builder()
                 .baseUrl("http://localhost:8085/cart/").build();
 }
+
 }

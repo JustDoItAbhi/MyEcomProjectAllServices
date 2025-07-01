@@ -9,7 +9,7 @@ public class CartItemResponseDto {
     private String productName;
     private int quantity;
     private double price;
-// GETTERS AND SETTERS
+// GETTERS AND SETTERS- cartId
     public long getCartId() {
         return cartId;
     }

@@ -12,5 +12,4 @@ public class Orders extends BaseModels{// ORDER ENTITY CLASS
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     private long price;
-
 }

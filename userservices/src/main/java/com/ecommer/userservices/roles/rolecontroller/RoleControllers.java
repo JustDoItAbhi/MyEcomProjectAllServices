@@ -15,13 +15,7 @@ import java.util.List;
 public class RoleControllers {
 @Autowired
     private RoleService roleService;
-//@Autowired
-//private OidcClientServices oidcClientServices;
-//@PostMapping("/")
-//public ResponseEntity<RegisterOidcClientResponseDto> registerOidcClient(@RequestBody RegisterOidcClientRequestDto requestDto){
-//    return ResponseEntity.ok(oidcClientServices.registerOidcClient(requestDto));
-//
-//}
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
 @PostMapping("/create")// create role post mapping
     public ResponseEntity<RoleResponseDto> createRole(@RequestBody RoleRequestDto requestDto){

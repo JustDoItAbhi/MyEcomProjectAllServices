@@ -1,4 +1,4 @@
-package practicekafka.practicekafka;
+package practicekafka.kafkaImplementation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import practicekafka.practicekafka.dto.SendEmailResponseDto;
+import practicekafka.kafkaImplementation.dto.SendEmailResponseDto;
 
 @Component
 public class  SendMessageProducer {

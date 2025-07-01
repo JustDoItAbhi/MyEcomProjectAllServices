@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.controller;
 
-import deliveryservice.deliveryservice.servicesproject.dto.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
 import deliveryservice.deliveryservice.servicesproject.entity.UserResponseUpdatedEntity;

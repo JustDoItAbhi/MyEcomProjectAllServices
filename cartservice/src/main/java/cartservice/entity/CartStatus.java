@@ -6,5 +6,4 @@ public enum CartStatus {// ENUM CLASS FOR CART STATUS
     DELETED,
     ACCEPTED,
     UPDATED
-
 }

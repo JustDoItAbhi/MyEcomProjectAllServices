@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class NominatimClinet {
-    private Double LVIV_LAT = 49.83826;// location of warehouse
-    private Double LVIV_LON=	24.02324;// location of warehouse
+    private Double WAREHOUSE_LAT = 49.83826;// location of warehouse
+    private Double WAREHOUSE_LON =	24.02324;// location of warehouse
 
     private final RestTemplateBuilder restTemplateBuilder;
     private final String NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";// DEFAULT LOCATION TRACE LINK
@@ -41,10 +41,10 @@ public class NominatimClinet {
 
         Coordinates coordinates  =forwardGeocode(city,country);
 
-        double lat1Rad = Math.toRadians(LVIV_LAT); // Lviv warehouse latitude
+        double lat1Rad = Math.toRadians(WAREHOUSE_LAT); // Lviv warehouse latitude
         double lat2Rad = Math.toRadians(coordinates.getLatitude());// lviv warehouse latitude
-        double deltaLat = Math.toRadians(coordinates.getLatitude() - LVIV_LAT);//subtract latitude to get distance
-        double deltaLon = Math.toRadians(coordinates.getLongitude() - LVIV_LON);// subtract longitude to get distance
+        double deltaLat = Math.toRadians(coordinates.getLatitude() - WAREHOUSE_LAT);//subtract latitude to get distance
+        double deltaLon = Math.toRadians(coordinates.getLongitude() - WAREHOUSE_LON);// subtract longitude to get distance
 
         double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)// logic to calculate
                 + Math.cos(lat1Rad) * Math.cos(lat2Rad)

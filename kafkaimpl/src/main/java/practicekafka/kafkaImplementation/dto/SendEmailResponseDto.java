@@ -1,4 +1,4 @@
-package practicekafka.practicekafka.dto;
+package practicekafka.kafkaImplementation.dto;
 
 
 public class SendEmailResponseDto {

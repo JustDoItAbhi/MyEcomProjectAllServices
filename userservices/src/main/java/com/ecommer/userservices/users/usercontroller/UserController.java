@@ -26,7 +26,7 @@ public class UserController {
     private UserServices userServices;// autowired user service
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com)$";
 
-    @PostMapping("/signup")// public use to sign up as a new user
+    @PostMapping("/signup")// (public use) to sign up as a new user
     public ResponseEntity<UserResponseDto> signup(@RequestBody SignUp signUp) throws JsonProcessingException {
         if(!signUp.getUserEmail().matches(EMAIL_PATTERN)){
             throw new NotCorrectEmailProvidedException("Invalid email! Only Gmail and Yahoo emails are allowed."+signUp.getUserEmail());
@@ -80,7 +80,7 @@ public class UserController {
     }
     @PreAuthorize("isAuthenticated())")
     @GetMapping("/getUserByid/{email}")// authenticated api
-    public ResponseEntity<UserResponseDto> getAll(@PathVariable ("email")String email) throws SignUpUserException {// GET USER BY ITS EMAIL
+    public ResponseEntity<UserResponseDto> getByEmail(@PathVariable ("email")String email) throws SignUpUserException {// GET USER BY ITS EMAIL
         return ResponseEntity.ok(userServices.getById(email));
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")

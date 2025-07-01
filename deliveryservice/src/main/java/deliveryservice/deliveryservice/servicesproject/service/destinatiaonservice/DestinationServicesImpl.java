@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.service.destinatiaonservice;
 
-import deliveryservice.deliveryservice.servicesproject.dto.DesignationRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dto.requests.DestinationRequestDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CountryNotFound;
@@ -40,7 +40,7 @@ public class DestinationServicesImpl implements DestinationService{// DESTINATIO
     }
 
     @Override// NOT IMPLEMENTED
-    public Destinations createDesignation(DesignationRequestDto dto) {
+    public Destinations createDesignation(DestinationRequestDto dto) {
         return null;
     }
 }
