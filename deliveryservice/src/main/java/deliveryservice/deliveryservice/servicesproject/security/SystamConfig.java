@@ -1,10 +1,18 @@
 package deliveryservice.deliveryservice.servicesproject.security;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import deliveryservice.deliveryservice.servicesproject.orderservice.dtos.CheckOutOrder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.config.Customizer;
@@ -17,18 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SystamConfig {// SYSTEM CONFIGRATION
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory){
-        RedisTemplate<String,Object> template=new RedisTemplate<>();
-        template.setConnectionFactory(factory);
-        GenericJackson2JsonRedisSerializer serializer=new GenericJackson2JsonRedisSerializer();
-        template.setDefaultSerializer(serializer);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(serializer);
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(serializer);
-        return template;
-    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -39,6 +36,7 @@ public class SystamConfig {// SYSTEM CONFIGRATION
 //                                .requestMatchers("/user/getUserByid/**").authenticated()
 //                                .requestMatchers("/deliveryUser/{cartId}/{userEmail}").permitAll()
 //                        .requestMatchers("/deliveryUser/{id}").authenticated()
+                                .requestMatchers("/deliveryUser/getOrder/{email}").permitAll()
                                 .anyRequest().authenticated()// PROTECTED ALL
                         )
                 )

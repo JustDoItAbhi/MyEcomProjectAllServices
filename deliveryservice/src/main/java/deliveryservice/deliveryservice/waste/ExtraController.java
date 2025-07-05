@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.waste;
 
-import deliveryservice.deliveryservice.servicesproject.dto.DeliveryResponseDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.DeliveryResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Delivery;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

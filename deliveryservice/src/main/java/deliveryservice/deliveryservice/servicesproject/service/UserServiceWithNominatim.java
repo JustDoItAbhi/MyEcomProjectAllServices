@@ -1,9 +1,10 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
-import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
-import deliveryservice.deliveryservice.servicesproject.dto.CheckOutOrder;
-import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
-import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.CartResposneDtos;
+import deliveryservice.deliveryservice.servicesproject.entity.Delivery;
+import deliveryservice.deliveryservice.servicesproject.orderservice.dtos.CheckOutOrder;
+import deliveryservice.deliveryservice.servicesproject.dtos.requests.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
 import deliveryservice.deliveryservice.servicesproject.entity.UserResponseUpdatedEntity;
 
@@ -123,7 +124,7 @@ public class UserServiceWithNominatim implements UserServices{// STRATGRY AND LA
     }
 
     @Override
-    public CheckOutOrder getOrderDetails(String email) {
+    public Delivery getOrderDetails(String email) {
         return null;
     }
 

@@ -19,9 +19,9 @@ private long id;// AUTO-INCREMENTED PRIMARY ID
 @CreationTimestamp
 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 private LocalDateTime createdAt;// CREATED AT TIME STAMP
-@UpdateTimestamp
-@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-private LocalDateTime updatedAt;// UPDATED AT TIME STAMP
+//@UpdateTimestamp
+//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//private LocalDateTime updatedAt;// UPDATED AT TIME STAMP
     // GETTERS AND SETTERS
     public long getId() {
         return id;
@@ -38,12 +38,12 @@ private LocalDateTime updatedAt;// UPDATED AT TIME STAMP
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//
+//    public LocalDateTime getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(LocalDateTime updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 }

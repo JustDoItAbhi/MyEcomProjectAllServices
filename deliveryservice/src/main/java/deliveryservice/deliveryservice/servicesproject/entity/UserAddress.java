@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="userAddres")
 public class UserAddress extends BaseModels{// USER ENTITY
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private DeliveryStatus status;
     private String userName;
     private String userPhone;
     private String userEmail;
@@ -29,7 +33,21 @@ public class UserAddress extends BaseModels{// USER ENTITY
         this.cartId = cartId;
     }
 
+    public DeliveryStatus getStatus() {
+        return status;
+    }
 
+    public void setStatus(DeliveryStatus status) {
+        this.status = status;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 
     public long getTotalAmount() {
         return totalAmount;

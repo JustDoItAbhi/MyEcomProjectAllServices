@@ -1,8 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.template;
 
-import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
-import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
-import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
+import deliveryservice.deliveryservice.servicesproject.dtos.CartResposneDtos;
+import deliveryservice.deliveryservice.servicesproject.dtos.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.UserNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -27,8 +26,8 @@ import java.time.Duration;
 public class CallingUserService implements  CallingServices{// STRATRGY AND LAYER PATTERN FOR USER SERVCIE IMPLEMENTATION
 private final RestTemplateBuilder restTemplateBuilder;// DECLARTION OF REST TEMPLATE
 private final DiscoveryClient discoveryClient;// DECLARATION OF EURECA DISCOVERY CLINET INSTANCE
-    @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+//    @Autowired
+//    private RedisTemplate<String,Object> redisTemplate;
 
     // CONSTRUCTOR
     public CallingUserService(RestTemplateBuilder restTemplateBuilder, DiscoveryClient discoveryClient) {
@@ -37,10 +36,10 @@ private final DiscoveryClient discoveryClient;// DECLARATION OF EURECA DISCOVERY
     }
 
     public UserResponseDto getUser(String emailId){// GET USER
-        UserResponseDto userResponseDto= (UserResponseDto) redisTemplate.opsForValue().get("userResponse");
-        if(userResponseDto!=null){
-            return userResponseDto;
-        }
+//        UserResponseDto userResponseDto= (UserResponseDto) redisTemplate.opsForValue().get("userResponse");
+//        if(userResponseDto!=null){
+//            return userResponseDto;
+//        }
         Jwt jwt=(Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String token= jwt.getTokenValue();
 
@@ -55,7 +54,7 @@ private final DiscoveryClient discoveryClient;// DECLARATION OF EURECA DISCOVERY
         if(response.getBody()==null){// USER VALIDATION
             throw new UserNotExistsException("USER NOT FETCHED "+emailId);
         }
-        redisTemplate.opsForValue().set("userResponse",userResponseDto, Duration.ofSeconds(5));
+//        redisTemplate.opsForValue().set("userResponse",userResponseDto, Duration.ofSeconds(5));
         return response.getBody();
     }
 

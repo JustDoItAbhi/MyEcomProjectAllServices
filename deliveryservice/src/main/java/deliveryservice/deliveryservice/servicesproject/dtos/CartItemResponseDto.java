@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dtos;
 
 
 public class CartItemResponseDto {// CART ITEM RESPONSE DTO

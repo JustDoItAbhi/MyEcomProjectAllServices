@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.orderservice.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -23,4 +23,6 @@ public class UserDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
     private long totalAmount;
+    private int countryDistance;
+    private String message;
 }

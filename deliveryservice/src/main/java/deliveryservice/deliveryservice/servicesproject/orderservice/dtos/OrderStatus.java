@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.orderservice.dtos;
 
 public enum OrderStatus {// ORDER STATUS ENUM CLASS
     PENDING,

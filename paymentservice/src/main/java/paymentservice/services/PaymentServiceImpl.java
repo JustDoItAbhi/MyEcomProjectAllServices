@@ -69,7 +69,7 @@ public class PaymentServiceImpl implements PaymentGateway {// PAYMENT SERVICE IM
                 .setAfterCompletion(PaymentLinkCreateParams.AfterCompletion.builder()
                         .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT)
                         .setRedirect(PaymentLinkCreateParams.AfterCompletion.Redirect.builder()
-                                .setUrl(paymentRedirectUrl+"/"+dto.getCartId()+"/"+email)//REDIRECT URL
+                                .setUrl(paymentRedirectUrl+email)//REDIRECT URL
                                 .build())
                         .build())
 

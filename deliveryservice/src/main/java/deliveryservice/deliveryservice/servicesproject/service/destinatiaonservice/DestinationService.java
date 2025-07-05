@@ -1,6 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.service.destinatiaonservice;
 
-import deliveryservice.deliveryservice.servicesproject.dto.requests.DestinationRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.requests.DestinationRequestDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CountryNotFound;

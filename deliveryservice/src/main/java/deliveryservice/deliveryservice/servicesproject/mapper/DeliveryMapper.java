@@ -1,7 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.mapper;
 
-import deliveryservice.deliveryservice.servicesproject.dto.DeliveryResponseDto;
-import deliveryservice.deliveryservice.servicesproject.dto.DeliveryServiceNotification;
+import deliveryservice.deliveryservice.servicesproject.dtos.DeliveryResponseDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.DeliveryServiceNotification;
 
 public class DeliveryMapper {
     public static DeliveryResponseDto fromPaymentEntity(DeliveryServiceNotification notification){// MAPPING FROM ENTITY TO RESPONSE DTO

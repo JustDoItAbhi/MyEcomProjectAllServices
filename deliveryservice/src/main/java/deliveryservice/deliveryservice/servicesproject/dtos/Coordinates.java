@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dtos;
 
 public class Coordinates {// CO-ORDINATES FOR LOCATION
     private double latitude;

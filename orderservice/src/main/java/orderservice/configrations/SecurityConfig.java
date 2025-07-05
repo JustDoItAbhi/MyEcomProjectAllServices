@@ -1,6 +1,11 @@
 package orderservice.configrations;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import orderservice.dtos.CheckOutOrder;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,11 +46,20 @@ public class SecurityConfig {// SPRING SECURITY CONFIGRATIONS
         return http.build();
     }
     @Bean
-    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory factory){
-        RedisTemplate<String,Object>template=new RedisTemplate<>();
+    public RedisTemplate<String, CheckOutOrder> redisTemplate(RedisConnectionFactory factory){
+        RedisTemplate<String,CheckOutOrder> template=new RedisTemplate<>();
         template.setConnectionFactory(factory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        ObjectMapper mapper=new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        Jackson2JsonRedisSerializer<CheckOutOrder> serializer=new Jackson2JsonRedisSerializer<>(mapper,CheckOutOrder.class);
+
+//        template.setDefaultSerializer(serializer);
+//        template.setKeySerializer(new StringRedisSerializer());
+//        template.setValueSerializer(serializer);
+//        template.setHashKeySerializer(new StringRedisSerializer());
+//        template.setHashValueSerializer(serializer);
+        template.setValueSerializer(serializer);
         return template;
     }
 

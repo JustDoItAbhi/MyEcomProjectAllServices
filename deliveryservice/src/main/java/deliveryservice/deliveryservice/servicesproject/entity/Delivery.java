@@ -4,23 +4,43 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Delivery extends BaseModels{// DELVIERY ENTITY
-    private String orderId;
-    private String paymentStatus;
+    private long cartId;
+    private PaymentStatus paymentStatus;
     private double amount;
+    private DeliveryStatus deliveryStatus;
+    private String message;
     // GETTERS AND SETTERS
-    public String getOrderId() {
-        return orderId;
+
+
+    public String getMessage() {
+        return message;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getPaymentStatus() {
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
+    }
+
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 

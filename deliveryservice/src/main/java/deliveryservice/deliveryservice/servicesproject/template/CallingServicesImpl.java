@@ -1,7 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.template;
 
-import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
-import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.CartResposneDtos;
+import deliveryservice.deliveryservice.servicesproject.dtos.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.UserNotExistsException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;

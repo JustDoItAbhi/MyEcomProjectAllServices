@@ -1,4 +1,4 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dtos;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

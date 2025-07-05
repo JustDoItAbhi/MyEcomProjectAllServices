@@ -48,6 +48,11 @@ public class OrdersController {
         return ResponseEntity.ok(orderItemServices.getUserRoles());
     }
 
+    @GetMapping("/getEmail/{email}")
+    public ResponseEntity<CheckOutOrder> getEmail(@PathVariable ("email")String email){
+        return ResponseEntity.ok(orderItemServices.byEmail(email));
+    }
+
 //    @GetMapping("/getUserForDelivery/{email}")// get user by email
 //    public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
 //        if(!email.matches(EMAIL_PATTERN)){

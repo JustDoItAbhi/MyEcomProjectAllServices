@@ -13,4 +13,5 @@ public interface OrderItemServices {// ORDER ITEM SERVICE LAYER AND STRATRGY DEG
    CheckOutOrder userLoginOrSignUp(long cartiD, String email);
    Orders getOrderById(long id);// GET ORDER BY ID
    String getUserRoles();// OPTIONAL USER ROLE CHECK
+   CheckOutOrder byEmail(String email);
 }

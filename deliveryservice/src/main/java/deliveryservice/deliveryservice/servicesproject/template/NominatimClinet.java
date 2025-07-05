@@ -1,7 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.template;
 
-import deliveryservice.deliveryservice.servicesproject.dto.Coordinates;
-import deliveryservice.deliveryservice.servicesproject.dto.NominatimResponseDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.Coordinates;
+import deliveryservice.deliveryservice.servicesproject.dtos.NominatimResponseDto;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

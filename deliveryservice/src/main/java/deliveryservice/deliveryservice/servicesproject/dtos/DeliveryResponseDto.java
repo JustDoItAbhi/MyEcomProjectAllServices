@@ -1,9 +1,11 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dtos;
+
+import deliveryservice.deliveryservice.servicesproject.entity.PaymentStatus;
 
 public class DeliveryResponseDto {// DELIVERY RESPONSE DTO
     private long deliveryId;
-    private String orderId;
-    private String paymentStatus;
+    private long orderId;
+    private PaymentStatus paymentStatus;
     private double amount;
     // GETTERS AND SETTERS
     public long getDeliveryId() {
@@ -14,19 +16,19 @@ public class DeliveryResponseDto {// DELIVERY RESPONSE DTO
         this.deliveryId = deliveryId;
     }
 
-    public String getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 

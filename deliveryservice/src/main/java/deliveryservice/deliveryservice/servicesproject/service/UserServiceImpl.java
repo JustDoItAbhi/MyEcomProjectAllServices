@@ -1,17 +1,17 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
-import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
-import deliveryservice.deliveryservice.servicesproject.dto.CheckOutOrder;
-import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
-import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
-import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
-import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
-import deliveryservice.deliveryservice.servicesproject.entity.UserResponseUpdatedEntity;
+import deliveryservice.deliveryservice.servicesproject.dtos.CartResposneDtos;
+import deliveryservice.deliveryservice.servicesproject.entity.*;
+import deliveryservice.deliveryservice.servicesproject.orderservice.dtos.CheckOutOrder;
+import deliveryservice.deliveryservice.servicesproject.dtos.requests.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CartNotFount;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CountryNotFound;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.UserNotExistsException;
 import deliveryservice.deliveryservice.servicesproject.mapper.UserMapper;
+import deliveryservice.deliveryservice.servicesproject.orderservice.dtos.UserDto;
+import deliveryservice.deliveryservice.servicesproject.repository.DeliveryRespository;
 import deliveryservice.deliveryservice.servicesproject.repository.DestinationRespository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserAddressRepository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserResponseUpdateRepository;
@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -36,15 +35,18 @@ private final DestinationRespository destinationRespository;// DECLARED DESTINAT
 private final UserResponseUpdateRepository updateRepository;// DECLARED ADDRESS UPDATE REPOSIOTORY
 private final Map<Long, UserResponseDto> userAddressCache=new HashMap<>();// OPTIONAL USE TO REDUCE TIME COMPLEXITY
 @Autowired
-private RedisTemplate<String,Object>redisTemplate;
+private RedisTemplate<String,CheckOutOrder>redisTemplate;
+@Autowired
+    private DeliveryRespository deliveryRespository;
 
 // CONTRUCTOR
-public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServices callingServices,
-                           DestinationRespository destinationRespository, UserResponseUpdateRepository updateRepository) {
-        this.userAddressRepository = userAddressRepository;
-        this.callingServices = callingServices;
-        this.destinationRespository = destinationRespository;
+    public UserServiceImpl(UserResponseUpdateRepository updateRepository, RedisTemplate<String, CheckOutOrder> redisTemplate, DestinationRespository destinationRespository,
+                           CallingServices callingServices, UserAddressRepository userAddressRepository) {
         this.updateRepository = updateRepository;
+        this.redisTemplate = redisTemplate;
+        this.destinationRespository = destinationRespository;
+        this.callingServices = callingServices;
+        this.userAddressRepository = userAddressRepository;
     }
 
     @Override// GET CART AND USER BY IDS
@@ -78,10 +80,7 @@ public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServi
 //        existingUser.setUpdatedAt(LocalDateTime.now());// updated timestamp
         existingUser.setUserEmail(userEmail);// set user email
         existingUser.setCountryDistance(destinations.getCountryDistance());
-
         UserAddress responseDto= UserMapper.fromEntity(existingUser);
-
-
 
         userAddressCache.put(cartId, existingUser);
         System.out.println("USER ADDRESS IS "+existingUser.getUserEmail());
@@ -145,12 +144,35 @@ public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServi
     }
 
     @Override
-    public CheckOutOrder getOrderDetails(String email) {
-    CheckOutOrder check= (CheckOutOrder) redisTemplate.opsForValue().get(email);
+    public Delivery getOrderDetails(String email) throws CityNotFound {
+    CheckOutOrder check=  redisTemplate.opsForValue().get(email);
     if(check==null){
         throw new UserNotExistsException("PLEASE CHECK ORDER SERVICE "+email);
     }
-    return check;
+    check.setStatus(DeliveryStatus.READY_TO_DELIVER);
+        UserDto existingUser= check.getUserDto();
+        Destinations destinations = fetchCountriesAndCities(existingUser.getUserCountry(),existingUser.getUserCity());
+//        existingUser.setCountryDistance(destinations.getCountryDistance());// setting deistanc in km to useraddress
+        if (destinations.getCountryDistance()/60<=24)   {// if delivery speed 60 km per hour and it will reach before or = 24 hours
+            existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 2 days " );// then take maximum two days for delivery
+        }else{
+            existingUser.setMessage("PARCEL WILL DELIVER IN MAXIMUM 7 DAYS AS YOUR CITY IS FAR "// otherwise 7 days
+                    +existingUser.getUserCity()+" is "+destinations.getCountryDistance()+" killometers");
+        }
+
+//
+        existingUser.setCreatedAt(LocalDateTime.now());// created timestamp
+        existingUser.setCountryDistance(destinations.getCountryDistance());
+        UserAddress responseDto= UserMapper.fromOrderService(check);
+        userAddressRepository.save(responseDto);
+        Delivery delivery=new Delivery();
+        delivery.setAmount(responseDto.getTotalAmount());
+        delivery.setCartId(responseDto.getCartId());
+        delivery.setPaymentStatus(PaymentStatus.PAID);
+        delivery.setDeliveryStatus(check.getStatus());
+        delivery.setMessage(responseDto.getMessage());
+        deliveryRespository.save(delivery);
+        return delivery;
     }
 
 

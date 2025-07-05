@@ -27,7 +27,7 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
     private final OrderRepository orderRepository;// DECLARATION OF ORDER REPOSITORY
     private final HashMap<Long,Object>ordersMap;
     @Autowired
-    private RedisTemplate<String,Object>redisTemplate;
+    private RedisTemplate<String,CheckOutOrder>redisTemplate;
     private final RestTemplateService restTemplateService;// // DECLARATION OF REST TEMPLATE SERVICE
 // DEPENDENCY INJECTION
     public OrderItemServicesImpl(OrderRepository orderRepository, HashMap<Long, Object> ordersMap, RestTemplateService restTemplateService) {
@@ -38,16 +38,10 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
 
     @Override
     public OrderResponseDto getCartItems(long cartId) {// GET CART ITEMS
-//        OrderResponseDto dto= (OrderResponseDto) ordersMap.get(cartId);
-//        if(dto!=null){
-//            return dto;
-//        }
         CartResposneDtos resposneDtos=restTemplateService.fetchProduct(cartId);// FETCH CART BY CART ID
         if(resposneDtos==null){// VART VALIDATION
                 throw new OrderCannotPLacedexception(" CANNOT FIND CART "+cartId);
         }
-
-
         Orders orders= new Orders();
         orders.setCartId(resposneDtos.getCartId());
         orders.setPrice(resposneDtos.getTotal());
@@ -80,13 +74,16 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
         if(dto==null){
             throw new SignUpException("please sign up "+ "http://localhost:8090/user/signup");
         }
+      check= UserMapper.fromUserResponse(dto,orderResponseDto);
+              redisTemplate.opsForValue().set(email,check);
+        getOrderById(orderResponseDto.getOrderid());
 
-        redisTemplate.opsForValue().set(email,check);
-        return UserMapper.fromUserResponse(dto,orderResponseDto);
+        return check;
     }
 
     @Override
-    public Orders getOrderById(long id) {// GET ORDER BY ID
+    public Orders getOrderById(long id) {// GET ORDER BY ID by hashmap
+
         Orders existingOrder=orderRepository.findById(id).orElseThrow(
                 ()-> new RuntimeException("ID NOT FOUND "+ id));// CHECK STATUS IF READY TO PAY
         existingOrder.setOrderStatus(OrderStatus.READY_TO_PAY);
@@ -106,5 +103,14 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
             return jwt.getClaimAsStringList("roles").toString(); // Extract "roles" claim
         }
         return "No roles available";
+    }
+
+    @Override
+    public CheckOutOrder byEmail(String email) {
+        CheckOutOrder check=  redisTemplate.opsForValue().get(email);
+        if(check==null){
+            throw new SignUpException("user not found "+ email);
+        }
+        return check;
     }
 }

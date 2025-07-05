@@ -1,23 +1,25 @@
-package deliveryservice.deliveryservice.servicesproject.dto;
+package deliveryservice.deliveryservice.servicesproject.dtos;
+
+import deliveryservice.deliveryservice.servicesproject.entity.PaymentStatus;
 
 public class DeliveryServiceNotification {// DELIVERY NOTIFICATION DTO
-    private String orderId;
-    private String paymentStatus;
+    private long orderId;
+    private PaymentStatus paymentStatus;
     private double amount;
 
-    public String getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 

@@ -1,8 +1,9 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
-import deliveryservice.deliveryservice.servicesproject.dto.CheckOutOrder;
-import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
-import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
+import deliveryservice.deliveryservice.servicesproject.entity.Delivery;
+import deliveryservice.deliveryservice.servicesproject.orderservice.dtos.CheckOutOrder;
+import deliveryservice.deliveryservice.servicesproject.dtos.requests.UserRequestDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
 import deliveryservice.deliveryservice.servicesproject.entity.UserResponseUpdatedEntity;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.CityNotFound;
@@ -17,6 +18,6 @@ public interface UserServices {// STRATRGY AND LAYER PATTERN FOR USER SERVICE
     List<UserAddress>getAll();// GET ALL USER ADDRESS
     UserResponseDto FetchUserDataAndValidate(String email);// TEST USER DATA
     boolean deleteDeliveryAddress(long id);// DELETE USER
-    CheckOutOrder getOrderDetails(String email);
+    Delivery getOrderDetails(String email) throws CityNotFound;
 
 }

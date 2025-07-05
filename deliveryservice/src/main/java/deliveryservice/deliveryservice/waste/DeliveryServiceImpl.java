@@ -1,6 +1,7 @@
 package deliveryservice.deliveryservice.waste;
 
-import deliveryservice.deliveryservice.servicesproject.dto.DeliveryResponseDto;
+import deliveryservice.deliveryservice.servicesproject.dtos.DeliveryResponseDto;
+
 import deliveryservice.deliveryservice.servicesproject.entity.Delivery;
 import deliveryservice.deliveryservice.servicesproject.repository.DeliveryRespository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserAddressRepository;
@@ -24,7 +25,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery delivery=new Delivery();
         delivery.setId(dto.getDeliveryId());
         delivery.setAmount(dto.getAmount());
-        delivery.setOrderId(dto.getOrderId());
+        delivery.setCartId(dto.getOrderId());
         delivery.setPaymentStatus(dto.getPaymentStatus());
         deliveryRespository.save(delivery);
         return delivery;
