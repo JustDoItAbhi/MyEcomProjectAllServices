@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonDeserialize// json deserializer requirment of springboot oauth2 implentation
-@NoArgsConstructor// no argument constructor
+//@NoArgsConstructor// no argument constructor
 public class CustomUsersDetals implements UserDetails {
     private String password;// user custome password for jwt token  implementation
     private  String username;// user custome user for jwt token  implementation
@@ -24,7 +24,13 @@ public class CustomUsersDetals implements UserDetails {
     private  boolean credentialsNonExpired;// // user custome jwt token credential non expiry for jwt implementation
     private boolean enabled;// // user custome jwt token enable for jwt implementation
     private String userEmail;// optional // user custome jwt token usereamil for jwt not implementation
-    private List<GrantedAuthority>authorities;//// user custome jwt token role based authority for jwt implementation
+    private List<GrantedAuthority>authorities;
+
+    public CustomUsersDetals() {
+    }
+
+    //// user custome jwt token role based authority for jwt implementation
+
 // setters
     public void setPassword(String password) {
         this.password = password;

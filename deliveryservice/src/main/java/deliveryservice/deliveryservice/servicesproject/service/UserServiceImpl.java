@@ -1,6 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
 import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
+import deliveryservice.deliveryservice.servicesproject.dto.CheckOutOrder;
 import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.Destinations;
@@ -15,9 +16,12 @@ import deliveryservice.deliveryservice.servicesproject.repository.DestinationRes
 import deliveryservice.deliveryservice.servicesproject.repository.UserAddressRepository;
 import deliveryservice.deliveryservice.servicesproject.repository.UserResponseUpdateRepository;
 import deliveryservice.deliveryservice.servicesproject.template.CallingServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +29,15 @@ import java.util.Map;
 
 @Service
 @Primary// priotities service bean
-public class UserServiceImpl implements UserServices{//  LAYER SERVICE FOR USER SERVICE IMPLEMENTATION
+public class UserServiceImpl implements UserServices{//   USER SERVICE IMPLEMENTATION
 private final UserAddressRepository userAddressRepository;// DECLARED USERADRESS REPOSIOTORY
 private final CallingServices callingServices;// SERVICE TO RESTTEMPLATE
 private final DestinationRespository destinationRespository;// DECLARED DESTINATAION REPOSIOTORY
 private final UserResponseUpdateRepository updateRepository;// DECLARED ADDRESS UPDATE REPOSIOTORY
 private final Map<Long, UserResponseDto> userAddressCache=new HashMap<>();// OPTIONAL USE TO REDUCE TIME COMPLEXITY
+@Autowired
+private RedisTemplate<String,Object>redisTemplate;
+
 // CONTRUCTOR
 public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServices callingServices,
                            DestinationRespository destinationRespository, UserResponseUpdateRepository updateRepository) {
@@ -47,6 +54,13 @@ public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServi
         if(dtos==null){// VALIDATE CART
             throw new CartNotFount("YOU ARE NOT ALLOWED "+ userEmail);
         }
+        if(dtos.getCartId()<=0){
+            throw new CartNotFount("YOU ARE NOT ALLOWED "+ cartId);
+        }
+        if(existingUser.getUserEmail()==null){
+            throw new CartNotFount("YOU ARE NOT ALLOWED "+ userEmail);
+        }
+
         existingUser.setCartId(dtos.getCartId());// saved cartId in UserAdrress
         existingUser.setTotalAmount(dtos.getTotal());// save amount in UserAdrress
         // fetching country and city from database
@@ -59,13 +73,14 @@ public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServi
                     +existingUser.getUserCity()+" is "+destinations.getCountryDistance()+" killometers");
         }
 
-
+//
         existingUser.setCreatedAt(LocalDateTime.now());// created timestamp
-        existingUser.setUpdatedAt(LocalDateTime.now());// updated timestamp
+//        existingUser.setUpdatedAt(LocalDateTime.now());// updated timestamp
         existingUser.setUserEmail(userEmail);// set user email
         existingUser.setCountryDistance(destinations.getCountryDistance());
 
         UserAddress responseDto= UserMapper.fromEntity(existingUser);
+
 
 
         userAddressCache.put(cartId, existingUser);
@@ -127,6 +142,15 @@ public UserServiceImpl(UserAddressRepository userAddressRepository, CallingServi
     public boolean deleteDeliveryAddress(long id) {// DELETE DELIVERY
         userAddressRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public CheckOutOrder getOrderDetails(String email) {
+    CheckOutOrder check= (CheckOutOrder) redisTemplate.opsForValue().get(email);
+    if(check==null){
+        throw new UserNotExistsException("PLEASE CHECK ORDER SERVICE "+email);
+    }
+    return check;
     }
 
 

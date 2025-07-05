@@ -1,5 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.controller;
 
+import deliveryservice.deliveryservice.servicesproject.dto.CheckOutOrder;
 import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
@@ -70,13 +71,20 @@ public ResponseEntity<String> debugAdminRole() {
 
     return ResponseEntity.ok("User roles: " + roles);
 }
-@GetMapping("/{email}")// GET USR BY EMAIL
-    public ResponseEntity<UserResponseDto> getOnlyUser(@PathVariable ("email")String email){
-    if(!email.matches(EMAIL_PATTERN)){// VALIDATE EMAIL
-        throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+    @GetMapping("/getOrder/{email}")// GET USR BY EMAIL
+    public ResponseEntity<CheckOutOrder> getOrder(@PathVariable ("email")String email){
+        if(!email.matches(EMAIL_PATTERN)){// VALIDATE EMAIL
+            throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+        }
+        return ResponseEntity.ok(userServices.getOrderDetails(email));
     }
-        return ResponseEntity.ok(userServices.FetchUserDataAndValidate(email));
-}
+//@GetMapping("/{email}")// GET USR BY EMAIL
+//    public ResponseEntity<UserResponseDto> getOnlyUser(@PathVariable ("email")String email){
+//    if(!email.matches(EMAIL_PATTERN)){// VALIDATE EMAIL
+//        throw new UserNotExistsException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+//    }
+//        return ResponseEntity.ok(userServices.FetchUserDataAndValidate(email));
+//}
 //    @GetMapping("/{country}")
 //    public ResponseEntity<List<Destinations>> getByCountry(@PathVariable("country")String country) throws CountryNotFound {
 //        return ResponseEntity.ok(userServices.getDestinationByCounty(country));

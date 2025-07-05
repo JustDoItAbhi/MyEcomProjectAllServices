@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 @Getter
 @Setter
-@NoArgsConstructor
+
 @Entity
 @Table(name = "ROLES")
 public class Roles {// role entity
@@ -21,6 +21,9 @@ public class Roles {// role entity
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long roleId;// auto incremented role id as primary key
     private String roleType;// role name
+
+    public Roles() {
+    }
 
     public Roles(String roleType) {// constructor
         this.roleType = roleType;

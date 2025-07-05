@@ -1,5 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,8 +17,10 @@ public abstract class BaseModels {// ABSTRACT BASEMODEL
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private long id;// AUTO-INCREMENTED PRIMARY ID
 @CreationTimestamp
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 private LocalDateTime createdAt;// CREATED AT TIME STAMP
 @UpdateTimestamp
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 private LocalDateTime updatedAt;// UPDATED AT TIME STAMP
     // GETTERS AND SETTERS
     public long getId() {

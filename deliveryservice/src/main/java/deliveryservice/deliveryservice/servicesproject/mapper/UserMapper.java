@@ -20,7 +20,7 @@ public class UserMapper {
         responseDto.setMessage(users.getMessage());
         responseDto.setCountryDistance(users.getCountryDistance());
         responseDto.setCreatedAt(users.getCreatedAt());
-        responseDto.setUpdatedAt(users.getUpdatedAt());
+//        responseDto.setUpdatedAt(users.getUpdatedAt());
         responseDto.setCartId(users.getCartId());
         responseDto.setTotalAmount(users.getTotalAmount());
         return responseDto;

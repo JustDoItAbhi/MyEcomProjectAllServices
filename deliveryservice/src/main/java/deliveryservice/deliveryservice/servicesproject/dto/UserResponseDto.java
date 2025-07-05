@@ -1,5 +1,7 @@
 package deliveryservice.deliveryservice.servicesproject.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +19,9 @@ public class UserResponseDto {// USER RESPONSE DTO
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
     private String message;
     private int countryDistance;

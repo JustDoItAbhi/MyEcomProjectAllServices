@@ -1,5 +1,6 @@
 package deliveryservice.deliveryservice.servicesproject.service;
 
+import deliveryservice.deliveryservice.servicesproject.dto.CheckOutOrder;
 import deliveryservice.deliveryservice.servicesproject.dto.requests.UserRequestDto;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.entity.UserAddress;
@@ -16,5 +17,6 @@ public interface UserServices {// STRATRGY AND LAYER PATTERN FOR USER SERVICE
     List<UserAddress>getAll();// GET ALL USER ADDRESS
     UserResponseDto FetchUserDataAndValidate(String email);// TEST USER DATA
     boolean deleteDeliveryAddress(long id);// DELETE USER
+    CheckOutOrder getOrderDetails(String email);
 
 }

@@ -1,5 +1,6 @@
 package orderservice.controllers;
 
+import orderservice.dtos.CheckOutOrder;
 import orderservice.dtos.OrderResponseDto;
 import orderservice.entity.Orders;
 import orderservice.exceptions.SignUpException;
@@ -24,6 +25,13 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDto> getCART(@PathVariable("cartId") long cartId)throws SignUpException {
         return ResponseEntity.ok(orderItemServices.getCartItems(cartId));
     }
+    @GetMapping("/getUserLogin/{cartId}/{email}")// get user by email
+    public ResponseEntity<CheckOutOrder> getUserById(@PathVariable("cartId")long cartId, @PathVariable("email") String email) {
+        if(!email.matches(EMAIL_PATTERN)){
+            throw new UsernameNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+        }
+        return ResponseEntity.ok(orderItemServices.userLoginOrSignUp(cartId,email));
+    }
 
     @DeleteMapping("/{id}")// delete order
     public ResponseEntity<Boolean> deleteOrder(@PathVariable("id") long id) {
@@ -40,12 +48,11 @@ public class OrdersController {
         return ResponseEntity.ok(orderItemServices.getUserRoles());
     }
 
-    @GetMapping("/getUserForDelivery/{email}")// get user by email
-    public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
-        if(!email.matches(EMAIL_PATTERN)){
-            throw new UsernameNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
-        }
-        return ResponseEntity.ok(userServices.getUserByEmail(email));
-
-    }
+//    @GetMapping("/getUserForDelivery/{email}")// get user by email
+//    public ResponseEntity<UserDetails> getUserById(@PathVariable("email") String email) {
+//        if(!email.matches(EMAIL_PATTERN)){
+//            throw new UsernameNotFoundException("Invalid email! Only Gmail and Yahoo emails are allowed."+email);
+//        }
+//        return ResponseEntity.ok(userServices.getUserByEmail(email));
+//    }
 }

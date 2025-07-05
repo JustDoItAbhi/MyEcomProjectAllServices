@@ -70,16 +70,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDto getProductById(long id) {// GET PRODUCT BY ID
+        ProductResponseDto redisProduct= (ProductResponseDto) redisTemplate.opsForValue().get("productsId");
+        if(redisProduct!=null){
+            return redisProduct;
+        }
         Optional<Products>savedProduct=productRespository.findById(id);
         if(savedProduct.isEmpty()){
             throw new ProductNotFoundException("PRODUCT NOT FOUNT "+id);
         }
         Products products=savedProduct.get();
         ProductResponseDto responseDto=ProductMapper.forSerching(products);
-       ProductResponseDto response= (ProductResponseDto) redisTemplate.opsForValue().get("products");
-        if(response!=null){
-            return response;
-        }
+
+        redisTemplate.opsForValue().set("productId",responseDto);
         return responseDto;
     }
 
@@ -137,10 +139,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String DeleteProduct(long id) {
-//        Optional<Products>savedProduct=productRespository.findById(id);
-//        if(savedProduct.isEmpty()){
-//            throw new ProductNotFoundException("NOT SUCH PRODUCT FOUND "+id);
-//        }
+
        productRespository.deleteById(id);
         return "PRODUCT OF "+ id+" IS DELETED";
     }

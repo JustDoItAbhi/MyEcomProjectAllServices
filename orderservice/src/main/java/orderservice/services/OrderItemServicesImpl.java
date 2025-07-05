@@ -1,5 +1,8 @@
 package orderservice.services;
 
+import orderservice.dtos.CheckOutOrder;
+import orderservice.entity.UserDetails;
+import orderservice.exceptions.SignUpException;
 import orderservice.templatesservice.RestTemplateService;
 import orderservice.dtos.CartResposneDtos;
 import orderservice.dtos.OrderResponseDto;
@@ -8,6 +11,10 @@ import orderservice.entity.Orders;
 import orderservice.exceptions.OrderCannotPLacedexception;
 import orderservice.mappers.OrderMapper;
 import orderservice.repositorties.OrderRepository;
+import orderservice.users.userdtos.UserResponseDto;
+import orderservice.users.usermapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,6 +26,8 @@ import java.util.HashMap;
 public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATION OF ORDER SERVICE
     private final OrderRepository orderRepository;// DECLARATION OF ORDER REPOSITORY
     private final HashMap<Long,Object>ordersMap;
+    @Autowired
+    private RedisTemplate<String,Object>redisTemplate;
     private final RestTemplateService restTemplateService;// // DECLARATION OF REST TEMPLATE SERVICE
 // DEPENDENCY INJECTION
     public OrderItemServicesImpl(OrderRepository orderRepository, HashMap<Long, Object> ordersMap, RestTemplateService restTemplateService) {
@@ -29,11 +38,16 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
 
     @Override
     public OrderResponseDto getCartItems(long cartId) {// GET CART ITEMS
-
+//        OrderResponseDto dto= (OrderResponseDto) ordersMap.get(cartId);
+//        if(dto!=null){
+//            return dto;
+//        }
         CartResposneDtos resposneDtos=restTemplateService.fetchProduct(cartId);// FETCH CART BY CART ID
         if(resposneDtos==null){// VART VALIDATION
                 throw new OrderCannotPLacedexception(" CANNOT FIND CART "+cartId);
         }
+
+
         Orders orders= new Orders();
         orders.setCartId(resposneDtos.getCartId());
         orders.setPrice(resposneDtos.getTotal());
@@ -43,6 +57,8 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
             orders.setOrderStatus(OrderStatus.SUCESSFULL);
         }
         orderRepository.save(orders);// SAVE ORDER TO DATABASE
+        OrderResponseDto responseDto=OrderMapper.fromEntity(orders);
+//        ordersMap.put(cartId,responseDto);
         return OrderMapper.fromEntity(orders);
     }
 
@@ -50,6 +66,23 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
     public boolean deleteOrder(long id) {// DELETE ORDER
         orderRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public CheckOutOrder userLoginOrSignUp(long cartiD, String email) {
+        CheckOutOrder check= (CheckOutOrder) redisTemplate.opsForValue().get(email);
+        if(check!=null){
+            return check;
+        }
+         OrderResponseDto orderResponseDto=getCartItems(cartiD);
+
+        UserResponseDto dto=restTemplateService.getUserById(email);
+        if(dto==null){
+            throw new SignUpException("please sign up "+ "http://localhost:8090/user/signup");
+        }
+
+        redisTemplate.opsForValue().set(email,check);
+        return UserMapper.fromUserResponse(dto,orderResponseDto);
     }
 
     @Override

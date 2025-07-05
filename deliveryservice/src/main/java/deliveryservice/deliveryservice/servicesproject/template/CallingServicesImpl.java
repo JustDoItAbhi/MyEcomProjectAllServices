@@ -4,7 +4,6 @@ import deliveryservice.deliveryservice.servicesproject.dto.CartResposneDtos;
 import deliveryservice.deliveryservice.servicesproject.dto.UserResponseDto;
 import deliveryservice.deliveryservice.servicesproject.exceptions.exceptionfiles.UserNotExistsException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,15 +14,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class CallingServicesWithoutEurekaImpl implements CallingServices{
+public class CallingServicesImpl implements CallingServices{
     private RestTemplateBuilder restTemplateBuilder;
 
-    public CallingServicesWithoutEurekaImpl(RestTemplateBuilder restTemplateBuilder) {
+    public CallingServicesImpl(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
     @Override
-    public UserResponseDto getUser(String userId) {
+    public UserResponseDto getUser(String emailId) {
         RestTemplate restTemplate=restTemplateBuilder.build();
         Jwt jwt=(Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String token= jwt.getTokenValue();
@@ -31,13 +30,13 @@ public class CallingServicesWithoutEurekaImpl implements CallingServices{
         HttpHeaders headers=new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<?> entity=new HttpEntity<>(headers);
-        String url="http://localhost:8090/user/getUserByid/"+userId;
+        String url="http://localhost:8090/user/getUserByid/"+emailId;
         ResponseEntity<UserResponseDto>response=restTemplate.exchange(url,
                 HttpMethod.GET,
                 entity,
                 UserResponseDto.class);
         if(response.getBody()==null){
-            throw new UserNotExistsException("PLEASE SIGN UP "+userId);
+            throw new UserNotExistsException("PLEASE SIGN UP "+emailId);
         }
         return response.getBody();
     }
