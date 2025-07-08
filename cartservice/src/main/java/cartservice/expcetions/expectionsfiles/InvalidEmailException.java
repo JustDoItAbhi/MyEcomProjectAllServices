@@ -1,4 +1,4 @@
-package cartservice.securityconfigrations.expcetions.expectionsfiles;
+package cartservice.expcetions.expectionsfiles;
 
 public class InvalidEmailException extends RuntimeException{
     public InvalidEmailException() {

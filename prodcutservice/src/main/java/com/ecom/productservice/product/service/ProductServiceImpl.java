@@ -9,6 +9,7 @@ import com.ecom.productservice.product.exceptions.ProductNotFoundException;
 import com.ecom.productservice.product.productmapper.ProductMapper;
 import com.ecom.productservice.repository.CategoryRespository;
 import com.ecom.productservice.repository.ProductRespository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRespository productRespository;
     private final CategoryRespository categoryRespository;
     private RedisTemplate<String,Object>redisTemplate;
+    private RedisTemplate<Long,Object>redisTemplateById;
 
 // CONSTRUCTOR
 
@@ -69,19 +71,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "productId",key = "#id")
     public ProductResponseDto getProductById(long id) {// GET PRODUCT BY ID
-        ProductResponseDto redisProduct= (ProductResponseDto) redisTemplate.opsForValue().get("productsId");
-        if(redisProduct!=null){
-            return redisProduct;
-        }
+
         Optional<Products>savedProduct=productRespository.findById(id);
         if(savedProduct.isEmpty()){
             throw new ProductNotFoundException("PRODUCT NOT FOUNT "+id);
         }
         Products products=savedProduct.get();
         ProductResponseDto responseDto=ProductMapper.forSerching(products);
-
-        redisTemplate.opsForValue().set("productId",responseDto);
         return responseDto;
     }
 
@@ -142,6 +140,19 @@ public class ProductServiceImpl implements ProductService {
 
        productRespository.deleteById(id);
         return "PRODUCT OF "+ id+" IS DELETED";
+    }
+
+    @Override
+    public List<ProductResponseDto> getProductByName(String name) {
+        List<Products> products=productRespository.searchByKeyword(name);
+        if(products.isEmpty()){
+            throw new ProductNotFoundException("NO SUCH PRODUCT EXISTS" +name);
+        }
+        List<ProductResponseDto>responseDtos=new ArrayList<>();
+        for(Products products1:products){
+            responseDtos.add(ProductMapper.forSerching(products1));
+        }
+        return responseDtos;
     }
 
 }

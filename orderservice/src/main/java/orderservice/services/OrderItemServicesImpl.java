@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Service
@@ -53,14 +54,9 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
         orderRepository.save(orders);// SAVE ORDER TO DATABASE
         OrderResponseDto responseDto=OrderMapper.fromEntity(orders);
 //        ordersMap.put(cartId,responseDto);
-        return OrderMapper.fromEntity(orders);
+        return responseDto;
     }
 
-    @Override
-    public boolean deleteOrder(long id) {// DELETE ORDER
-        orderRepository.deleteById(id);
-        return true;
-    }
 
     @Override
     public CheckOutOrder userLoginOrSignUp(long cartiD, String email) {
@@ -69,6 +65,7 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
             return check;
         }
          OrderResponseDto orderResponseDto=getCartItems(cartiD);
+        check.setOrderId(orderResponseDto.getOrderid());
 
         UserResponseDto dto=restTemplateService.getUserById(email);
         if(dto==null){
@@ -77,7 +74,6 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
       check= UserMapper.fromUserResponse(dto,orderResponseDto);
               redisTemplate.opsForValue().set(email,check);
         getOrderById(orderResponseDto.getOrderid());
-
         return check;
     }
 
@@ -91,6 +87,11 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
             return existingOrder;
         }
         return existingOrder;
+    }
+    @Override
+    public boolean deleteOrder(long id) {// DELETE ORDER
+        orderRepository.deleteById(id);
+        return true;
     }
 
     @Override

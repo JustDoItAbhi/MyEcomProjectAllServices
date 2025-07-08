@@ -24,6 +24,10 @@ public class ProductController {// PRODUCT CONTROLLER
     public ResponseEntity<List<ProductResponseDto>> getAllProduct(){// GET LIST OF PRODUCT
         return ResponseEntity.ok(productService.getAllProducts());
     }
+    @GetMapping("/getProductByName/{name}")// PUBLIC USE
+    public ResponseEntity<List<ProductResponseDto>> getProductByName(@PathVariable("name")String name){// GET LIST OF PRODUCT
+        return ResponseEntity.ok(productService.getProductByName(name));
+    }
     @GetMapping("/get/{id}")// PUBLIC USE
     public ResponseEntity<ProductResponseDto> getById(@PathVariable ("id")long id){// GET PRODUCT BY ITS ID
         return ResponseEntity.ok(productService.getProductById(id));

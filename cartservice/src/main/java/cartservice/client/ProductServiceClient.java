@@ -1,8 +1,7 @@
 package cartservice.client;
 
 import cartservice.client.dto.ProductResponseDto;
-import cartservice.entity.Products;
-import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductNotFoundException;
+import cartservice.expcetions.expectionsfiles.ProductNotFoundException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import org.springframework.cloud.client.ServiceInstance;
@@ -16,8 +15,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
 
 @Service
 public class ProductServiceClient {// class to call product service
@@ -29,19 +26,14 @@ public class ProductServiceClient {// class to call product service
         this.restTemplateBuilder = restTemplateBuilder;
         this.discoveryClient = discoveryClient;
     }
-
     public ProductResponseDto fetchProductById(long id) {// METHOD TO CALL PRODUCT SERVICE
         RestTemplate restTemplate=restTemplateBuilder.build();
-        Jwt jwt=(Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String token= jwt.getTokenValue();
-        HttpHeaders headers=new HttpHeaders();
-        headers.setBearerAuth(token);
-        HttpEntity<?>entity=new HttpEntity<>(headers);
+
         ServiceInstance serviceInstance = discoveryClient.getInstances("productservice").get(0);
         String serviceAUri = serviceInstance.getUri() + "/product/get/"+id;
 //        String serviceAUri = "http://localhost:8089/product/get/"+id;
-//        ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(serviceAUri, ProductResponseDto.class);
-        ResponseEntity<ProductResponseDto> response=restTemplate.exchange(serviceAUri, HttpMethod.GET,entity, ProductResponseDto.class);
+        ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(serviceAUri, ProductResponseDto.class);
+//        ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(ProductResponseDto.class);
         if(response.getBody()==null){
             throw new ProductNotFoundException("PRODUCT NOT FOUND "+ id);// VALIDATION FOR PRODUCT
         }
@@ -49,4 +41,22 @@ public class ProductServiceClient {// class to call product service
         return response.getBody();
     }
 
+//    public ProductResponseDto fetchProductById(long id) {// METHOD TO CALL PRODUCT SERVICE
+//        RestTemplate restTemplate=restTemplateBuilder.build();
+//        Jwt jwt=(Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String token= jwt.getTokenValue();
+//        HttpHeaders headers=new HttpHeaders();
+//        headers.setBearerAuth(token);
+//        HttpEntity<?>entity=new HttpEntity<>(headers);
+//        ServiceInstance serviceInstance = discoveryClient.getInstances("productservice").get(0);
+//        String serviceAUri = serviceInstance.getUri() + "/product/get/"+id;
+////        String serviceAUri = "http://localhost:8089/product/get/"+id;
+////        ResponseEntity<ProductResponseDto> response=restTemplate.getForEntity(serviceAUri, ProductResponseDto.class);
+//        ResponseEntity<ProductResponseDto> response=restTemplate.exchange(serviceAUri, HttpMethod.GET,entity, ProductResponseDto.class);
+//        if(response.getBody()==null){
+//            throw new ProductNotFoundException("PRODUCT NOT FOUND "+ id);// VALIDATION FOR PRODUCT
+//        }
+//        response.getBody();
+//        return response.getBody();
+//    }
 }

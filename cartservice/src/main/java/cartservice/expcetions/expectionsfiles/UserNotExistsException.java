@@ -1,4 +1,4 @@
-package cartservice.securityconfigrations.expcetions.expectionsfiles;
+package cartservice.expcetions.expectionsfiles;
 
 public class UserNotExistsException extends RuntimeException{
     public UserNotExistsException() {

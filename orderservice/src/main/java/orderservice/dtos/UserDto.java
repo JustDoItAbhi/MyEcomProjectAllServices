@@ -1,14 +1,17 @@
 package orderservice.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+import orderservice.entity.BaseModels;
 
 import java.time.LocalDateTime;
 import java.util.List;
 @Getter
 @Setter
-public class UserDto {
+
+public class UserDto  {
     private long userId;
     private String userName;
     private String userPhone;
@@ -20,7 +23,6 @@ public class UserDto {
     private String userHouseNumber;
     private String userStreet;
     private String userLandMark;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;
-    private long totalAmount;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//    private LocalDateTime createdAt;
 }

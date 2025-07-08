@@ -29,7 +29,17 @@ public class RestTemplateServiceImpl implements RestTemplateService{//
         this.restTemplateBuilder = restTemplateBuilder;
         this.discoveryClient = discoveryClient;
     }
+    public CartResposneDtos fetchProduct(long cartId) {// FETCH PRODUCT FROM PRODUCT SERVICE
+        RestTemplate restTemplate=restTemplateBuilder.build();
 
+        ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
+        String serviceAUri = serviceInstance.getUri() + "/cart/getCartById/"+cartId;// API
+        ResponseEntity<CartResposneDtos>response=restTemplate.getForEntity(serviceAUri, CartResposneDtos.class);
+        if(response.getBody()==null){// PRODUCT VALIDATION
+            throw new RuntimeException("CANNOT FETCH CART "+ cartId);
+        }
+        return response.getBody();
+    }
 
     public UserResponseDto getUserById(String email)throws SignUpException {// FETCH USER BY USE EMAIL
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -52,21 +62,7 @@ public class RestTemplateServiceImpl implements RestTemplateService{//
         }
         return template.getBody();
     }
-    public CartResposneDtos fetchProduct(long cartId) {// FETCH PRODUCT FROM PRODUCT SERVICE
-        RestTemplate restTemplate=restTemplateBuilder.build();
-        Jwt jwt=(Jwt)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String token =jwt.getTokenValue();
-        HttpHeaders headers=new HttpHeaders();
-        headers.setBearerAuth(token);
-        HttpEntity<?> entity=new HttpEntity<>(headers);// ADDING TO HEADER
-        ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
-        String serviceAUri = serviceInstance.getUri() + "/cart/getCartById/"+cartId;// API
-        ResponseEntity<CartResposneDtos>response=restTemplate.exchange(serviceAUri, HttpMethod.GET,entity, CartResposneDtos.class);
-        if(response.getBody()==null){// PRODUCT VALIDATION
-            throw new RuntimeException("CANNOT FETCH CART "+ cartId);
-        }
-        return response.getBody();
-    }
+
 
     public List<UserResponseDto> getAllUser(){// OPTIONAL GET ALL USERS
         RestTemplate restTemplate=restTemplateBuilder.build();
@@ -91,5 +87,20 @@ public class RestTemplateServiceImpl implements RestTemplateService{//
 //        }
 //        throw new IllegalStateException("JWT token is not available");
 //    }
+//public CartResposneDtos fetchProduct(long cartId) {// FETCH PRODUCT FROM PRODUCT SERVICE
+//    RestTemplate restTemplate=restTemplateBuilder.build();
+//    Jwt jwt=(Jwt)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//    String token =jwt.getTokenValue();
+//    HttpHeaders headers=new HttpHeaders();
+//    headers.setBearerAuth(token);
+//    HttpEntity<?> entity=new HttpEntity<>(headers);// ADDING TO HEADER
+//    ServiceInstance serviceInstance = discoveryClient.getInstances("cartservice").get(0);
+//    String serviceAUri = serviceInstance.getUri() + "/cart/getCartById/"+cartId;// API
+//    ResponseEntity<CartResposneDtos>response=restTemplate.exchange(serviceAUri, HttpMethod.GET,entity, CartResposneDtos.class);
+//    if(response.getBody()==null){// PRODUCT VALIDATION
+//        throw new RuntimeException("CANNOT FETCH CART "+ cartId);
+//    }
+//    return response.getBody();
+//}
 
 }

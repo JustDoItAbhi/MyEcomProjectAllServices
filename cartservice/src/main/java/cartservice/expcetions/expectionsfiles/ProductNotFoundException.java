@@ -1,4 +1,4 @@
-package cartservice.securityconfigrations.expcetions.expectionsfiles;
+package cartservice.expcetions.expectionsfiles;
 
 public class ProductNotFoundException extends RuntimeException{
     public ProductNotFoundException() {

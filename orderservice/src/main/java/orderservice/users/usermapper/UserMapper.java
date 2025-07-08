@@ -39,6 +39,7 @@ public class UserMapper {
             CheckOutOrder check=new CheckOutOrder();
             check.setCartId(responseDto.getCartId());
             check.setOrderStatus(responseDto.getOrderStatus());
+            check.setOrderId(responseDto.getOrderid());
             check.setPrice(responseDto.getPrice());
             UserDto userDto=new UserDto();
             userDto.setUserId(dto.getUserId());
@@ -52,7 +53,7 @@ public class UserMapper {
             userDto.setUserCountry(dto.getUserCountry());
             userDto.setUserPostelCode(dto.getUserPostelCode());
             userDto.setUserLandMark(dto.getUserLandMark());
-            userDto.setTotalAmount(userDto.getTotalAmount());
+//            userDto.setTotalAmount(userDto.getTotalAmount());
             check.setUserDto(userDto);
             return check;
     }

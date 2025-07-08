@@ -2,7 +2,7 @@ package cartservice.client;
 
 
 import cartservice.client.dto.UserResponseDto;
-import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
+import cartservice.expcetions.expectionsfiles.UserNotExistsException;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;

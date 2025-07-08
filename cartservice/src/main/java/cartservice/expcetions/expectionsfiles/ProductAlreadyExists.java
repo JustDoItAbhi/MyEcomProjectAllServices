@@ -1,4 +1,4 @@
-package cartservice.securityconfigrations.expcetions.expectionsfiles;
+package cartservice.expcetions.expectionsfiles;
 
 public class ProductAlreadyExists extends RuntimeException{
     public ProductAlreadyExists() {

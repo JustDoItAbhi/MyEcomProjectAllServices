@@ -5,20 +5,25 @@ import cartservice.client.ProductServiceClient;
 import cartservice.client.dto.UserResponseDto;
 import cartservice.dtos.CartItemResponseDto;
 import cartservice.dtos.CartRequestDto;
+import cartservice.dtos.CartResposneDto;
 import cartservice.dtos.CartResposneDtos;
 import cartservice.client.dto.ProductResponseDto;
 import cartservice.entity.CartItems;
 import cartservice.entity.CartStatus;
 import cartservice.entity.Carts;
-import cartservice.securityconfigrations.expcetions.expectionsfiles.OutOfStockProduct;
-import cartservice.securityconfigrations.expcetions.expectionsfiles.UserNotExistsException;
+import cartservice.mapper.AnotherCartMapper;
+import cartservice.expcetions.expectionsfiles.OutOfStockProduct;
+import cartservice.expcetions.expectionsfiles.UserNotExistsException;
 import cartservice.mapper.CartMapper;
 import cartservice.mapper.CartItemMapper;
 import cartservice.repository.CartItemsRepository;
 import cartservice.repository.CartRepository;
 import cartservice.repository.ProductRepository;
-import cartservice.securityconfigrations.expcetions.expectionsfiles.CartNotFoundException;
-import cartservice.securityconfigrations.expcetions.expectionsfiles.ProductNotFoundException;
+import cartservice.expcetions.expectionsfiles.CartNotFoundException;
+import cartservice.expcetions.expectionsfiles.ProductNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -44,8 +49,51 @@ public class CartServiceImpl implements IcartServices {
         this.cartItemsRepository = cartItemsRepository;
         this.callingUserService = callingUserService;
     }
-
     @Override
+    @Cacheable(value = "carts",key = "#cart.Id")
+    public CartResposneDto addToCart(CartRequestDto dto) {// IMPROVED AND PUBLIC API
+        int intStok=0;// CHECK STOCK VARIABLE
+        Carts carts = new Carts();
+        carts.setCartStatus(CartStatus.ACCEPTED);
+        carts.setCartCreatedTime(LocalDateTime.now());
+        List<CartItems> cartItemsList = new ArrayList<>();
+        for (CartItems cartItems : dto.getItem()) {// ADDING TO CART ALL GIVEN CART ITEMS
+            Optional<CartItems>existingCartItem=cartItemsRepository.findByProductId(cartItems.getProductId());
+            if(existingCartItem.isPresent()){
+                cartItems.setQuantity(cartItems.getQuantity());
+            }
+            ProductResponseDto responseDto =fetchProductandValidate(cartItems.getProductId());
+
+            cartItems.setProductId(responseDto.getId());
+            cartItems.setProductName(responseDto.getName());
+            cartItems.setQuantity(cartItems.getQuantity());
+            cartItems.setPrice(responseDto.getPrice());
+            cartItemsList.add(cartItems);
+            intStok=responseDto.getStock()-cartItems.getQuantity();
+            if(intStok<=0){// IF STOCK IS LESS THEN 0 THEN RETURN ERROR
+                throw new OutOfStockProduct(responseDto.getName()+" THIS PRODUCT IS OUT OF STOCK ");
+            }
+        }
+        long amount = 0;
+        for (int i = 0; i < cartItemsList.size(); i++) {// CALCULATE THE TOTAL COST OF SELECTED ITEAMS
+            amount += cartItemsList.get(i).getPrice() * cartItemsList.get(i).getQuantity();
+        }
+        carts.setTotal(amount);
+        carts.setLeftItemStock(intStok);
+        carts.setItems(cartItemsList);
+        Carts savedCart = cartRepository.save(carts);// SAVE TO DATABASE
+        return AnotherCartMapper.fromCartToResponse(savedCart);
+    }
+    @Override
+    public CartResposneDto confirmCart(long cartId) {// OPTIONAL CONFIM CART ONCE IF WANT TO RECHECK
+        Carts cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + cartId));
+        cart.setCartStatus(CartStatus.IN_PROGRESS);
+        return AnotherCartMapper.fromCartToResponse(cart);
+
+    }
+
+    @Override // PRIVATE API USER REQUIRED
     public CartResposneDtos addItemToCart(String email, CartRequestDto dto) throws CartNotFoundException {// ADD ITEAMS TO CART
         UserResponseDto responseDto1=fetchUserDataAndValidate(email);// FETCHING USER BY EMAIL
         if(!responseDto1.getUserEmail().equals(email)){// VALIDATION OF USER EMAIL
@@ -69,6 +117,7 @@ if(existingEmail.isPresent()){// CART VALIDATION IF CART IS ALREADY PRESENT
         carts.setCartCreatedTime(LocalDateTime.now());
         List<CartItems> cartItemsList = new ArrayList<>();
         for (CartItems cartItems : dto.getItem()) {// ADDING TO CART ALL GIVEN CART ITEMS
+
             Optional<CartItems>existingCartItem=cartItemsRepository.findByProductId(cartItems.getProductId());
             if(existingCartItem.isPresent()){
                 cartItems.setQuantity(cartItems.getQuantity());
@@ -140,21 +189,7 @@ if(existingEmail.isPresent()){// CART VALIDATION IF CART IS ALREADY PRESENT
         return CartMapper.fromCart(cart);
     }
 
-    @Override
-    public CartResposneDtos confirmCart(long userId) {// OPTIONAL CONFIM CART ONCE IF WANT TO RECHECK
-        Carts cart = cartRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
-        cart.setCartStatus(CartStatus.IN_PROGRESS);
 
-        // Perform confirmation logic, e.g., saving the cart as an order
-        // ...
-        // Optionally clear the cart
-//        cart.getItems().clear();
-//        cart.setTotal(0);
-//        cartRepository.save(cart);
-        return CartMapper.fromCart(cart);
-
-    }
 
 
 

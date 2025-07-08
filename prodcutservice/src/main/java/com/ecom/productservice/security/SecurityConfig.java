@@ -36,6 +36,8 @@ public class SecurityConfig  {
                             .requestMatchers("/error").permitAll()
                             .requestMatchers("/category/getbyid").hasRole("ADMIN")
                             .requestMatchers("/category/","/category/price/{id}").permitAll()// OPEN TO USE
+                            .requestMatchers("/product/get/{id}").permitAll()
+                            .requestMatchers("/product/getProductByName/{name}").permitAll()
                                     .anyRequest().authenticated()// REST ALL AUTHENTICATED
                     ))
                     // JWT ROLE BASE CHECK

@@ -16,5 +16,6 @@ public interface ProductService {
     boolean deleteList();// delete list of products
     String getUserRoles();// check the role of token provider
     String DeleteProduct(long id);
+    List<ProductResponseDto> getProductByName(String name);
 }
 

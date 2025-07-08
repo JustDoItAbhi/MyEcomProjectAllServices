@@ -24,16 +24,15 @@ public class SecurityConfig {// API BASE SYSTEM CONFIGRATION
                         .requestMatchers("/product/get/{id}").permitAll()// PUBLIC ACCESS
                         .requestMatchers("/user/getUserByid/{email}").hasAnyRole("ADMIN","USER")// USER AND ADMIN BOTH CAN ACCESS
 //                        .requestMatchers("/order/getCartById/{id}").permitAll()
+                                .requestMatchers("/cart/add").permitAll()
+                                .requestMatchers("/cart/getCartById/{cartId}").permitAll()
                                 .anyRequest().authenticated()// REST ALL CALLS ARE AUTHENTICATED
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(new CustomJwtAuthenticationConverter()))
                 );
-
 //                .formLogin(Customizer.withDefaults());
-
-
         return http.build();
     }
 
@@ -47,6 +46,4 @@ public class SecurityConfig {// API BASE SYSTEM CONFIGRATION
         authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return authenticationConverter;
     }
-
-
 }

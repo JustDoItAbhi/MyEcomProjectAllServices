@@ -1,4 +1,4 @@
-package cartservice.securityconfigrations.expcetions;
+package cartservice.expcetions;
 
 import java.time.LocalDateTime;
 
