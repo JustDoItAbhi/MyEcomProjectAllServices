@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 //		(exclude =  { SecurityAutoConfiguration.class })
-@ComponentScan("com.ecommer.userservices")
+//@ComponentScan("com.ecommer.userservices.exceptions")
 public class UserServicesApplication {
 
 	public static void main(String[] args) {

@@ -64,16 +64,19 @@ public class OrderItemServicesImpl implements OrderItemServices {// IMPLEMENTATI
         if(check!=null){
             return check;
         }
-         OrderResponseDto orderResponseDto=getCartItems(cartiD);
-        check.setOrderId(orderResponseDto.getOrderid());
+        else if(check==null||check.getUserDto()==null||check.getUserDto().getUserEmail()==null){
+            UserResponseDto dto=restTemplateService.getUserById(email);
+            if(dto==null){
+                throw new SignUpException("please sign up "+ email);
+//                "http://localhost:8090/user/signup"
+            }
+            OrderResponseDto orderResponseDto=getCartItems(cartiD);
+            check.setOrderId(orderResponseDto.getOrderid());
 
-        UserResponseDto dto=restTemplateService.getUserById(email);
-        if(dto==null){
-            throw new SignUpException("please sign up "+ "http://localhost:8090/user/signup");
+            check= UserMapper.fromUserResponse(dto,orderResponseDto);
+            redisTemplate.opsForValue().set(email,check);
+            getOrderById(orderResponseDto.getOrderid());
         }
-      check= UserMapper.fromUserResponse(dto,orderResponseDto);
-              redisTemplate.opsForValue().set(email,check);
-        getOrderById(orderResponseDto.getOrderid());
         return check;
     }
 

@@ -26,6 +26,7 @@ public class SecurityConfig {// API BASE SYSTEM CONFIGRATION
 //                        .requestMatchers("/order/getCartById/{id}").permitAll()
                                 .requestMatchers("/cart/add").permitAll()
                                 .requestMatchers("/cart/getCartById/{cartId}").permitAll()
+                                .requestMatchers("/cart/deleteProductFromCart/cartId/{cartId}/productId/{productId}").permitAll()
                                 .anyRequest().authenticated()// REST ALL CALLS ARE AUTHENTICATED
                 )
 

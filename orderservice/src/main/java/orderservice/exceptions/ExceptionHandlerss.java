@@ -10,16 +10,32 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionHandlerss {// GLOABLE EXECPTION HANDLER
     @ExceptionHandler(SignUpException.class)// SIGN UP EXECPTION
     public ResponseEntity<ExceptionMessageDto> getExceptionForSignup(SignUpException e,WebRequest webRequest){
+   Map<String,Object>signup=new LinkedHashMap<>();
+   signup.put("userName","**");
+   signup.put("userPhone","**");
+   signup.put("userPassword","**");
+   signup.put("userEmail","**");
+   signup.put("roles","[**]");
+   signup.put("userHouseNumber","**");
+   signup.put("userStreet","**");
+   signup.put("userLandMark","**");
+   signup.put("city","**");
+   signup.put("state","**");
+   signup.put("country","**");
+   signup.put("postelCode","**");
     ExceptionMessageDto dto=new ExceptionMessageDto(
-            e.getMessage()+" PLEASE SIGN UP ",
+            e.getMessage(),
             404,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            signup
+
     );
             return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }

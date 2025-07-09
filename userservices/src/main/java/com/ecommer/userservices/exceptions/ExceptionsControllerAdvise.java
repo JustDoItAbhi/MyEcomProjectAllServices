@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice// gloable exception handlers
+@RestControllerAdvice// gloable exception handlers
 public class ExceptionsControllerAdvise {
     @ExceptionHandler(UserNotFoundException.class)// user not found exception
     public ResponseEntity<MessageResponseDto> userNotFound(UserNotFoundException e){
@@ -41,11 +43,12 @@ public class ExceptionsControllerAdvise {
         );
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(SignUpUserException.class)// sign up exception is user not exists
     public ResponseEntity<MessageResponseDto>signupexpention(SignUpUserException e){
         MessageResponseDto dto=new MessageResponseDto(
                 e.getMessage(),
-                404,
+                500,
                 LocalDateTime.now()
 
         );

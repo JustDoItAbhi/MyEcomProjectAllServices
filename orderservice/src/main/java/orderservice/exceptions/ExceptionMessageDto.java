@@ -6,11 +6,19 @@ public class ExceptionMessageDto {
     private String message;
     private int code;
     private LocalDateTime time;
+    private Object signupRequest;
 
     public ExceptionMessageDto(String message, int code, LocalDateTime time) {
         this.message = message;
         this.code = code;
         this.time = time;
+    }
+
+    public ExceptionMessageDto(String message, int code, LocalDateTime time, Object signupRequest) {
+        this.message = message;
+        this.code = code;
+        this.time = time;
+        this.signupRequest = signupRequest;
     }
 
     public String getMessage() {
@@ -35,5 +43,9 @@ public class ExceptionMessageDto {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public Object getSignupRequest() {
+        return signupRequest;
     }
 }

@@ -166,7 +166,7 @@ public class UserServicesImpl implements UserServices { //SERVICE LAYER
     public UserResponseDto getById(String email) throws SignUpUserException {// GET USER BY EMAIL
         Optional<Users>existingUser=userRepository.findByUserEmail(email);
         if(existingUser.isEmpty()){
-            throw new SignUpUserException("PLEASE SIGN  UP "+email);
+            throw new EmailNotFoundException("PLEASE SIGN  UP "+email);
         }
         return UserMapper.fromEntity(existingUser.get());
     }

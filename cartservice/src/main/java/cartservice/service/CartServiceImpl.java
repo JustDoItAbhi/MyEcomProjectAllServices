@@ -86,10 +86,17 @@ public class CartServiceImpl implements IcartServices {
     }
     @Override
     public CartResposneDto confirmCart(long cartId) {// OPTIONAL CONFIM CART ONCE IF WANT TO RECHECK
-        Carts cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + cartId));
-        cart.setCartStatus(CartStatus.IN_PROGRESS);
-        return AnotherCartMapper.fromCartToResponse(cart);
+        try {
+            Optional<Carts> cart = cartRepository.findById(cartId);
+            if(cart.isEmpty() ){
+                throw new CartNotFoundException("Cart not found for user: " + cartId);
+            }
+            cart.get().setCartStatus(CartStatus.IN_PROGRESS);
+            return AnotherCartMapper.fromCartToResponse(cart.get());
+
+        } catch (CartNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

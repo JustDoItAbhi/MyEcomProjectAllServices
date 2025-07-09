@@ -13,6 +13,8 @@ import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -55,12 +57,15 @@ public class RestTemplateServiceImpl implements RestTemplateService{//
         }
         ServiceInstance serviceInstance = instances.get(0);
         String url = serviceInstance.getUri().toString() + "/user/getUserByid/" + email;// API CALL
+try {
+    ResponseEntity<UserResponseDto> template = restTemplate.exchange(url, HttpMethod.GET, entity, UserResponseDto.class);
+    return template.getBody();
+//    if (template.getBody().getUserEmail() == null||template.getBody() == null || template.getStatusCode() != HttpStatus.OK) {// VALIDATION AND SEND SIGN UP API IF USER IS NULL OR USER IS HAVING ERROR
+} catch (HttpClientErrorException.NotFound e) {
+    throw new SignUpException(("DEAR " + email + " SIGNUP http://localhost:8090/user/signup"));
+}
 
-        ResponseEntity<UserResponseDto> template = restTemplate.exchange(url, HttpMethod.GET, entity, UserResponseDto.class);
-        if (template.getBody() == null || template.getStatusCode() != HttpStatus.OK) {// VALIDATION AND SEND SIGN UP API IF USER IS NULL OR USER IS HAVING ERROR
-            throw new CannotFetchDataFromUserService(("DEAR " + email + " SIGNUP http://localhost:8090/user/signup"));
-        }
-        return template.getBody();
+
     }
 
 
